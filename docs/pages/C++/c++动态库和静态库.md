@@ -1,0 +1,152 @@
+# visual studio上C++库加载方式及方法：动态库静态加载、动态库动态加载、静态库加载
+- [动态库静态加载](#动态库静态加载)
+  - [**第一步：生成dll：**](#**第一步：生成dll：**)
+  - [**第二步：加载dll：**](#**第二步：加载dll：**)
+- [动态库动态加载](#动态库动态加载)
+- [静态库加载](#静态库加载)
+
+----------------------
+## 动态库静态加载
+### **第一步：生成dll：**
+1. 新建vs项目
+2. 添加.h .cpp文件
+3. 设置vs项目属性
+   1. 更改配置属性为动态态库，选择，项目->属性->常规->配置类型->动态库(dll)
+   2. 添加编译宏，选择，“项目->属性->C/C++ ->预处理器->预处理器定义”中添加 APIEXPORT 宏
+4. 生成解决方案
+
+*add.h文件内容*
+```c++
+#pragma once
+
+#ifdef APIEXPORT
+#define EXTERN_API extern "C" __declspec(dllexport)
+#else
+#define EXTERN_API extern "C" __declspec(dllimport)
+#endif
+
+EXTERN_API int add(int elm1, int elm2);
+```
+*add.cpp文件内容*
+```c++
+#include "add.h"
+
+int add(int elm1, int elm2)
+{
+	return elm1+ elm2;
+}
+```
+### **第二步：加载dll：**
+1. 新建vs项目
+2. 添加主程序入口函数.cpp文件(包含main函数的源文件)
+3. 添加第一步生成dll中的.h文件.dll文件.lib文件
+   1. .h .lib可随意放置，使用时，指定正确的路径即可
+   2. 放置.dll文件在和.exe文件同一目录下
+
+*main.cpp文件内容*
+```c++
+//动态库静态加载
+#include <iostream>
+#include "add.h"//包含头文件
+#pragma comment(lib,"../Debug/libMathFunctions.lib")//指定.lib文件的位置
+int main()
+{
+	std::cout<<add(1, 2);
+	return 0;
+}
+```
+--------------------------
+## 动态库动态加载
+### **第一步：生成dll：**
+此步骤参考[动态库静态加载](#动态库静态加载)中[**第一步：生成dll：**](#第一步：生成dll)
+### **第二步：加载dll：**
+1. 新建vs项目
+2. 添加主程序入口函数.cpp文件(包含main函数的源文件)
+	1. 使用Windows库函数加载dll
+	2. LoadLibraryA 加载dll
+	3. GetProcAddress 获取函数地址
+	4. FreeLibrary 释放句柄
+3. 添加第一步生成dll中的.dll文件.lib文件
+   1. .lib可随意放置，使用时，指定正确的路径即可
+   2. 放置.dll文件在和.exe文件同一目录下
+
+*main.cpp文件内容*
+```c++
+//动态库动态加载
+#include <iostream>
+#include <Windows.h>
+#pragma comment(lib,"../Debug/libMathFunctions.lib")
+int main()
+{
+	HINSTANCE h = LoadLibraryA("libMathFunctions.dll");//第一步
+	typedef int(*FunPtr)(int a, int b);//定义函数指针
+	if (h == NULL)
+	{
+		FreeLibrary(h);
+		printf("load lib error\n");
+	}
+	else
+	{
+		FunPtr funPtr = (FunPtr)GetProcAddress(h, "add");//第二步
+		if (funPtr != NULL)
+		{
+			int result = funPtr(8, 3);
+			printf("8 + 3 =%d\n", result);
+		}
+		else
+		{
+			printf("get process error\n");
+			printf("%d", GetLastError());
+		}
+		FreeLibrary(h);//第三步
+	}
+	return 0;
+}
+```
+----------------------------
+## 静态库加载
+### **第一步：生成lib：**
+1. 新建vs项目
+2. 添加.h .cpp文件
+3. 设置vs项目属性
+   1. 更改配置属性为动态态库，选择，项目->属性->常规->配置类型->静态库(lib)
+4. 生成解决方案
+
+*add.h文件*
+```c++
+#pragma once
+int add(int elm1, int elm2);
+```
+*add.cpp文件*
+```c++
+#include "add.h"
+int add(int elm1, int elm2)
+{
+	return elm1 + elm2;
+}
+```
+### **第二步：加载dll：**
+1. 新建vs项目
+2. 添加主程序入口函数.cpp文件(包含main函数的源文件)
+3. 添加第一步生成lib中的.lib文件.h文件
+   1. .lib .h文件可随意放置，使用时，指定正确的路径即可
+
+*main.cpp文件*
+```c++
+//静态库加载
+#include <iostream>
+#include "math/add.h"
+#pragma comment(lib,"../Debug/libMathFunctions.lib")
+int main()
+{
+	std::cout << add(1, 2);
+	return 0;
+}
+```
+### 注意事项
+1. 动态库需要使用__declspec(dllexport)导出和 __declspec(dllimport)加载
+2. 静态库不需要__declspec(dllexport)和 __declspec(dllimport)
+------------------
+- [我的GitHub](https://github.com/shuhaiwen "https://github.com/shuhaiwen") 
+- [我的CSDN](https://blog.csdn.net/u014140383 "https://blog.csdn.net/u014140383")
+- [我的Gitee](https://gitee.com/shuhaiwen "https://gitee.com/shuhaiwen")
