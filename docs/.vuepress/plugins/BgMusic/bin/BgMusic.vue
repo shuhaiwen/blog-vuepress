@@ -91,7 +91,7 @@ export default {
   components: {
     ModuleTransition
   },
-  mounted() {
+  mounted () {
     if (this.floatPosition === 'left') {
       this.floatStyle = {
         ...this.floatStyle,
@@ -107,7 +107,7 @@ export default {
         'border-bottom-left-radius': '20px'
       }
     }
-    // auto shrink
+    // autoShrink时隐藏歌曲信息
     if (this.autoShrink) this.changeBgmInfo(true)
   },
   data () {
@@ -154,7 +154,7 @@ export default {
       // 第一次加载时初始化音量条并处理自动播放事件
       if (this.firstLoad) {
         if (this.getVolume()) {
-          const percent =  this.getVolume()
+          const percent = this.getVolume()
           this.$refs.vbar.style.width = percent * 100 + '%'
           this.$refs.bgm.volume = percent
         } else {
@@ -263,7 +263,7 @@ export default {
     unMuteBgm () {
       this.isMute = false
       if (this.getVolume()) {
-        const percent =  this.getVolume()
+        const percent = this.getVolume()
         this.$refs.vbar.style.width = percent * 100 + '%'
         this.$refs.bgm.volume = percent
       } else {

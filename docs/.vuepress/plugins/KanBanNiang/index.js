@@ -5,12 +5,12 @@ module.exports = (options, context) => ({
     const { clean, messages, theme, modelStyle, btnStyle, width, height, messageStyle } = options
     return {
       CLEAN: clean || false,
-      THEME: theme || ['blackCat', 'whiteCat', 'haru1', 'haru2', 'haruto', 'koharu', 'izumi', 'shizuku', 'wanko', 'miku', 'z16'],
+      THEME: theme || ['tsumiki'],
       MESSAGES: messages || {
         welcome: '',
-        home: '心里的花，我想要带你回家。',
-        theme: '好吧，希望你能喜欢我的其他小伙伴。',
-        close: '你知道我喜欢吃什么吗？痴痴地望着你。'
+        home: '心里的花，宝宝带您回家。',
+        theme: '主人，您想看看宝宝的其它小伙伴吗？',
+        close: '主人，您不想要宝宝了吗？痴痴地望着你。'
       },
       MESSAGE_STYLE: messageStyle || {
         right: '68px',

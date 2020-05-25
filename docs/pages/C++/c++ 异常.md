@@ -1,4 +1,4 @@
-# C++异常的使用
+# C++异常
 - [1.用<code>throw</code>抛出异常](#1.用<code>throw</code>抛出异常)
 - [2.用<code>try catch</code>语句捕获异常](#2.用<code>try&nbsp;catch</code>语句捕获异常)
 - [继承<code>exception</code>类实现自己的异常类](#继承<code>exception</code>类实现自己的异常类)

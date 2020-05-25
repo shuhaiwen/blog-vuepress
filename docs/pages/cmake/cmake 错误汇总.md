@@ -1,3 +1,4 @@
+# cmake 错误汇总
 ## 更换生成器导致的问题
 ```sh
 CMake Error: Error: generator : Unix Makefiles

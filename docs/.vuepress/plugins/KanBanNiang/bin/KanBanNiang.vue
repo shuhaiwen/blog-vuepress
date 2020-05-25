@@ -51,32 +51,19 @@ export default {
       },
       currentTheme: THEME[0],
       myTheme: THEME,
-      themeName: ['blackCat', 'whiteCat', 'haru1', 'haru2', 'haruto', 'koharu', 'izumi', 'shizuku', 'wanko', 'miku', 'z16'],
+      themeName: ['tsumiki', 'haru1', 'haru2', 'shizuku', 'miku' ],
       // 模型地址
       model: {
-        blackCat:
-          // 'https://assets.smallsunnyfox.com/models/live2d-widget-model-hijiki/assets/hijiki.model.json',
-          'https://assets.smallsunnyfox.com/models/model/HyperdimensionNeptunia/histoire/index.json',
-        whiteCat:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-tororo/assets/tororo.model.json',
+        tsumiki:
+        'https://cdn.jsdelivr.net/gh/shuhaiwen/live2dw/live2d-widget-model-tsumiki/assets/tsumiki.model.json',
         haru1:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-haru/01/assets/haru01.model.json',
+          'https://cdn.jsdelivr.net/gh/shuhaiwen/live2dw/live2d-widget-model-haru/01/assets/haru01.model.json',
         haru2:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-haru/02/assets/haru02.model.json',
-        haruto:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-haruto/assets/haruto.model.json',
-        koharu:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-koharu/assets/koharu.model.json',
-        izumi:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-izumi/assets/izumi.model.json',
+          'https://cdn.jsdelivr.net/gh/shuhaiwen/live2dw/live2d-widget-model-haru/02/assets/haru02.model.json',
         shizuku:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-shizuku/assets/shizuku.model.json',
-        wanko:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-wanko/assets/wanko.model.json',
+          'https://cdn.jsdelivr.net/gh/shuhaiwen/live2dw/live2d-widget-model-shizuku/assets/shizuku.model.json',
         miku:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-miku/assets/miku.model.json',
-        z16:
-          'https://assets.smallsunnyfox.com/models/live2d-widget-model-z16/assets/z16.model.json'
+          'https://cdn.jsdelivr.net/gh/shuhaiwen/live2dw/live2d-widget-model-miku/assets/miku.model.json',
       },
       // model的高宽
       style: {
@@ -127,7 +114,7 @@ export default {
           themes.push(this.myTheme[i])
         }
       }
-      const randomNum = Math.floor(Math.random() * (this.myTheme.length-1))
+      const randomNum = Math.floor(Math.random() * (this.myTheme.length - 1))
       this.currentTheme = themes[randomNum]
       this.initBanNiang()
     },
@@ -190,9 +177,8 @@ export default {
     border-radius 4px
     // 其他主题识别不到变量时使用
     background-color rgba(231, 234, 241, 0.5)
-    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2)
     // reco主题
-    box-shadow var(--box-shadow) 
+    box-shadow var(--box-shadow)
     background-color var(--background-color)
   .banniang-container
     position fixed

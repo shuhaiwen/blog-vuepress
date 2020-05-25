@@ -1,8 +1,9 @@
+# xml总结
 **xml schema 中重要内容解析**
 
-# 属性
+## 属性
 
-## abstract
+### abstract
 
 * option：可选的，指示元素是否可以在实例文档中使用。
 * value：true|false(默认false)

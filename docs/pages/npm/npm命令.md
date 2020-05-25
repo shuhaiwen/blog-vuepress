@@ -1,6 +1,6 @@
-## npm 命令
+# npm 命令
 
-### 常用指令表
+## 常用指令表
 <table>
 <tr>
 <th colspan="2">功能</th>

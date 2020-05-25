@@ -1,6 +1,5 @@
-<BackToTop></BackToTop>
-
 # git常用指令
+[[toc]]
 ## git配置
 ### 设置用户名和邮箱
 *如果用户名有空格，则用户名要在引号内，如"zhang san"*

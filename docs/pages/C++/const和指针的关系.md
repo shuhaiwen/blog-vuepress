@@ -1,4 +1,5 @@
-# const和*，**搭配的解释
+# const和指针的关系
+## const和*，**搭配的解释
 - [类型一：const 和 int](#类型一：const&nbsp;和&nbsp;int)
 - [类型二：const和 int 和 *](#类型二：const和&nbsp;int&nbsp;和&nbsp;*&#42;*)
 - [类型三：const 和 int 和 **](#类型三：const&nbsp;和&nbsp;int&nbsp;和&nbsp;**)
