@@ -1,3 +1,12 @@
+---
+title: boost库编译
+date: 2019-06-07
+sidebarDepth: 2
+tags:
+ - boost
+categories:
+ - C++
+---
 # boost库编译
 ## 常用的boost库编译指令解释
 - [常用的编译指令](#常用的编译指令)

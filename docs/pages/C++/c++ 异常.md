@@ -1,7 +1,17 @@
+---
+title: C++异常
+date: 2019-06-09
+sidebarDepth: 2
+tags:
+ - 异常
+categories:
+ - C++
+---
 # C++异常
-- [1.用<code>throw</code>抛出异常](#1.用<code>throw</code>抛出异常)
-- [2.用<code>try catch</code>语句捕获异常](#2.用<code>try&nbsp;catch</code>语句捕获异常)
-- [继承<code>exception</code>类实现自己的异常类](#继承<code>exception</code>类实现自己的异常类)
+- [C++异常](#c异常)
+	- [1.用<code>throw</code>抛出异常](#1用throw抛出异常)
+	- [2.用<code>try catch</code>语句捕获异常](#2用try-catch语句捕获异常)
+	- [继承<code>exception</code>类实现自己的异常类](#继承exception类实现自己的异常类)
 ## 1.用<code>throw</code>抛出异常
 在需要抛异常的地方使用throw
 - throw +基本类型

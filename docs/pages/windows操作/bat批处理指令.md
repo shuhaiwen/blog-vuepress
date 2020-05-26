@@ -1,3 +1,12 @@
+---
+title: bat批处理指令
+date: 2020-05-21
+sidebarDepth: 2
+tags:
+ - bat
+categories:
+ - Cmd
+---
 # bat批处理指令
 - dir 　　　列文件名 
 - cd　　　　改变当前目录 

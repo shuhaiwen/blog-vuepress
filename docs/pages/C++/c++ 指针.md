@@ -1,3 +1,12 @@
+---
+title: C++指针
+date: 2019-06-13
+sidebarDepth: 2
+tags:
+ - 指针
+categories:
+ - C++
+---
 # c++ 指针
 **c/c++中的指针的全面理解**
 

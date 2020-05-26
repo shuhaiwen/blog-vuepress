@@ -1,3 +1,13 @@
+---
+title: Git
+date: 2020-05-04
+sidebarDepth: 2
+tags:
+ - git
+categories:
+ - Git
+---
+
 # git常用指令
 [[toc]]
 ## git配置

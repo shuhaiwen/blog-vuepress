@@ -1,3 +1,12 @@
+---
+title: cmake 错误汇总
+date: 2019-03-05
+sidebarDepth: 2
+tags:
+ - CMake
+categories:
+ - CMake
+---
 # cmake 错误汇总
 ## 更换生成器导致的问题
 ```sh

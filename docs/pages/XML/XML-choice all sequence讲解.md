@@ -1,3 +1,12 @@
+---
+title: XML-choice all sequence讲解
+date: 2020-05-21
+sidebarDepth: 2
+tags:
+ - XML
+categories:
+ - Xml
+---
 # XML-choice all sequence讲解
 
 **XML Schema 中 Order 指示器 choice all sequence和 Occurrence 指示器 minOccurs maxOccurs 的用法解释**

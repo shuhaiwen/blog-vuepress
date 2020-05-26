@@ -1,3 +1,12 @@
+---
+title: XML-final属性
+date: 2020-05-21
+sidebarDepth: 2
+tags:
+ - XML
+categories:
+ - Xml
+---
 # xml-final属性
 ## final
 可选。防止从该 complexType 元素派生指定的类型。该值可以包含 #all 或者一个列表，该列表是 extension 或 restriction 的子集。

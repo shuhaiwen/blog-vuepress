@@ -1,6 +1,6 @@
 module.exports = {
-
   title: '小锋哥的博客',
+  dest: 'blog',
   description: '小锋哥的博客',
   head: [ // 注入到当前页面的 HTML <head> 中的标签
     ['link', { rel: 'icon', href: '/github.svg' }], // 增加一个自定义的 favicon(网页标签的图标)
@@ -13,7 +13,7 @@ module.exports = {
     [
       require('./plugins/KanBanNiang'),
       {
-        theme: ['tsumiki','miku']	,
+        theme: ['miku','tsumiki']	,
         width: 200,
         height: 470,
         modelStyle: {
@@ -59,6 +59,16 @@ module.exports = {
         floatPosition: 'mini',
 
       }
+    ],
+    [
+      '@vuepress/pwa', 
+      {
+        serviceWorker: true,
+        updatePopup: {
+          message: "发现新内容可用",
+          buttonText: "刷新"
+        }
+      }
     ]
   ],
   theme: 'reco',
@@ -90,11 +100,11 @@ module.exports = {
     blogConfig: {
       category: {
         location: 2, // 在导航栏菜单中所占的位置，默认2
-        //text: 'Category' // 默认 “分类”
+        text: 'Category' // 默认 “分类”
       },
       tag: {
         location: 3, // 在导航栏菜单中所占的位置，默认3
-        //text: 'Tag' // 默认 “标签”
+        text: 'Tag' // 默认 “标签”
       }
     },
     //侧边栏
@@ -107,7 +117,7 @@ module.exports = {
       //     title:'C++',
       //     collapsable: true,
       //     children:[
-      //       'C++/别名归类.md',
+      //       'C++/别名归类',
       //       'C++/移动语义',
       //       'C++/c++随机数'
       //     ]
@@ -117,13 +127,6 @@ module.exports = {
       //     collapsable: true,
       //     children:[
       //       'Git/git常用指令',
-      //     ]
-      //   },
-      //   {
-      //     title:'Markdown',
-      //     collapsable: true,
-      //     children:[
-      //       '/Markdown/README',
       //     ]
       //   },
        

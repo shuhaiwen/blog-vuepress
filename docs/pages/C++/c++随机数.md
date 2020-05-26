@@ -1,3 +1,13 @@
+---
+title: 随机数
+date: 2020-05-03
+sidebarDepth: 2
+tags:
+ - 随机数
+categories:
+ - C++
+---
+
 # c++随机数
 *c++标准库提供引擎和分布来满足大部分随机数的需求*
 

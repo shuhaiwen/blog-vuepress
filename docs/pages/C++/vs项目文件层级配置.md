@@ -1,3 +1,13 @@
+---
+title: vs项目文件层级配置
+date: 2019-06-21
+sidebarDepth: 2
+tags:
+ - visual studio
+ - 项目配置
+categories:
+ - C++
+---
 # vs项目文件层级配置
 ## 步骤一：辅助Temp Lib include Bin文件夹及其子文件到解决方案路径下
 1. Temp 文件存放临时生成文件

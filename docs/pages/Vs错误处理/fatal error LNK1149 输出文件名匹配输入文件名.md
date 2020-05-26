@@ -1,3 +1,12 @@
+---
+title: visual studio错误集
+date: 2020-05-21
+sidebarDepth: 2
+tags:
+ - visual studio
+categories:
+ - C++
+---
 # fatal error LNK1149 输出文件名匹配输入文件名
 ## 报错可能原因
 错把 “属性->生成事件->后期生成事件”中的命令行语句写在了“属性->链接器->命令行”中

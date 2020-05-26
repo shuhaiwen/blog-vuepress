@@ -1,8 +1,21 @@
+---
+title: const和指针的关系
+date: 2019-06-19
+sidebarDepth: 2
+tags:
+ - const
+ - 指针
+categories:
+ - C++
+---
 # const和指针的关系
+- [const和指针的关系](#const和指针的关系)
+	- [const和*，**搭配的解释](#const和搭配的解释)
+	- [类型一：const 和 int](#类型一const-和-int)
+	- [类型二：const和 int 和 *](#类型二const和-int-和-)
+	- [类型三：const 和 int 和 **](#类型三const-和-int-和-)
+
 ## const和*，**搭配的解释
-- [类型一：const 和 int](#类型一：const&nbsp;和&nbsp;int)
-- [类型二：const和 int 和 *](#类型二：const和&nbsp;int&nbsp;和&nbsp;*&#42;*)
-- [类型三：const 和 int 和 **](#类型三：const&nbsp;和&nbsp;int&nbsp;和&nbsp;**)
 
 *注：以下举例以int作为类型,且new的数据未作delete处理*
 ## 类型一：const 和 int
