@@ -50,7 +50,7 @@ git status
 ## git远程仓库命令 
 ### 克隆远程仓库
 ```sh
-# 默认远程仓库分支为origin
+# 默认远程仓库分支为origin，且在本地创建master分支
 git clone [url]
 ```
 ### 拉取远程仓库内容
