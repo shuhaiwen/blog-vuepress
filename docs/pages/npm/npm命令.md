@@ -21,6 +21,10 @@ categories:
 <td>npm -v</td>
 </tr>
 <tr>
+<td colspan="2">帮助信息</td>
+<td>npm -h</td>
+</tr>
+<tr>
 <td colspan="2">npm全局包路径</td>
 <td>npm prefix -g</td>
 </tr>
@@ -80,8 +84,28 @@ categories:
 <td>执行指定script</td>
 <td>npm run [script]</td>
 </tr>
+<tr>
+    <td rowspan="3">查看已安装package</td>
+    <td>本地包</td>
+    <td>npm list</td>
+</tr>
+<tr>
+    <td>全局包</td>
+    <td>npm list -g</td>
+</tr>
+<tr>
+    <td>限制显示模块层级</td>
+    <td>npm --depth [number]</td>
+</tr>
 </table>
-
+-----------
+## 进阶指令表
+<table>
+<td>
+<th>功能</th>
+<th>指令</th>
+</td>
+</table>
 ------------
 ### 安装模块参数说明
 1. -g, --global 全局安裝（global）
@@ -97,12 +121,3 @@ categories:
 |:---|:---:|---|
 |install|i|安装package|
 |list|ls la ll|列出以安装package信息|
-----------
-[baidu]
-[Google][id1]
-
-
-[baidu]: http://www.baidu.com "百度一下"
-
-
-[id1]: http://www.Google.com
