@@ -98,14 +98,20 @@ categories:
     <td>npm --depth [number]</td>
 </tr>
 </table>
+
 -----------
 ## 进阶指令表
 <table>
-<td>
-<th>功能</th>
+<tr>
+<th colspan="2">功能</th>
 <th>指令</th>
-</td>
+</tr>
+<tr>
+	<td colspan="2">查看package文档</td>
+    <td>npm docs [packageName]</td>
+</tr>
 </table>
+
 ------------
 ### 安装模块参数说明
 1. -g, --global 全局安裝（global）
