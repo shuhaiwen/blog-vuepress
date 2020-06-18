@@ -1,5 +1,5 @@
 ---
-title: 编译器生成的符号
+title: vue笔记
 date: 2020-06-18
 sidebarDepth: 2
 tags:
@@ -12,7 +12,7 @@ categories:
 # vue笔记
 
 ## vue指令缩写
-<table border="1">
+<table>
 <tr><th>指令</th><th>缩写</th></tr>
 <tr><td>v-on</td><td>@</td></tr>
 <tr><td>v-bind</td><td>:</td></tr>
