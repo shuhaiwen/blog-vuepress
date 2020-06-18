@@ -6,17 +6,16 @@ set -e
 # 生成静态文件
 npm run build
 
-# 进入生成的文件夹
-cd docs/.vuepress/dist
+#删除blog目录下除.git文件外所有资源
+rm -rf ./blog/*
 
-git init
-git add -A
-git commit -m 'deploy'
+#移动blogTemp下文件到blog文件夹
+mv ./blogTemp/* ./blog/
 
-# 如果发布到 https://<USERNAME>.github.io
- git push -f git@github.com:shuhaiwen/shuhaiwen.github.io.git master
+# 进入目录下
+cd ./blog
 
-# 如果发布到 https://<USERNAME>.github.io/<REPO>
-# git push -f git@github.com:shuhaiwen/blog-vuepress.git master:gh-pages
+git add .
+git commit -m '$1.'
 
-cd -
+git push origin master
