@@ -3,9 +3,9 @@ title: Git
 date: 2020-05-04
 sidebarDepth: 2
 tags:
- - git
-categories:
  - Git
+categories:
+ - 版本控制
 ---
 
 # git常用指令

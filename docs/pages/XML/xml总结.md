@@ -3,9 +3,9 @@ title: xml总结
 date: 2020-05-21
 sidebarDepth: 2
 tags:
- - XML
-categories:
  - Xml
+categories:
+ - 前端
 ---
 # xml总结
 **xml schema 中重要内容解析**

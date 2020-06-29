@@ -3,9 +3,10 @@ title: npm 命令
 date: 2020-05-21
 sidebarDepth: 2
 tags:
- - cmd
-categories:
  - Npm
+categories:
+ - Cmd
+ - Kit
 ---
 
 # npm 命令

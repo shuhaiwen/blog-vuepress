@@ -3,9 +3,10 @@ title: visual studio错误集
 date: 2020-05-21
 sidebarDepth: 2
 tags:
- - visual studio
+ - VS
 categories:
  - C++
+ - Solution
 ---
 # fatal error LNK1149 输出文件名匹配输入文件名
 ## 报错可能原因

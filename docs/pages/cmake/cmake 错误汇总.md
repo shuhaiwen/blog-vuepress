@@ -6,6 +6,7 @@ tags:
  - CMake
 categories:
  - CMake
+ - Solution
 ---
 # cmake 错误汇总
 ## 更换生成器导致的问题

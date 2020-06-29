@@ -3,9 +3,10 @@ title: Linux命令学习步骤
 date: 2020-05-04
 sidebarDepth: 2
 tags:
- - cmd
+ - Linux
 categories:
  - Linux
+ - Cmd
 ---
 # Linux命令学习步骤
 
