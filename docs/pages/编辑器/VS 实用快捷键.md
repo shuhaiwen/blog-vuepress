@@ -1,5 +1,5 @@
 ---
-title: Vscode 实用快捷键
+title: Vs 实用快捷键
 date: 2020-07-01
 sidebarDepth: 2
 tags:
@@ -9,7 +9,7 @@ categories:
  - 编辑器
 ---
 
-# Vscode 实用快捷键
+# Vs 实用快捷键
 
 <table>
 <tr>
