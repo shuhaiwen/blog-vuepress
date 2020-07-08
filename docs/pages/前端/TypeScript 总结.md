@@ -10,7 +10,24 @@ categories:
 ---
 
 # TypeScript 总结
-------------------------------
+- [TypeScript 总结](#typescript-总结)
+  - [类型声明](#类型声明)
+    - [基本类型](#基本类型)
+    - [枚举 `enum`](#枚举-enum)
+    - [void](#void)
+    - [any](#any)
+    - [类型断言](#类型断言)
+  - [函数](#函数)
+    - [可选参数](#可选参数)
+    - [参数默认值](#参数默认值)
+    - [变长参数](#变长参数)
+  - [类型别名 `type`](#类型别名-type)
+  - [接口 `interface`](#接口-interface)
+    - [接口定义](#接口定义)
+    - [接口实现 `implements`](#接口实现-implements)
+    - [继承接口 `extends`](#继承接口-extends)
+  - [命名空间 `namespace`](#命名空间-namespace)
+  - [声明文件 `declare`](#声明文件-declare)
 ## 类型声明
 ### 基本类型
 关键字 `:`<br/>
@@ -33,7 +50,7 @@ let u: undefined = undefined;
 let n: null = null;
 ```
 *Array的语法类型C++模板写法，使用<>包裹内部类型,嵌套规则也相同*
-### 枚举
+### 枚举 `enum`
 ```ts
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
@@ -55,6 +72,7 @@ notSure = "maybe a string instead";// okay
 notSure = false; // okay
 ```
 ### 类型断言
+关键字：`<>` 或者 `as`<br/>
 类型断言是一种强制转换方式
 ```ts
 //写法1 <>
@@ -113,4 +131,133 @@ function buildName(firstName: string, ...restOfName: string[]) {
 }
 let buildNameFun: (fname: string, ...rest: string[]) => string = buildName;
 let employeeName = buildName("Joseph", "Samuel", "Lucas", "MacKinzie");
+```
+## 类型别名 `type`
+- 用于基本类型
+- 用于对象
+- 用于元组
+- 用于泛型
+- 用于联合类型
+- 用于函数
+```ts
+//基本类型
+type Name = string;
+//对象
+type User = {
+  name: string
+  age: number
+};
+//元组
+type PetList = [Dog, Pet];
+//泛型
+type Callback<T> = (data: T) => void;  
+type Pair<T> = [T, T];  
+type Coordinates = Pair<number>;  
+type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+//函数
+type NameResolver = () => string;
+//联合类型
+type NameOrResolver = Name | NameResolver;
+function getName(n: NameOrResolver): Name {
+    if (typeof n === 'string') {
+        return n;
+    } else {
+        return n();
+    }
+}
+```
+## 接口 `interface`
+### 接口定义
+- 支持对象[可选属性、只读属性]
+- 支持函数
+- 支持可索引的类型
+```ts
+//对象
+interface LabelledValue {
+  label: string;
+  readonly name?: string;
+}
+
+function printLabel(labelledObj: LabelledValue) {
+  console.log(labelledObj.label);
+}
+
+let myObj = {size: 10, label: "Size 10 Object"};
+printLabel(myObj);
+//函数
+interface SearchFunc {
+  (source: string, subString: string): boolean;
+}
+//可索引的类型
+interface StringArray {
+  [index: number]: string;
+}
+
+let myArray: StringArray;
+myArray = ["Bob", "Fred"];
+
+let myStr: string = myArray[0];
+```
+### 接口实现 `implements`
+```ts
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date);
+}
+
+class Clock implements ClockInterface {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(h: number, m: number) { }
+}
+```
+### 继承接口 `extends`
+```ts
+interface Shape {
+    color: string;
+}
+
+interface Square extends Shape {
+    sideLength: number;
+}
+
+let square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+```
+## 命名空间 `namespace`
+与c++中namespace一样作用
+- 使用namespace避免与其他对象命名冲突
+- 使用import 命名namespace别名
+```ts
+namespace Utility {
+  export function log(msg) {
+    console.log(msg);
+  }
+  export function error(msg) {
+    console.log(msg);
+  }
+}
+// usage
+Utility.log('Call me');
+Utility.error('maybe');
+
+//使用import 命名namespace别名
+namespace Shapes {
+    export namespace Polygons {
+        export class Triangle { }
+        export class Square { }
+    }
+}
+import polygons = Shapes.Polygons;
+let sq = new polygons.Square(); // Same as "new Shapes.Polygons.Square()"
+```
+## 声明文件 `declare`
+TypeScript 作为 JavaScript 的超集，在开发过程中不可避免要引用其他第三方的 JavaScript 的库。虽然通过直接引用可以调用库的类和方法，但是却无法使用TypeScript 诸如类型检查等特性功能。为了解决这个问题，需要将这些库里的函数和方法体去掉后只保留导出类型声明，而产生了一个描述 JavaScript 库和模块信息的声明文件。通过引用这个声明文件，就可以借用 TypeScript 的各种特性来使用库文件了。
+```ts
+declare var jQuery: (selector: string) => any;
+
+jQuery('#foo');
 ```

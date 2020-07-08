@@ -10,7 +10,11 @@ categories:
 ---
 
 # vue笔记
-
+- [vue笔记](#vue笔记)
+  - [vue指令缩写](#vue指令缩写)
+  - [props 和 data 区别](#props-和-data-区别)
+  - [mixins](#mixins)
+  - [inheritAttrs + `$attrs` + `$listeners`](#inheritattrs--attrs--listeners)
 ## vue指令缩写
 <table>
 <tr><th>指令</th><th>缩写</th></tr>

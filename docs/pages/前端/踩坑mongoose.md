@@ -12,7 +12,8 @@ categories:
 ---
 
 # 踩坑mongoose
-
+- [踩坑mongoose](#踩坑mongoose)
+  - [mongoose创建的collection名带后缀s？](#mongoose创建的collection名带后缀s)
 ## mongoose创建的collection名带后缀s？
 可能代码如下：
 ```js
