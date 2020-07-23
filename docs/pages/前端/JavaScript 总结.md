@@ -24,6 +24,9 @@ categories:
       - [import 导出](#import-导出)
       - [export 与 import 的复合写法](#export-与-import-的复合写法)
     - [CommonJS 模块语法](#commonjs-模块语法)
+  - [call apply bind](#call-apply-bind)
+  - [异步](#异步)
+    - [async await](#async-await)
 ## 关键字
 ### this
 JavaScript中this值是在函数被调用时确定的，this指向调用的对象
@@ -249,3 +252,49 @@ import * as ns from "mod";
 export {ns};
 ```
 ### CommonJS 模块语法
+```js
+// lib.js
+var counter = 3;
+function incCounter() {
+  counter++;
+}
+module.exports = {
+  counter: counter,
+  incCounter: incCounter,
+};
+// main.js
+var mod = require('./lib');
+
+console.log(mod.counter);  // 3
+mod.incCounter();
+console.log(mod.counter); // 3
+```
+## call apply bind
+**作用:函数的复用**
+- 用于改变函数执行时this指向(重新绑定对象)
+- 第一个参数是绑定的对象，后面参数是函数执行时接受的参数
+```js
+  let obj = {name: 'tony'};
+  
+  function Child(name){
+    this.name = name;
+  }
+  
+  Child.prototype = {
+    constructor: Child,
+    showName: function(){
+      console.log(this.name);
+    }
+  }
+  var child = new Child('thomas');
+  child.showName(); // thomas
+  
+  //  call,apply,bind使用
+  child.showName.call(obj);// tony
+  child.showName.apply(obj);// tony
+  let bind = child.showName.bind(obj); // 返回一个函数
+  bind(); // tony
+
+```
+## 异步
+### async await

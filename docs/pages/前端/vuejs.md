@@ -3,12 +3,11 @@ title: vue笔记
 date: 2020-06-18
 sidebarDepth: 2
 tags:
- - vue
+ - Vue
 categories:
  - javaScript
  - 前端
 ---
-
 # vue笔记
 - [vue笔记](#vue笔记)
   - [vue指令缩写](#vue指令缩写)
