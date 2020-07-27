@@ -1,11 +1,4 @@
-<!--
- * @Author: your name
- * @Date: 2020-06-18 10:28:36
- * @LastEditTime: 2020-07-24 10:12:40
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \FrontEnd\js\vue\blog-vuepress\docs\pages\前端\vuejs.md
---> 
+
 ---
 title: vue笔记
 date: 2020-06-18
@@ -46,7 +39,7 @@ categories:
 ------------
 ## slot插槽
 -  `<slot name="header"></slot>`具名插槽
--  `<slot v-bind:user="user">{{ user.lastName }}</slot>` 作用域插槽
+-  作用域插槽
 ```html
 <a
   v-bind:href="url"
