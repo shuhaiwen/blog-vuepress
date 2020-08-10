@@ -3,7 +3,7 @@ title: std::tie
 date: 2020-08-08
 sidebarDepth: 2
 tags:
- - std::tie
+ - tie
 categories:
  - C++11
 ---

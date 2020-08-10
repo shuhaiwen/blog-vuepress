@@ -3,7 +3,7 @@ title: std::initializer_list
 date: 2020-08-05
 sidebarDepth: 2
 tags:
- - std::initializer_list
+ - initializer_list
 categories:
  - C++11
 ---

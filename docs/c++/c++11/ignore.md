@@ -3,7 +3,7 @@ title: std::ignore
 date: 2020-08-05
 sidebarDepth: 2
 tags:
- - std::ignore
+ - ignore
 categories:
  - C++11
 ---
