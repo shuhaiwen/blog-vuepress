@@ -3,12 +3,12 @@ title: std::ignore
 date: 2020-08-07
 sidebarDepth: 2
 tags:
- - declvar
+ - declval
 categories:
  - C++11
 ---
 
-# declvar
+# declval
 - 头文件：utility
 - 功能：常与decltype一起使用，用来直接从类中获取成员类型
 - 示例
