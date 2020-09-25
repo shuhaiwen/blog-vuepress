@@ -101,4 +101,4 @@ private:
     const _Elem* _Last;
 };
 ```
-- 注意：当类中没有定义initializer_list 为参数的构造函数时，会默认使用相应的构造函数，因此花括号{}可以在没有实现initializer_list时正确解析。
+- 注意：当类中没有定义initializer_list 为参数的构造函数时，会默认使用相应的构造函数，因此花括号{}可以在没有实现initializer_list时也可正确解析。
