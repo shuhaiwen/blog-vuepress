@@ -34,7 +34,7 @@ int main()
     
 }
 ```
-- 源码分析：
+- 源码分析：模板函数`declval`（只声明不定义）最终返回的是_Ty类型
 ```c++
 // STRUCT TEMPLATE _Add_reference
 template <class _Ty, class = void>
