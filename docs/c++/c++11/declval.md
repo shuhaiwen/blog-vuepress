@@ -1,5 +1,5 @@
 ---
-title: std::ignore
+title: std::declval
 date: 2020-08-07
 sidebarDepth: 2
 tags:
@@ -10,7 +10,8 @@ categories:
 
 # declval
 - 头文件：utility
-- 功能：常与decltype一起使用，用来直接从类中获取成员类型
+- 功能：declval是一个模板函数，常与`decltype`一起使用，令在 `decltype` 表达式中不必经过构造函数就能使用成员函数
+- 注意：因为`declval`只有声明没有定义，因此只能用在*不求值语境*，所有可以用在`decltype`中
 - 示例
 ```c++
 #include <utility>
