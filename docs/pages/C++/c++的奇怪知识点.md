@@ -11,6 +11,7 @@ categories:
   - [函数中定义类或结构](#函数中定义类或结构)
   - [函数类型、函数指针](#函数类型函数指针)
   - [函数只声明不定义可以使用吗](#函数只声明不定义可以使用吗)
+  - [强制类型转换如何实现](#强制类型转换如何实现)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -66,5 +67,35 @@ int main()
     //Func1<int>();//编译不过，因为没有定义，无法执行  
 }
 ```
-
+## 强制类型转换如何实现
+在类中实现转换函数，形如`operator Type ();`
+```c++
+class A 
+{
+public:
+    A() :m_a(0) {}
+    A(const int& a) { m_a = a; }
+    //用户定义转换函数 int转换函数
+    operator int () {
+        return this->m_a;
+    }
+    //or
+    //operator int& () {
+    //    return this->m_a;
+    //}
+    operator int*() {
+        return &this->m_a;
+    }
+private:
+    int m_a;
+};
+int main()
+{
+    A a(2);
+    //int转换函数
+    int i = (int)(a);
+    i = static_cast<int>(a);
+    int* pi = (int*)(a);
+}
+```
 
