@@ -10,7 +10,7 @@ categories:
 # std::tie
 
 - 头文件：`tuple`
-- 功能：解构pair和tuple类型数据,可以与std::ignore配合使用
+- 功能：解构pair和tuple类型数据,可以与std::ignore配合使用，解构后变量时结构前数据的引用
 - 示例
 ```c++
 #include <tuple>
