@@ -12,6 +12,7 @@ categories:
   - [函数类型、函数指针](#函数类型函数指针)
   - [函数只声明不定义可以使用吗](#函数只声明不定义可以使用吗)
   - [强制类型转换如何实现](#强制类型转换如何实现)
+  - [`T A::*`的使用](#t-a的使用)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -96,6 +97,66 @@ int main()
     int i = (int)(a);
     i = static_cast<int>(a);
     int* pi = (int*)(a);
+}
+```
+## `T A::*`的使用
+- 语法分析
+  - `A::*`：指类型`A`的成员指针
+  - `T`是指类型`A`中成员的类型，可以是是指针或引用类型
+- 功能：用来重定向某一类成员变量
+- 示例
+```c++
+class A {
+public:
+    A() :a1(1), a2(2), a3(3) {
+        pa1 = new int(5);
+        pa2 = new int(6);
+    }
+    ~A() {
+        if (pa1 != nullptr) {
+            delete pa1;
+            pa1 = nullptr;
+        }
+        if (pa2 != nullptr) {
+            delete pa2;
+            pa2 = nullptr;
+        }
+    }
+    int a1;
+    int a2;
+    int a3;
+    
+    int* pa1;
+    int* pa2;
+};
+
+
+class B {
+public:
+    int b;
+};
+template <class T>
+void fun1(int T::*) {
+    cout << "";
+}
+int main() {
+    fun1(&A::a2);
+    fun1<A>(0);
+    fun1<A>(NULL);
+    fun1<A>(nullptr);
+
+    int A::* p1 = &A::a1;//用p1指向类A的成员a1
+    int A::* p2 = &A::a2;
+    int A::* p3 = &A::a3;
+    A* pa = new A;
+    pa->*p1 = 5;//通过*p1访问类A中成员a1，并赋值5
+    pa->*p2 = 6;
+    pa->*p3 = 7;
+
+    int* A::* pp1 = &A::pa1;//用pp1指向类A中成员pa1
+    delete pa->pa1;
+    pa->*pp1 = new int(3);
+
 }
 ```
 
