@@ -118,5 +118,9 @@ git branch --merged
 # 显示未合并分支
 git branch --no-merged
 ```
+### 分支改名
+```sh
+git branch -m oldName newName
+```
 
 
