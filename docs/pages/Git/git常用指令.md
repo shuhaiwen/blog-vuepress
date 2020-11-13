@@ -102,12 +102,17 @@ git checkout -b branch2
 git checkout master
 git merge branch1
 ```
-### 删除分支
+### 删除本地分支
 ```sh
 # 分支未被合并会报错
 git branch -d branch1
 # 强制删除分支(包括未合并分支)
 git branch -D branch1
+```
+### 删除远程分支
+```sh
+# 删除远程分支 branch1，其中冒号:前需要空一格，且删除的分支不能是远程仓库的默认分支
+git push origin :branch1
 ```
 ### 显示分支
 ```sh
