@@ -19,6 +19,7 @@ categories:
   - [concepts](#concepts)
     - [变量概念](#变量概念)
     - [函数概念](#函数概念)
+    - [使用概念](#使用概念)
 # concepts 和 requires
 这2个关键字的出现可以很好的限制模板参数中参数类型。在此之前，我们对模板参数类型的限制只能在内部处理，现在通过`concepts` 和 `requires`可以限制参数，并在编译期判断模板参数是否符合限制要求。
 ## requires
@@ -184,4 +185,18 @@ template <class T>
 concept bool EqualityComparable() { 
     return requires(T a, T b) { {a == b} -> Boolean; {a != b} -> Boolean; };
 }
+```
+### 使用概念
+有三种使用概念的方式
+```c++
+//Requires Clause
+template<typename Cont>
+    requires Sortable<Cont>
+void sort(Cont& container);
+//Trailing Requires Clause
+template<typename Cont>
+void sort(Cont& container) requires Sortable<Cont>;
+//Constrained Template Parameters
+template<Sortable Cont>
+void sort(Cont& container);
 ```

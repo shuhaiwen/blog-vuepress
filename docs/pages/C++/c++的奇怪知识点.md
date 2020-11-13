@@ -71,21 +71,27 @@ int main()
 ## 强制类型转换如何实现
 在类中实现转换函数，形如`operator Type ();`
 ```c++
-class A 
+class A
 {
 public:
     A() :m_a(0) {}
     A(const int& a) { m_a = a; }
-    //用户定义转换函数 int转换函数
-    operator int () {
+    //用户定义转换函数 int转换函数,当指定了explicit时，转换需显式转换
+    explicit operator int() {
         return this->m_a;
     }
     //or
     //operator int& () {
     //    return this->m_a;
     //}
-    operator int*() {
+    operator int* () {
         return &this->m_a;
+    }
+    operator bool() {
+        if (m_a > 0)
+            return true; 
+        else 
+            return false; 
     }
 private:
     int m_a;
@@ -93,10 +99,13 @@ private:
 int main()
 {
     A a(2);
+    bool b = a;//隐式调用 operator bool 
+    if (a) {}//if 块中默认bool，故也是显式调用operator bool
     //int转换函数
-    int i = (int)(a);
-    i = static_cast<int>(a);
-    int* pi = (int*)(a);
+    int i = (int)(a);//显式调用 operator int 
+    int i1 = a;//由于未显式指定int，隐式调用 operator bool 
+    i = static_cast<int>(a);//显式调用 operator int 
+    int* pi = (int*)(a);//显式调用 operator int* 
 }
 ```
 ## `T A::*`的使用
