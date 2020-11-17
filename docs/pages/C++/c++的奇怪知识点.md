@@ -13,6 +13,7 @@ categories:
   - [函数只声明不定义可以使用吗](#函数只声明不定义可以使用吗)
   - [强制类型转换如何实现](#强制类型转换如何实现)
   - [`T A::*`的使用](#t-a的使用)
+  - [成员函数引用限定](#成员函数引用限定)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -31,6 +32,7 @@ int main()
     func();//s.a=2
 }
 ```
+-------------------
 ## 函数类型、函数指针
 - 写法：函数类型是由2部分组成，函数返回值类型和参数类型。(将函数声明式的函数名和参数名去掉就是函数类型的写法)
 
@@ -51,6 +53,7 @@ int main()
     typedef int(*pFunc2)(int, int);
 }
 ```
+-------------------
 ## 函数只声明不定义可以使用吗
 一般情况下函数只声明不定义时函数是不能用的，但当处于*不求值语境*下，是可以使用的。例如，`decltype`推导数据类型时，是不需要计算表达式的值的。
 ```c++
@@ -68,6 +71,7 @@ int main()
     //Func1<int>();//编译不过，因为没有定义，无法执行  
 }
 ```
+-------------------
 ## 强制类型转换如何实现
 在类中实现转换函数，形如`operator Type ();`
 ```c++
@@ -108,6 +112,7 @@ int main()
     int* pi = (int*)(a);//显式调用 operator int* 
 }
 ```
+-------------------
 ## `T A::*`的使用
 - 语法分析
   - `A::*`：指类型`A`的成员指针
@@ -166,6 +171,34 @@ int main() {
     delete pa->pa1;
     pa->*pp1 = new int(3);
 
+}
+```
+-------------------
+## 成员函数引用限定
+- 功能：限定成员函数只能从左值或右值调用
+- 示例
+```c++
+#include <iostream>
+struct Test {
+    //引用限定只能用在非静态成员函数中
+    //static void TestSRef()& {
+    //    std::cout << " work only if object was a lvalue\n";
+    //}
+    void TestLRef()& {
+        std::cout << "左值"<<std::endl;
+    }
+    void TestRRef()&& {
+        std::cout << " work only if object was a rvalue\n";
+    }
+};
+
+int main() {
+    Test t;
+    t.TestLRef();     //ok
+    //t.TestRRef();     //不能编译
+
+    //Test{}.TestLRef();//不能编译
+    Test{}.TestRRef();//ok
 }
 ```
 
