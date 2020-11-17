@@ -8,8 +8,10 @@ tags:
 categories:
  - C++17
 ---
+- [if switch新特性](#if-switch新特性)
+  - [if switch 初始化语句](#if-switch-初始化语句)
+  - [constexpr if](#constexpr-if)
 # if switch新特性
-
 ## if switch 初始化语句
 - 功能：在`if`或`switch`条件块中增加变量声明或表达式语句
 - 使用场景：当if或switch语句的条件需要计算时，此计算表达式可放入if或switch条件区，而不必在外面声明
