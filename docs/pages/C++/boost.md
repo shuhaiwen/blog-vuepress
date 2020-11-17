@@ -1,14 +1,23 @@
 ---
-title: boost库编译
-date: 2019-06-07
+title: boost
+date: 2020-06-07
 sidebarDepth: 2
 tags:
  - boost
 categories:
  - C++
 ---
-# boost库编译
-## 常用的boost库编译指令解释
+- [boost](#boost)
+  - [boost库编译](#boost库编译)
+    - [常用的boost库编译指令解释](#常用的boost库编译指令解释)
+  - [* 默认值："./stage"](#-默认值stage)
+    - [示例](#示例)
+    - [扩展：部分visual studio的msvc版本](#扩展部分visual-studio的msvc版本)
+  - [* msvc-10.0是vs2010](#-msvc-100是vs2010)
+  - [boost库常用部分](#boost库常用部分)
+# boost
+## boost库编译
+### 常用的boost库编译指令解释
 - [常用的编译指令](#常用的编译指令)
 - [示例](#示例)
 - [扩展部分visual studio的msvc版本](#扩展:部分visual&nbsp;studio的msvc版本)
@@ -34,7 +43,7 @@ categories:
 * --stagedir=<STAGEDIR> 与stage选项一起用，指定lib文件生成目录
   * 默认值："./stage"
 ------------------------
-## 示例
+### 示例
 * 常用的编译命令
 ```sh
 b2 stage --with-regex toolset=msvc-14.2 link=static runtime-link=shared --stagedir="E:\boost\lib"
@@ -44,9 +53,16 @@ b2 stage --with-regex toolset=msvc-14.2 link=static runtime-link=shared --staged
 b2 --show-libraries
 ```
 以上命令会在E:\boost\lib目录下生成静态、多线程、适用vs2019的32|64位、debug|release版的regex库。
-## 扩展：部分visual studio的msvc版本
+### 扩展：部分visual studio的msvc版本
 * msvc-14.2是vs2019 
 * msvc-14.1是vs2017
 * msvc-14.0是vs2015
 * msvc-12.0是vs2013
 * msvc-10.0是vs2010
+-----------------------
+## boost库常用部分
+
+1. lexical_cast 字符串与数值的转换
+2. format 字符串的格式化
+3. filesystem 文件系统（c++17）
+4. log 日志库
