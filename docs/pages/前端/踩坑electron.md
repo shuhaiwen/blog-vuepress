@@ -60,7 +60,7 @@ app.on('ready', async () => {
       // await installExtension(VUEJS_DEVTOOLS) //注释掉原先代码
       //以下2行新增
       const { session } = require("electron");
-      session.defaultSession.loadExtension('C:\\Users\\shuhaiwen\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\ljjemllljcmogpfapbkkighbhhppjdbg\\6.0.0.2_0');
+      session.defaultSession.loadExtension('...\\Google\\Chrome\\User Data\\Default\\Extensions\\ljjemllljcmogpfapbkkighbhhppjdbg\\6.0.0.2_0');//引号内是vue-devTools扩展地址
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
