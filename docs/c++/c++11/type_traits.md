@@ -7,6 +7,9 @@ tags:
 categories:
  - C++11
 ---
+- [type_traits](#type_traits)
+  - [conjunction](#conjunction)
+  - [decay](#decay)
 # type_traits
 **c++ 类型特性（type_traits）定义一个编译时基于模板的结构，以查询或修改类型的属性**
 ## conjunction
@@ -34,4 +37,94 @@ struct conjunction<_First, _Rest...> : _Conjunction<_First::value, _First, _Rest
 //类5 
 template <class... _Traits>
 _INLINE_VAR constexpr bool conjunction_v = conjunction<_Traits...>::value;
+```
+- 示例
+```c++
+#include <iostream>
+#include <type_traits>
+ 
+// 若所有 Ts... 都拥有等同于 T 的类型，则启用 func
+template<typename T, typename... Ts>
+std::enable_if_t<std::conjunction_v<std::is_same<T, Ts>...>>
+func(T, Ts...) {
+    std::cout << "all types in pack are T\n";
+}
+ 
+// 否则
+template<typename T, typename... Ts>
+std::enable_if_t<!std::conjunction_v<std::is_same<T, Ts>...>>
+func(T, Ts...) {
+    std::cout << "not all types in pack are T\n";
+}
+ 
+int main() {
+    func(1, 2, 3);
+    func(1, 2, "hello!");
+}
+//输出：
+//all types in pack are T
+//not all types in pack are T
+```
+## decay
+- 功能：对类型 T 应用左值到右值、数组到指针及函数到指针隐式转换，移除 cv 限定符
+- 源码分析:
+
+**`decay`中通过`is_array_v` 和`is_function_v`来检查是否是数组或函数类型，再通过`_Select`来根据`is_array_v` 和`is_function_v`的检查结果来选择`_Apply`参数中的前者还是后者。对应数组就移除[],再去除引用，对于函数就添加指针,对应对象就移除cv限定符和引用**
+```c++
+// STRUCT TEMPLATE decay
+template <class _Ty>
+struct decay { // determines decayed version of _Ty
+    //移除引用
+    using _Ty1 = remove_reference_t<_Ty>;
+    //_Select判断is_function_v<_Ty1>的检查结果，true则_Apply<add_pointer<_Ty1>, remove_cv<_Ty1>>就会被替换成add_pointer<_Ty1>，false就会替换成remove_cv<_Ty1>
+    using _Ty2 = typename _Select<is_function_v<_Ty1>>::template _Apply<add_pointer<_Ty1>, remove_cv<_Ty1>>;
+    //与上面相同原理，但type一般是整个decay类的入口，即从type开始层层展开
+    using type = typename _Select<is_array_v<_Ty1>>::template _Apply<add_pointer<remove_extent_t<_Ty1>>, _Ty2>::type;
+};
+
+template <class _Ty>
+using decay_t = typename decay<_Ty>::type;
+```
+**`_Select`类主要用来匹配`_Select<true>`还是`_Select<false>`从而使`_Apply`等价于模板参数的第一个`_Ty1`还是第二个`_Ty2`**
+```c++
+// STRUCT TEMPLATE make_signed
+template <bool>
+struct _Select { // Select between aliases that extract either their first or second parameter
+    template <class _Ty1, class>
+    using _Apply = _Ty1;
+};
+
+template <>
+struct _Select<false> {
+    template <class, class _Ty2>
+    using _Apply = _Ty2;
+};
+```
+- 示例
+```c++
+#include <iostream>
+#include <type_traits>
+ 
+template <typename T, typename U>
+struct decay_equiv : 
+    std::is_same<typename std::decay<T>::type, U>::type 
+{};
+ 
+int main()
+{
+    std::cout << std::boolalpha
+              << decay_equiv<int, int>::value << '\n'
+              << decay_equiv<int&, int>::value << '\n'
+              << decay_equiv<int&&, int>::value << '\n'
+              << decay_equiv<const int&, int>::value << '\n'
+              << decay_equiv<int[2], int*>::value << '\n'
+              << decay_equiv<int(int), int(*)(int)>::value << '\n';
+}
+//输出：
+//true
+//true
+//true
+//true
+//true
+//true
 ```
