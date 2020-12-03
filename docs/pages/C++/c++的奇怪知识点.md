@@ -13,8 +13,10 @@ categories:
   - [函数只声明不定义可以使用吗](#函数只声明不定义可以使用吗)
   - [强制类型转换如何实现](#强制类型转换如何实现)
   - [`A::*`的使用](#a的使用)
-    - [成员函数指针](#成员函数指针)
   - [成员函数引用限定](#成员函数引用限定)
+  - [类中巧用`using`](#类中巧用using)
+    - [改变基类成员私用性](#改变基类成员私用性)
+    - [继承基类构造](#继承基类构造)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -184,11 +186,6 @@ int main() {
     (a.*fun)();
 }
 ```
-### 成员函数指针
-- 示例
-```c++
-
-```
 -------------------
 ## 成员函数引用限定
 - 功能：限定成员函数只能从左值或右值调用
@@ -217,4 +214,55 @@ int main() {
     Test{}.TestRRef();//ok
 }
 ```
+## 类中巧用`using`
+### 改变基类成员私用性
+```c++
+class Base {
+protected:
+    void print(double d) {
+        printf("Base");
+    }
+    double d;
+};
+class Derived : public Base{
+public:
+//使继承Base中保护成员并在Derived中成公有成员
+    using Base::print;
+    using Base::d;
+    void print() {
+        printf("Derived");
+    }
+};
+int main() {
+    Derived d;
+    //通过Derived直接访问
+    d.print(1.1);//success
+    d.d;//success
+    //以下编译错误，通过基类作用域符访问不了基类保护成员
+    d.Base::print(1.1);//error
+    d.Base::d;//error
+}
+```
+### 继承基类构造
+```c++
+class Base {
+public:
+    Base() :m_i(1), m_d(1.1) {}
+    Base(int i, double d):m_i(i),m_d(d) {}
+private:
+    int m_i;
+    double m_d;
+};
+class Derived : public Base {
+public:
+//声明使用Base中构造函数
+    using Base::Base;
+};
+int main() {
+    //调用Base::Base(1,1.1)，如果Derived没有声明using Base::Base;将会编译报错
+    Derived d(1,1.1);
+  
+}
+```
+
 
