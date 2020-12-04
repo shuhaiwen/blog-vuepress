@@ -17,6 +17,8 @@ categories:
   - [类中巧用`using`](#类中巧用using)
     - [改变基类成员私用性](#改变基类成员私用性)
     - [继承基类构造](#继承基类构造)
+  - [匿名联合体`union`](#匿名联合体union)
+  - [布置new（Placement new）](#布置newplacement-new)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -264,6 +266,82 @@ int main() {
   
 }
 ```
+## 匿名联合体`union`
+- 语法形式：`union { 成员说明 };`
+- 功能：匿名联合体的成员被注入到其外围作用域中
+- 注意事项：
+  - 联合体内成员名不能与外层作用域中其它声明的名称相同
+  - 它们不能有成员函数，不能有静态数据成员，且所有数据成员必须为公开。
+  - 仅允许非静态数据成员和 static_assert 声明
+  - 命名空间作用域的匿名联合体必须声明为 static，除非它们出现于无名命名空间
+  - 全局匿名联合体必须声明为 static
+- 示例
+```c++
+namespace nm {
+class A 
+{
+public:
+    union
+    {
+        int i;
+        double d;
+    };
+};
+static union
+{
+    float f=2.3;
+};
+}
+static union
+{
+    int i1;
+};
+int main() {
+    
+    nm::A a;
+    a.i = 2;
+    nm::f = 1.2;
+    i1=3;
+}
+```
+## 布置new（Placement new）
+- 语法形式：`new (address) type (initializer)`
+- 功能：使用预先分配的内存空间去分配给待分配对象
+- 注意事项：保证预先分配的内存大小大于待分配对象所需内存大小
+- 示例
+```c++
+#include<iostream> 
+using namespace std;
+int main()
+{
+    // initial value of X 
+    int X = 10;
 
+    cout << "Before placement new :" << endl;
+    cout << "X : " << X << endl;
+    cout << "&X : " << &X << endl;
+
+    // 将X的内存分配给mem，即mem==&X 
+    int* mem = new (&X) int{ 100 };
+
+    cout << "\nAfter placement new :" << endl;
+    cout << "X : " << X << endl;
+    cout << "mem : " << mem << endl;
+    cout << "&X : " << &X << endl;
+
+    return 0;
+}
+```
+- 输出结果
+```
+Before placement new :
+X : 10
+&X : 010FF8C8
+
+After placement new :
+X : 100
+mem : 010FF8C8
+&X : 010FF8C8
+```
 
 

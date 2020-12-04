@@ -144,11 +144,61 @@ const auto i2=2;
 ```GO
 //GO
 const(
-	i3,i4 int=3,4
+	i4,i5 int=3,4
 )
-const i5,i6=5,6
+const i6,i7=5,6
+//i1 i2 i3 分别为 0 1 2，j1 j2 j3 分别为 0*3 1*3 2*6
+const(
+	i1,ji=iota,iota*3
+	i2,j2
+	i3,j3
+)
 ```
 ```c++
 //c++
 const int i1=1,i2=2;
+```
+- GO中
+### 枚举
+- GO中并没有枚举，但可以借助`const`和`iota`来模仿实现个类似功能，而C++通过关键字`enum`来定义枚举类型，且默认自增+1
+```GO
+//GO
+//iota==0,也有自增+1作用
+const(
+	i1=iota //0
+	i2      //1
+	i3      //2
+	i4=10   //10
+	i5      //10
+	i6=iota //5 重新自增+1，且计数累计从i1~i5
+	i7      //6
+	i8=iota*2//7*2
+	i9			//8*2
+	i10			//9*2
+)
+```
+```c++
+//c++
+enum {
+	i1=0,			//0
+	i2,				//1
+	i3				//2
+}
+```
+- GO与c++都能指定枚举类型，GO中可以是int  float相关，而c++中是int char bool相关，不能是浮点型
+```GO
+//GO
+const(
+	i1 float32=iota 
+	i2 int
+	i3
+)
+```
+```c++
+//c++
+enum :int{ //bool char均可
+    i1=0,
+    i2,
+    i3
+};
 ```
