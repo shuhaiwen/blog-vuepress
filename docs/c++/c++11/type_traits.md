@@ -24,6 +24,7 @@ struct _Conjunction { // handle false trait or last trait
 //类2 部分具体化true使其能匹配第一个参数true的情况，变长参数前有2个参数_True _Next，使其最少匹配2个以上参数，不能匹配1个参数此处参数不包括false和ture；递归嵌套_Conjunction使type最终指向类1中的 type=_First,因此type中有一个value变量，类型为bool，值最终为false或true
 template <class _True, class _Next, class... _Rest>
 struct _Conjunction<true, _True, _Next, _Rest...> { // the first trait is true, try the next one
+//type递归终止条件是调用了类1
     using type = typename _Conjunction<_Next::value, _Next, _Rest...>::type;
 };
 //类3 可以匹配任意参数长度的类实例化，但由于类4的存在，其在匹配1个参数以上的优先级低于类4，因此类3只能匹配0参的实例化
@@ -34,7 +35,7 @@ template <class _First, class... _Rest>
 struct conjunction<_First, _Rest...> : _Conjunction<_First::value, _First, _Rest...>::type {
     // the first false trait in _Traits, or the last trait if none are false
 };
-//类5 
+//类5 value有2个来源，一个是通过类3继承自true_type，另是一个通过类4间接指向类1中type所指向类型中所含的静态成员常量value
 template <class... _Traits>
 _INLINE_VAR constexpr bool conjunction_v = conjunction<_Traits...>::value;
 ```
