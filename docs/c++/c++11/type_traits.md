@@ -16,6 +16,7 @@ categories:
     - [remove_cv](#remove_cv)
     - [remove_reference](#remove_reference)
   - [其它类](#其它类)
+    - [enable_if](#enable_if)
     - [conditional](#conditional)
     - [decay](#decay)
   - [辅助类](#辅助类)
@@ -153,6 +154,39 @@ int main() {
 ```
 
 ## 其它类
+### enable_if
+- 功能：基于类型特性条件性地从重载决议移除函数，并对不同类型特性提供分离的函数重载与特化的便利方法；std::enable_if 可用作额外的函数参数（不可应用于运算符重载）、返回类型（不可应用于构造函数与析构函数），或类模板或函数模板形参。
+- 使用场景：
+  - 利用`enable_if`的决断能力，实现多个同参函数，不受同名函数不能重载限制
+```c++
+struct T {
+    enum { int_t,float_t } m_type;
+    template <typename Integer,
+              std::enable_if_t<std::is_integral_v<Integer>, int> = 0
+    >
+    T(Integer) : m_type(int_t) {}
+ 
+    template <typename Floating,
+              std::enable_if_t<std::is_floating_point_v<Floating>, int> = 0
+    >
+    T(Floating) : m_type(float_t) {} // OK
+};
+```
+- 源码分析：`enable_if`有2个参数，参数1是`bool`类型数据，当参数1是`false`时，`enable_if_t`将会编译报错。
+
+```c++
+template <bool _Test, class _Ty = void>
+struct enable_if {}; // no member "type" when !_Test
+
+template <class _Ty>
+struct enable_if<true, _Ty> { // type is _Ty for _Test
+    using type = _Ty;
+};
+
+template <bool _Test, class _Ty = void>
+using enable_if_t = typename enable_if<_Test, _Ty>::type;
+
+```
 ### conditional
 - 功能：根据条件真假选择，功能如三目运算符`?:`
 - 源码分析：
