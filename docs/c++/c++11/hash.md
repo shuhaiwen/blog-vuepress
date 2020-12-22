@@ -30,7 +30,7 @@ struct _Conditionally_enabled_hash { // conditionally enabled hash base
         return hash<_Kty>::_Do_hash(_Keyval);
     }
 };
-//对没具体化hash的类删除构造，道州无法实例化，故产生编译警告
+//对没具体化hash的类删除构造，使无法实例化，产生编译警告
 template <class _Kty>
 struct _Conditionally_enabled_hash<_Kty, false> { // conditionally disabled hash base
     _Conditionally_enabled_hash()                                   = delete;
@@ -39,7 +39,7 @@ struct _Conditionally_enabled_hash<_Kty, false> { // conditionally disabled hash
     _Conditionally_enabled_hash& operator=(const _Conditionally_enabled_hash&) = delete;
     _Conditionally_enabled_hash& operator=(_Conditionally_enabled_hash&&) = delete;
 };
-//利用类型特性is_const_v is_integral_v 等限制此类可以对数值类型如bool char int long等进行hash，当为false时匹配_Conditionally_enabled_hash<_Kty, false>，因此类中构造等函数被删除，无法实例，就会报错，当为true是匹配 _Conditionally_enabled_hash
+//利用类型特性is_const_v is_integral_v 等限制此类可以对数值类型如bool char int long等进行hash，当为false时匹配_Conditionally_enabled_hash<_Kty, false>，因此类中构造等函数被删除，无法实例，就会报错，当为true时匹配 _Conditionally_enabled_hash
 // STRUCT TEMPLATE hash
 template <class _Kty>
 struct hash

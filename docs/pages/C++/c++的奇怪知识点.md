@@ -19,6 +19,7 @@ categories:
     - [继承基类构造](#继承基类构造)
   - [匿名联合体`union`](#匿名联合体union)
   - [布置new（Placement new）](#布置newplacement-new)
+  - [`*&`的使用](#的使用)
 
 # c++的奇怪知识点
 ## 函数中定义类或结构
@@ -343,5 +344,37 @@ X : 100
 mem : 010FF8C8
 &X : 010FF8C8
 ```
+## `*&`的使用
+- `*&`：指针的引用，功能和作用与`**`指针的指针类型相似
+- 解释：`*&`指针的引用，是一个特殊的引用，常见的引用是直接指向对象，而这个引用是执行指针，具有引用所有功能，因此在一定场合可以替代指针的指针`**`使用。
+- 示例
+```c++
+void pass_by_point(int* p)
+{
+	//Allocate memory for int and store the address in p
+	p = new int;
+}
+void pass_by_point_point(int** p)
+{
+	//Allocate memory for int and store the address in p
+	*p = new int;
+}
+void pass_by_point_reference(int*& p)
+{
+	p = new int;
+}
 
+int main()
+{
+	int* p1 = NULL;
+	int* p2 = NULL;
+	int* p3 = NULL;
+
+	pass_by_point(p1); //p1 is null
+	pass_by_point_point(&p2); 
+	pass_by_point_reference(p3); 
+
+	return 0;
+}
+```
 

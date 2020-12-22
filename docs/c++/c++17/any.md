@@ -13,6 +13,8 @@ categories:
 # std::any
 ## 功能及示例
 - 功能：用来存储任意类型数据的类型安全容器
+  - 当储存的是指针时，any内保存了指针数据(把指针当作一个数据)，外部指针所指的数据改变会影响any内部存储的指针所指向的数据，外部指针被重新赋值，不会影响any内储存的指针数据
+  - 当储存的是对象时，外部对象数据改变不影响any内存储数据。
 - 示例
 ```c++
 #include <any>
@@ -84,6 +86,11 @@ any是一个普通类（非模板类），它构造实现可以匹配任意类�
         //调用any内部的_Emplace函数
         _Emplace<decay_t<_ValueType>>(_STD forward<_ValueType>(_Value));
     }
+    template <class _Ty, class... _Types>
+void _Construct_in_place1(_Ty& _Obj, _Types&&... _Args) noexcept(is_nothrow_constructible_v<_Ty, _Types...>) {
+	::new (const_cast<void*>(static_cast<const volatile void*>(_STD addressof(_Obj))))
+		_Ty(_STD forward<_Types>(_Args)...);
+}
 //_Emplace函数中有3个分支，分支主要通过对象所占内存大小，以及字节对齐大小条件来区分
  template <class _Decayed, class... _Types>
     _Decayed& _Emplace(_Types&&... _Args) { // emplace construct _Decayed
@@ -118,3 +125,8 @@ any是一个普通类（非模板类），它构造实现可以匹配任意类�
         }
     }
 ```
+- 以上源码中有几个重要的实现:
+  - `auto& _Obj = reinterpret_cast<_Decayed&>(_Storage._TrivialData);`
+    - 当 _Decayed是指针时，_Obj会是`*&`指针的引用类型，即`&_Obj`与`_Storage._TrivialData`的地址是相同的。
+  - `::new (const_cast<void*>(static_cast<const volatile void*>(_STD addressof(_Obj))))_Ty(_STD forward<_Types>(_Args)...);`
+    - 这使用布置new实现，从`_Obj`中分配内存给`_Ty`数据，从而达到给`_Obj`赋值功能
