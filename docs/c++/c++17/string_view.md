@@ -19,12 +19,24 @@ categories:
 - 注意事项：
   - `string_view`可以从c风格字符初始化，但不能从c++string初始化
   - 由于`string_view`仅由指针和大小表示字符串，并不由终止符`\0`结束，所以如`data()`操作返回字符串实际范围可能更大（因为匹配到最近一个`\0`）。
+  - 由于`string_view`仅仅是引用字符串，故要保证`string_view`指向的字符串生命周期要长于`string_view`
 - 示例
 ```c++
 #include <iostream>
 #include <string>
 #include <string_view>
-
+std::string_view fun_suc()
+{
+	static std::string strpp = "akjsdjkasd";//
+	std::string_view strView(strpp);
+	return strView;//strpp静态对象生命周期长于string_view可以返回
+}
+std::string_view fun_err()
+{
+	std::string strpp = "akjsdjkasd";
+	std::string_view strView(strpp);
+	return strView;//strpp对象生命周期短于string_view，不可作为返回值
+}
 int main() {
 	std::string strpp = "akjsdjkasd";
 	std::string_view strView(strpp.c_str(),6);

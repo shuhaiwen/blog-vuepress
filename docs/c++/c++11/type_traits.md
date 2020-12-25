@@ -19,8 +19,7 @@ categories:
     - [enable_if](#enable_if)
     - [conditional](#conditional)
     - [decay](#decay)
-  - [辅助类](#辅助类)
-    - [integral_constant](#integral_constant)
+    - [`type_identity`](#type_identity)
     - [bool_constant true_type false_type](#bool_constant-true_type-false_type)
   - [逻辑运算类](#逻辑运算类)
     - [conjunction](#conjunction)
@@ -290,6 +289,32 @@ int main()
 //true
 //true
 //true
+```
+### `type_identity`
+- 复制类型`T`
+- 使用场景：当一个模板函数如sum可以计算int和float值，但只有一个模板参数T，为避免如`sum(1,1.2)`编译报错，可使用type_identity
+- 示例
+```c
+template<class T>
+void f(T, T);
+ 
+template<class T>
+void g(T, std::type_identity_t<T>);
+int main()
+{
+    f(4.2, 0); // 错误：对 'T' 推导出冲突的类型
+    g(4.2, 0); // OK ：调用 g<double>
+    g(0, 4.2); // OK ：调用 g<int>
+}
+- 源码分析:使用类型别名指向_Ty
+```c
+template <class _Ty>
+struct type_identity {
+	using type = _Ty;
+};
+template <class _Ty>
+using type_identity_t = typename type_identity<_Ty>::type;
+```
 ```
 ## 辅助类
 ### integral_constant
