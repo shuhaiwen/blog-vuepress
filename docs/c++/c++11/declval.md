@@ -43,7 +43,12 @@ struct _Add_reference { // add reference (non-referenceable type)
     using _Lvalue = _Ty;
     using _Rvalue = _Ty;
 };
-
+//具体化版本，匹配<_Ty,void>类型或省略第二参数<_Ty>
+template <class _Ty>
+struct _Add_reference<_Ty, std::void_t<_Ty&>> { // (referenceable type)
+	using _Lvalue = _Ty&;
+	using _Rvalue = _Ty&&;
+};
 template <class _Ty>
 using add_rvalue_reference_t = typename _Add_reference<_Ty>::_Rvalue;
 

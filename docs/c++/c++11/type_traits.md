@@ -16,13 +16,17 @@ categories:
     - [remove_cv](#remove_cv)
     - [remove_reference](#remove_reference)
   - [其它类](#其它类)
-    - [enable_if](#enable_if)
-    - [conditional](#conditional)
-    - [decay](#decay)
+    - [`enable_if`](#enable_if)
+    - [`conditional`](#conditional)
+    - [`decay`](#decay)
     - [`type_identity`](#type_identity)
-    - [bool_constant true_type false_type](#bool_constant-true_type-false_type)
+    - [`invoke_result`](#invoke_result)
+      - [源码分析：本质是利用`decltype`和`declval`编译期识别类型特点](#源码分析本质是利用decltype和declval编译期识别类型特点)
+  - [辅助类](#辅助类)
+    - [`integral_constant`](#integral_constant)
+    - [`bool_constant true_type false_type`](#bool_constant-true_type-false_type)
   - [逻辑运算类](#逻辑运算类)
-    - [conjunction](#conjunction)
+    - [`conjunction`](#conjunction)
 # type_traits
 **c++ 类型特性（type_traits）定义一个编译时基于模板的结构，以查询或修改类型的属性**
 ## 类型属性
@@ -153,7 +157,7 @@ int main() {
 ```
 
 ## 其它类
-### enable_if
+### `enable_if`
 - 功能：基于类型特性条件性地从重载决议移除函数，并对不同类型特性提供分离的函数重载与特化的便利方法；std::enable_if 可用作额外的函数参数（不可应用于运算符重载）、返回类型（不可应用于构造函数与析构函数），或类模板或函数模板形参。
 - 使用场景：
   - 利用`enable_if`的决断能力，实现多个同参函数，不受同名函数不能重载限制
@@ -186,7 +190,7 @@ template <bool _Test, class _Ty = void>
 using enable_if_t = typename enable_if<_Test, _Ty>::type;
 
 ```
-### conditional
+### `conditional`
 - 功能：根据条件真假选择，功能如三目运算符`?:`
 - 源码分析：
   - 实现2个模板类，含3个参数，当参数1是`false`时匹配特化`false`版类，当参数1为`true`时匹配普通模板类
@@ -227,7 +231,7 @@ int main()
 //double
 //double
 ```
-### decay
+### `decay`
 - 功能：对类型 T 应用左值到右值、数组到指针及函数到指针隐式转换，移除 cv 限定符
 - 源码分析:
 
@@ -291,7 +295,7 @@ int main()
 //true
 ```
 ### `type_identity`
-- 复制类型`T`
+- 功能：复制类型`T`
 - 使用场景：当一个模板函数如sum可以计算int和float值，但只有一个模板参数T，为避免如`sum(1,1.2)`编译报错，可使用type_identity
 - 示例
 ```c
@@ -315,9 +319,76 @@ struct type_identity {
 template <class _Ty>
 using type_identity_t = typename type_identity<_Ty>::type;
 ```
+### `invoke_result`
+- 功能：计算可调用类型的返回值类型
+- 示例
+```c
+#include <type_traits>
+//识别call返回值类型
+template<typename _CallBack,typename... Args>
+std::invoke_result_t<_CallBack,Args...> call(_CallBack fun,Args...args)
+{
+	return std::invoke(fun, args...);
+}
+int main()
+{
+	using namespace std;
+    //含参函数，需要单独传递参数类型
+	invoke_result_t<int(int, int),int,int> res_int = 2;
+	static_assert(is_same_v<decltype(res_int), int>, "error");
+	invoke_result_t<void*()> res_void;
+	static_assert(is_same_v<decltype(res_void),void*>, "error");
+    //可调用对象 function类型
+	invoke_result_t<function<void* ()>> res_fun;
+	static_assert(is_same_v<decltype(res_fun), void*>, "error");
+
+	function<int(int,int)> fun = [](int i,int j)->int {return i+j; };
+	auto val = call(fun,1,2);//val=3 int类型
+}
+```
+#### 源码分析：本质是利用`decltype`和`declval`编译期识别类型特点
+- 利用`conditional_t`判断可调用类型是否含参
+```c
+template <class _Callable, class... _Args>
+using _Select_invoke_traits = conditional_t<sizeof...(_Args) == 0, _Invoke_traits_zero<void, _Callable>,
+    _Invoke_traits_nonzero<void, _Callable, _Args...>>;
+
+template <class _Callable, class... _Args>
+using invoke_result_t = typename _Select_invoke_traits<_Callable, _Args...>::type;
+
+```
+- 利用`decltype`和`declval`来计算可调用类型的返回值
+```c
+//无参版本
+template <class _Void, class _Callable>
+struct _Invoke_traits_zero {
+    // selected when _Callable isn't callable with zero _Args
+    using _Is_invocable         = false_type;
+    using _Is_nothrow_invocable = false_type;
+    template <class _Rx>
+    using _Is_invocable_r = false_type;
+    template <class _Rx>
+    using _Is_nothrow_invocable_r = false_type;
+};
+
+template <class _Callable>
+using _Decltype_invoke_zero = decltype(_STD declval<_Callable>()());
+
+template <class _Callable>
+struct _Invoke_traits_zero<void_t<_Decltype_invoke_zero<_Callable>>, _Callable> {
+    // selected when _Callable is callable with zero _Args
+    using type                  = _Decltype_invoke_zero<_Callable>;
+    using _Is_invocable         = true_type;
+    using _Is_nothrow_invocable = bool_constant<noexcept(_STD declval<_Callable>()())>;
+    template <class _Rx>
+    using _Is_invocable_r = bool_constant<disjunction_v<is_void<_Rx>, is_convertible<type, _Rx>>>;
+    template <class _Rx>
+    using _Is_nothrow_invocable_r = bool_constant<
+        conjunction_v<_Is_nothrow_invocable, disjunction<is_void<_Rx>, _Is_nothrow_convertible<type, _Rx>>>>;
+};
 ```
 ## 辅助类
-### integral_constant
+### `integral_constant`
 - 功能：包装特定类型的静态常量
 - 源码分析：
   - 类模板包含2个参数，分别是类型参数和非类型参数
@@ -352,7 +423,7 @@ int main()
 	int i3 = std::integral_constant<int, 2>();//i3经 operator value_type() 返回2，i3是int类型
 }
 ```
-### bool_constant true_type false_type
+### `bool_constant true_type false_type`
 - 功能:
   - `bool_constant`是对`integral_constant`特化`bool`的别名
   - `true_type`是对`bool_constant`特化`true`的别名
@@ -382,7 +453,7 @@ int main()
 //value of true_type true
 ```
 ## 逻辑运算类
-### conjunction
+### `conjunction`
 - 功能：在特性序列上进行逻辑与
 - 源码分析
 ```c++
