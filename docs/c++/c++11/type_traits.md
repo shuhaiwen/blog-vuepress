@@ -11,11 +11,14 @@ categories:
   - [类型属性](#类型属性)
     - [类型类别判断](#类型类别判断)
     - [类型属性判断](#类型属性判断)
+      - [`extent`](#extent)
+      - [`rank`](#rank)
     - [类型关系判断](#类型关系判断)
-    - [`is_convertible`](#is_convertible)
+      - [`is_convertible`](#is_convertible)
   - [类型修改](#类型修改)
-    - [remove_cv](#remove_cv)
-    - [remove_reference](#remove_reference)
+    - [`remove_cv`](#remove_cv)
+    - [`remove_reference`](#remove_reference)
+    - [`remove_exten`和`remove_all_extents`](#remove_exten和remove_all_extents)
   - [其它类](#其它类)
     - [`enable_if`](#enable_if)
     - [`conditional`](#conditional)
@@ -23,6 +26,7 @@ categories:
     - [`type_identity`](#type_identity)
     - [`invoke_result`](#invoke_result)
       - [源码分析：本质是利用`decltype`和`declval`编译期识别类型特点](#源码分析本质是利用decltype和declval编译期识别类型特点)
+    - [`common_type`](#common_type)
   - [辅助类](#辅助类)
     - [`integral_constant`](#integral_constant)
     - [`bool_constant true_type false_type`](#bool_constant-true_type-false_type)
@@ -33,8 +37,80 @@ categories:
 ## 类型属性
 ### 类型类别判断
 ### 类型属性判断
+#### `extent`
+- 功能：获取数组类型在指定维度的大小
+- 源码分析:
+  - `extent`继承自`integral_constant`
+  - `extent_v`利用继承递归展开，最终当展开到维度为0时结束
+```c
+template <class _Ty, unsigned int _Ix = 0>
+_INLINE_VAR constexpr size_t extent_v = 0; // determine extent of dimension _Ix of array _Ty
+
+template <class _Ty, size_t _Nx>
+_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], 0> = _Nx;
+
+template <class _Ty, unsigned int _Ix, size_t _Nx>
+_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], _Ix> = extent_v<_Ty, _Ix - 1>;
+
+template <class _Ty, unsigned int _Ix>
+_INLINE_VAR constexpr size_t extent_v<_Ty[], _Ix> = extent_v<_Ty, _Ix - 1>;
+
+template <class _Ty, unsigned int _Ix = 0>
+struct extent : integral_constant<size_t, extent_v<_Ty, _Ix>> {};
+```
+- 示例
+```c
+#include <iostream>
+#include <type_traits>
+
+int main()
+{
+	std::cout << std::extent<int[3]>::value << '\n'; // < 默认维度为 0
+	std::cout << std::extent<int[3][4], 0>::value << '\n';
+	std::cout << std::extent<int[3][4], 1>::value << '\n';
+	std::cout << std::extent<int[3][4], 2>::value << '\n';
+	std::cout << std::extent<int[]>::value << '\n';
+
+	const auto ext = std::extent<int[9]>{};
+	std::cout << ext << '\n'; // < 隐式转换到 std::size_t
+
+	const int ints[] = { 1,2,3,4 };
+	std::cout << std::extent<decltype(ints)>::value << '\n'; // < 数组大小 
+}
+```
+#### `rank`
+- 功能：计算指定数组的维度，当非数组时结果为0
+- 源码分析:
+  - `rank`继承自`integral_constant`
+  - `rank_v`递归展开数组维度，并+1
+```c
+template <class _Ty>
+_INLINE_VAR constexpr size_t rank_v = 0; // determine number of dimensions of array _Ty
+
+template <class _Ty, size_t _Nx>
+_INLINE_VAR constexpr size_t rank_v<_Ty[_Nx]> = rank_v<_Ty> + 1;
+
+template <class _Ty>
+_INLINE_VAR constexpr size_t rank_v<_Ty[]> = rank_v<_Ty> + 1;
+
+template <class _Ty>
+struct rank : integral_constant<size_t, rank_v<_Ty>> {};
+
+```
+- 示例
+```c
+#include <iostream>
+#include <type_traits>
+
+int main()
+{
+	std::cout << std::rank<int[1][2][3]>::value << '\n';
+	std::cout << std::rank<int[][2][3][4]>::value << '\n';
+	std::cout << std::rank<int>::value << '\n';
+}
+```
 ### 类型关系判断
-### `is_convertible`
+#### `is_convertible`
 - 功能：判断是否可以由A转换到B
 - 规则：
   - 子类指针或引用可转基类指针或引用
@@ -65,7 +141,7 @@ int main()
 }
 ```
 ## 类型修改
-### remove_cv
+### `remove_cv`
 - 功能：移除最顶层 const 、最顶层 volatile 或两者，若存在
   - 解释：如`const volatile int*p`,其中`const volatile`修饰的是p指向的数据，并不是限定`int*`的，因此`remove_cv`会匹配无cv限定的模板实现，即内部type类型指向`const volatile int*`。又如`int* const volatile p`，cv限定符修饰的是`int*`,因此`remove_cv`内部type指向`int*`。
 - 源码分析:实现4个模板函数，分别匹配const volatile限定符，而内部type始终指向无cv限定符类型，从而达到去除cv限定符功能
@@ -131,7 +207,7 @@ int main() {
         ? "passed" : "failed") << '\n';
 }
 ```
-### remove_reference
+### `remove_reference`
 - 功能：移除类型的引用`&`或`&&`
 - 源码分析:`remove_reference_t`是`remove_reference::type`的别名，`remove_reference`有3个定义，分别接收`T`、`T&`和`T&&`，即左值，左值引用和右值引用，而`type`始终指向`T`,即左值，因此达到去除引用的目的。
 ```c++
@@ -186,7 +262,41 @@ int main() {
 //true
 //true
 ```
+### `remove_exten`和`remove_all_extents`
+- 功能：
+  - `remove_exten`:从给定数组类型移除一个维度
+  - `remove_all_extents`:从给定数组类型移除全部维度
+- 源码分析:特化`_Ty[]`类型，优先匹配数组
+```c
+template <class _Ty>
+struct remove_extent { // remove array extent
+    using type = _Ty;
+};
 
+template <class _Ty, size_t _Ix>
+struct remove_extent<_Ty[_Ix]> {
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct remove_extent<_Ty[]> {
+    using type = _Ty;
+};
+```
+- 示例
+```c
+#include <iostream>
+#include <type_traits>
+using namespace std;
+int main()
+{
+	//移除第一层维度
+	static_assert(is_same_v<remove_extent_t<int[]>, int>, "类型不同");
+	static_assert(is_same_v<remove_extent_t<int[2][3]>, int[3]>,"类型不同");
+	//移除全部数组维度
+	static_assert(is_same_v<remove_all_extents_t<int[][3][3]>, int>, "类型不同");
+}
+```
 ## 其它类
 ### `enable_if`
 - 功能：基于类型特性条件性地从重载决议移除函数，并对不同类型特性提供分离的函数重载与特化的便利方法；std::enable_if 可用作额外的函数参数（不可应用于运算符重载）、返回类型（不可应用于构造函数与析构函数），或类模板或函数模板形参。
@@ -419,6 +529,85 @@ struct _Invoke_traits_zero<void_t<_Decltype_invoke_zero<_Callable>>, _Callable> 
     using _Is_nothrow_invocable_r = bool_constant<
         conjunction_v<_Is_nothrow_invocable, disjunction<is_void<_Rx>, _Is_nothrow_convertible<type, _Rx>>>>;
 };
+```
+### `common_type`
+- 功能：确定一组类型的公共类型
+- 源码分析
+  - `common_type`分别对0参、单参、双参、多参版特化
+    - 0参版无type类型，编译报错
+    - 单参版继承自双参版
+    - 多参版最终转化成双参版
+  - 最终`common_type`会展开到`_Conditional_type`,`_Conditional_type`是一个模板变量,等号右边是个`decltype`+三元表达式`decltype(false ? _STD declval<_Ty1>() : _STD declval<_Ty2>());`,这个三元表达式正是判断类型是否相同的关键，三目运算符要求表达式2和表达式3必须是同一类型或可隐式转化另一类型，故当类型不同会编译报错
+```c
+template <class _Ty1, class _Ty2, class = void>
+struct _Const_lvalue_cond_oper {};
+
+template <class _Ty1, class _Ty2>
+struct _Const_lvalue_cond_oper<_Ty1, _Ty2, void_t<_Conditional_type<const _Ty1&, const _Ty2&>>> {
+    using type = remove_cvref_t<_Conditional_type<const _Ty1&, const _Ty2&>>;
+};
+
+template <class _Ty1, class _Ty2, class = void>
+struct _Decayed_cond_oper : _Const_lvalue_cond_oper<_Ty1, _Ty2> {};
+
+template <class _Ty1, class _Ty2>
+struct _Decayed_cond_oper<_Ty1, _Ty2, void_t<_Conditional_type<_Ty1, _Ty2>>> {
+    using type = decay_t<_Conditional_type<_Ty1, _Ty2>>;
+};
+
+template <class... _Ty>
+struct common_type;
+
+template <class... _Ty>
+using common_type_t = typename common_type<_Ty...>::type;
+
+template <>
+struct common_type<> {};
+
+template <class _Ty1>
+struct common_type<_Ty1> : common_type<_Ty1, _Ty1> {};
+
+template <class _Ty1, class _Ty2, class _Decayed1 = decay_t<_Ty1>, class _Decayed2 = decay_t<_Ty2>>
+struct _Common_type2 : common_type<_Decayed1, _Decayed2> {};
+
+template <class _Ty1, class _Ty2>
+struct _Common_type2<_Ty1, _Ty2, _Ty1, _Ty2> : _Decayed_cond_oper<_Ty1, _Ty2> {};
+
+template <class _Ty1, class _Ty2>
+struct common_type<_Ty1, _Ty2> : _Common_type2<_Ty1, _Ty2> {};
+
+template <class _Void, class _Ty1, class _Ty2, class... _Rest>
+struct _Common_type3 {};
+
+template <class _Ty1, class _Ty2, class... _Rest>
+struct _Common_type3<void_t<common_type_t<_Ty1, _Ty2>>, _Ty1, _Ty2, _Rest...>
+    : common_type<common_type_t<_Ty1, _Ty2>, _Rest...> {};
+
+template <class _Ty1, class _Ty2, class... _Rest>
+struct common_type<_Ty1, _Ty2, _Rest...> : _Common_type3<void, _Ty1, _Ty2, _Rest...> {};
+```
+- 示例
+```c
+#include <iostream>
+#include <type_traits>
+ 
+template <class T>
+struct Number { T n; };
+ 
+template <class T, class U>
+Number<typename std::common_type<T, U>::type> operator+(const Number<T>& lhs,
+                                                        const Number<U>& rhs) 
+{
+    return {lhs.n + rhs.n};
+}
+ 
+int main()
+{
+    Number<int> i1 = {1}, i2 = {2};
+    Number<double> d1 = {2.3}, d2 = {3.5};
+    std::cout << "i1i2: " << (i1 + i2).n << "\ni1d2: " << (i1 + d2).n << '\n'
+              << "d1i2: " << (d1 + i2).n << "\nd1d2: " << (d1 + d2).n << '\n';
+}
 ```
 ## 辅助类
 ### `integral_constant`

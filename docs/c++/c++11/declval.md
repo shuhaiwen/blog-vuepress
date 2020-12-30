@@ -32,10 +32,10 @@ int main()
 //  decltype(NonDefault().foo()) n2 = n1;               // 错误：无默认构造函数
     decltype(std::declval<NonDefault>().foo()) n2 = n1; // n2 的类型是 int
     decltype(std::declval<NonDefault>().m_str) n3;      //n3的类型是string
-    
+    decltype(std::declval<Default>()) n4=Default();     //n4是Default&&类型，declval返回的就是右值引用
 }
 ```
-- 源码分析：模板函数`declval`（只声明不定义）最终返回的是_Ty类型
+- 源码分析：模板函数`declval`（只声明不定义）最终返回的是_Ty**右值引用**类型
 ```c++
 // STRUCT TEMPLATE _Add_reference
 template <class _Ty, class = void>
