@@ -12,6 +12,7 @@ categories:
     - [类型类别判断](#类型类别判断)
     - [类型属性判断](#类型属性判断)
     - [类型关系判断](#类型关系判断)
+    - [`is_convertible`](#is_convertible)
   - [类型修改](#类型修改)
     - [remove_cv](#remove_cv)
     - [remove_reference](#remove_reference)
@@ -33,6 +34,36 @@ categories:
 ### 类型类别判断
 ### 类型属性判断
 ### 类型关系判断
+### `is_convertible`
+- 功能：判断是否可以由A转换到B
+- 规则：
+  - 子类指针或引用可转基类指针或引用
+  - A实现了转换B函数，则A可以转B，(但A的指针或引用不能转B的引用或指针)
+  - B实现了完美构造函数`template<class T> B(T&&){...}`，任何类型（包括指针和引用）都可以转换成B
+- 示例
+```c
+#include <iostream>
+#include <type_traits>
+
+class E { public: template<class T> E(T&&) { } };
+class A {};
+class B : public A {};
+class C {};
+class D 
+{ 
+public: operator C() { return c; }  C c; 
+};
+int main()
+{
+	bool b2ap = std::is_convertible<B*, A*>::value;//true 子类转基类 指针
+	bool b2ar = std::is_convertible<B&, A&>::value;//true 子类转基类 引用
+	bool a2b = std::is_convertible<A*, B*>::value;//false 基类不能向下转子类
+	bool b2c = std::is_convertible<B*, C*>::value;//false B C没有继承关系
+	bool d2c = std::is_convertible<D, C>::value;//true D实现了转换C函数
+	bool d2cp = std::is_convertible<D&, C&>::value;//false 转换函数不能用在指针和引用上	
+	bool everything2e = std::is_convertible<A, E>::value; //true 完美转发构造函数使类能从任何类型转换
+}
+```
 ## 类型修改
 ### remove_cv
 - 功能：移除最顶层 const 、最顶层 volatile 或两者，若存在
@@ -232,7 +263,9 @@ int main()
 //double
 ```
 ### `decay`
-- 功能：对类型 T 应用左值到右值、数组到指针及函数到指针隐式转换，移除 cv 限定符
+- 功能：
+  - 对类型 T 应用左值到右值、数组到指针及函数到指针隐式转换
+  - 移除 cv 限定符
 - 源码分析:
 
 **`decay`中通过`is_array_v` 和`is_function_v`来检查是否是数组或函数类型，再通过`_Select`来根据`is_array_v` 和`is_function_v`的检查结果来选择`_Apply`参数中的前者还是后者。对应数组就移除[],再去除引用，对于函数就添加指针,对应对象就移除cv限定符和引用**
