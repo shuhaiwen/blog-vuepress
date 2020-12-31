@@ -14,7 +14,7 @@ categories:
   - `ptr`是传入的指针,`std::malloc()`、`std::calloc()` 或 `std::realloc()` 先前分配的，且仍未被 `std::free()` 释放
   - new_size是需要分配的内存大小
 - 示例
-```c++
+```cpp
 int main()
 {
     int* p = new int(2);

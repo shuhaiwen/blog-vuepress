@@ -31,7 +31,7 @@ requires的语法形式主要2种，分别是Requires clauses（requires 子句�
   - 以运算符 || 联结的前述表达式的序列
 - 注意：关键词 `requires` 必须后随某个常量表达式（故可以写为 requires true）,因此才能实现编译期判断
 - 示例
-```c++
+```cpp
 #include <type_traits>
 #include <iostream>
 
@@ -90,7 +90,7 @@ int main(){
 - 规则：要求序列是不含`requires`关键字的表达式语句，如表达式是`a+b;`，而不能是`requires (a+b);`.
 - 注意：它断言该表达式合法。该表达式是不求值操作数；只检查语言正确性。而且表达式可以有多个，之间用分号`;`隔开。
 - 示例
-```c++
+```cpp
 template<typename T>
 concept Addable =
 requires (T a, T b) {
@@ -105,7 +105,7 @@ concept Swappable = requires(T&& t, U&& u) {
 ```
 #### 类型要求
 - 规则：要求`typename`关键字后接类型名，用来判断指定类型名是否合法
-```c++
+```cpp
 
 #include <type_traits>
 #include <vector>
@@ -136,7 +136,7 @@ requires(T x) {
 #### 嵌套要求
 - 语法：`requires 约束表达式 ;`
 - 示例
-```c++
+```cpp
 
 #include <type_traits>
 #include <vector>
@@ -161,7 +161,7 @@ int main(){
   - 必须有类型 bool
   - 不允许 constexpr ，变量自动为 constexpr
 - 示例
-```c++
+```cpp
 // 来自标准（范围 TS ）的变量概念
 template <class T, class U>
 concept bool Derived = std::is_base_of<U, T>::value//满足概念库中定义的T是U的基类
@@ -179,7 +179,7 @@ concept bool Derived = std::is_base_of<U, T>::value//满足概念库中定义的
   - 参数列表必须为空
   - 函数体必须仅由一条 return 语句组成，其参数必须是一条制约表达式（谓词制约、其他制约的
   - 合取/析取或 requires 表达式，见后述）
-```c++
+```cpp
 // 来自标准（范围 TS ）的函数概念
 template <class T>
 concept bool EqualityComparable() { 
@@ -188,7 +188,7 @@ concept bool EqualityComparable() {
 ```
 ### 使用概念
 有三种使用概念的方式
-```c++
+```cpp
 //Requires Clause
 template<typename Cont>
     requires Sortable<Cont>

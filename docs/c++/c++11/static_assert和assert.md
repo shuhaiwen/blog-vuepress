@@ -16,7 +16,7 @@ categories:
   - static_assert是关键字，而assert是宏
   - assert进行运行期检查，而static_assert在编译期检查
 - 示例
-```c++
+```cpp
 #include<assert.h>
 int main()
 {
@@ -27,7 +27,7 @@ int main()
 }
 ```
 - assert源码分析:当在程序中定义NDEBUG宏时，assert宏辉展开成`(void)0`,这可以使assert不产生任何断言作用。assert展开后先执行`!!(expression)`表达式，如果真，则得`(void)true`,否则，执行`(_wassert(_CRT_WIDE(#expression), _CRT_WIDE(__FILE__), (unsigned)(__LINE__)), 0)`,其中`_wassert`函数作用是将错误信息打印在控制台，并调用`std::abort()`终止程序。`,0`的作用是利用逗号表达式的特性使assert宏执行后产生`(void)0`结果
-```c++
+```cpp
 #ifdef NDEBUG
 
     #define assert(expression) ((void)0)

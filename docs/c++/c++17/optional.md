@@ -11,7 +11,7 @@ categories:
 - 功能：类模板 std::optional 管理一个可选的容纳值，既可以存在也可以不存在的值。
 - 使用场景：比如一个函数执行，异常和正常的返回值需要区分时，或异常没有返回值，正常才有返回值的情况下，相当于optional带有标志，且保存着可能存在的值.可以很好的取代类似std::pair<T,bool>的结构
 - 示例
-```c++
+```cpp
 #include <string>
 #include <functional>
 #include <iostream>

@@ -13,7 +13,7 @@ categories:
 - 功能：declval是一个模板函数，常与`decltype`一起使用，令在 `decltype` 表达式中不必经过构造函数就能使用成员函数
 - 注意：因为`declval`只有声明没有定义，因此只能用在*不求值语境*，所有可以用在`decltype`中
 - 示例
-```c++
+```cpp
 #include <utility>
 #include <iostream>
  
@@ -36,7 +36,7 @@ int main()
 }
 ```
 - 源码分析：模板函数`declval`（只声明不定义）最终返回的是_Ty**右值引用**类型
-```c++
+```cpp
 // STRUCT TEMPLATE _Add_reference
 template <class _Ty, class = void>
 struct _Add_reference { // add reference (non-referenceable type)

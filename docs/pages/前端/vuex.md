@@ -15,7 +15,7 @@ categories:
 
 ## state
 - 在计算属性中获取state
-```js
+```javascript
 // 创建一个 Counter 组件
 const Counter = {
   template: `<div>{{ count }}</div>`,
@@ -27,7 +27,7 @@ const Counter = {
 }
 ```
 - 根实例中注册 store 
-```js
+```javascript
 Vue.use(Vuex)
 const app = new Vue({
   el: '#app',

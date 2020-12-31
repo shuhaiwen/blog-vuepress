@@ -13,7 +13,7 @@ categories:
   - 获取函数指针，但函数不能有重载(即同名函数)
   - 当对象已实现了`operator&`取地址运算符时，且此取地址返回的不是该对象实际地址时
 - 示例
-```c++
+```cpp
 #include <memory>
 void fun() {
     printf("fun");
@@ -31,7 +31,7 @@ int main()
     - 针对对象版：将传入对象先强制转换char&，在取char&地址，最后强制转换T*,这样就不会调用对象的重载版本`operator&`
     - 针对非对象版，直接取地址即可
   - 将`addressof(const _Ty&&)`右值重载删除，禁止临时对象的传入
-```c++
+```cpp
 //以下是可能的实现方式
 //通过enable_if来决定调用哪一个addressof的实现
 //函数1 当T是对象时，调用这个实现，返回类型是T*
@@ -56,7 +56,7 @@ const _Ty* addressof(const _Ty&&) = delete;
 ## 与取地址运算符`operator&`比较
 - 区别：当对象实现了自定义的`operator&`取地址运算符时，且，返回的地址不是本对象的实际地址，这时运用`&T`将会得到非预期的T类型对象地址，而`addressof`将始终返回实际的对象地址
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <memory>
  

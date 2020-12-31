@@ -15,7 +15,7 @@ categories:
   -  以花括号{}为赋值的右运算数
   -  以花括号{}绑定到auto
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 #include <initializer_list>
@@ -67,7 +67,7 @@ int main()
 
 ```
 - 源码分析：initializer_list中的构造有2个参数，分别是数组首尾地址，有begin，end方法，分别返回首尾指针，还有一个size方法，通过首尾指针相减得到数组大小。猜测：在使用花括号时，花括号里自动构造一个数组，再将数组首尾指针传给initializer_list的构造中。
-```c++
+```cpp
 template <class _Elem>
 class initializer_list {
 public:

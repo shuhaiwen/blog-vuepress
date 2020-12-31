@@ -11,7 +11,7 @@ categories:
 - 头文件： `functional`
 - 功能：类模板 std::function 是通用多态函数封装器。 std::function 的实例能存储、复制及调用任何可调用 (Callable) 目标——函数、 lambda 表达式、 bind 表达式或其他函数对象，还有指向成员函数指针和指向数据成员指针
 - 示例
-```c++
+```cpp
 #include <functional>
 struct Foo {
     Foo(int num) : num_(num) {}
@@ -73,7 +73,7 @@ int main()
 - 源码分析:
   - 模板类`function`通过`_Get_function_impl`模板类作中转，继承自模板类`_Func_class`，其中`_Get_function_impl`的定义由直接定义的模板类和宏函数展开的模板类这2部分组成。当`function`接收函数类型模板参数时会匹配宏函数展开的`_Get_function_impl`类，而当模板参数是非函数类型时，会匹配直接定义的`_Get_function_impl`，且静态检查报错。
   - `_Func_class`中定义了一个函数对象，因此`function`实例对象可以像函数般使用`()`调用。
-```c++
+```cpp
 //只截取部分重要代码，其它如重载赋值运算符等功能函数不分析
 
 // STRUCT TEMPLATE _Get_function_impl

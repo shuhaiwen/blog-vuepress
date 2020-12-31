@@ -11,7 +11,7 @@ categories:
 ## 引用坍缩(reference collapsing)
 - 规则：右值引用的右值引用坍缩成右值引用，所有其他组合均坍缩成左值引用
 - 示例
-```c++
+```cpp
 int main()
 {
     typedef int& lref;
@@ -27,7 +27,7 @@ int main()
 - 功能：模板T&&或关键字auto&&接收左值或右值，并自动推导左值引用或右值引用类型
 - 实现方法：通过引用坍缩特性，右值引用的右值引用依然是右值引用，左值或左值引用的右值引用是左值引用
 - 示例
-```c++
+```cpp
 template<class T>
 bool test(T&& t)
 {

@@ -32,7 +32,7 @@ categories:
 ### 基本类型
 关键字 `:`<br/>
 TypeScript比较JavaScript语法，只在变量后加 `:[type]`,示例如下：
-```ts
+```typescript
 //boolearn
 let isDone: boolean = false;
 //number
@@ -51,14 +51,14 @@ let n: null = null;
 ```
 *Array的语法类型C++模板写法，使用<>包裹内部类型,嵌套规则也相同*
 ### 枚举 `enum`
-```ts
+```typescript
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
 ```
 ### void
 - void一般用在函数返回值时，表示函数无返回值
 - void用在变量声明时，只能被赋予null或undefinde,没有多大意义
-```ts
+```typescript
 function warnUser(): void {
     console.log("This is my warning message");
 }
@@ -66,7 +66,7 @@ let unusable: void = undefined;
 ```
 ### any
 any类型与C++中void* 类型，被any指定的对象可以被转换成任意类型
-```ts
+```typescript
 let notSure: any = 4;// okay
 notSure = "maybe a string instead";// okay
 notSure = false; // okay
@@ -74,7 +74,7 @@ notSure = false; // okay
 ### 类型断言
 关键字：`<>` 或者 `as`<br/>
 类型断言是一种强制转换方式
-```ts
+```typescript
 //写法1 <>
 let someValue: any = "this is a string";
 let strLength: number = (<string>someValue).length;
@@ -86,7 +86,7 @@ let strLength: number = (someValue as string).length;
 *TypeScript函数调用时，参数个数不能超过定义的的个数，JavaScript则无此规则*
 - 为返回值指定类型
 - 为参数指定类型
-```ts
+```typescript
 function sum(x: number, y: number): number {
     return x + y;
 }
@@ -97,7 +97,7 @@ sum(1,2,3);//error
 ### 可选参数
 关键字 `?`<br/>
 可选参数可约束函数参数是否可忽略
-```ts
+```typescript
 function buildName(firstName: string, lastName?: string) {
     if (lastName)
         return firstName + " " + lastName;
@@ -113,7 +113,7 @@ let result3 = buildName("Bob", "Adams");  // ah, just right
 **类似C++函数参数默认值**
 - 传参时可不忽略
 - 默认值参数不能在非默认值参数之前
-```ts
+```typescript
 function buildName(firstName = "Will", lastName: string) {
     return firstName + " " + lastName;
 }
@@ -125,7 +125,7 @@ let result4 = buildName(undefined, "Adams");     // okay and returns "Will Adams
 ```
 ### 变长参数
 关键字 `...`<br/>
-```ts
+```typescript
 function buildName(firstName: string, ...restOfName: string[]) {
   return firstName + " " + restOfName.join(" ");
 }
@@ -139,7 +139,7 @@ let employeeName = buildName("Joseph", "Samuel", "Lucas", "MacKinzie");
 - 用于泛型
 - 用于联合类型
 - 用于函数
-```ts
+```typescript
 //基本类型
 type Name = string;
 //对象
@@ -171,7 +171,7 @@ function getName(n: NameOrResolver): Name {
 - 支持对象[可选属性、只读属性]
 - 支持函数
 - 支持可索引的类型
-```ts
+```typescript
 //对象
 interface LabelledValue {
   label: string;
@@ -199,7 +199,7 @@ myArray = ["Bob", "Fred"];
 let myStr: string = myArray[0];
 ```
 ### 接口实现 `implements`
-```ts
+```typescript
 interface ClockInterface {
     currentTime: Date;
     setTime(d: Date);
@@ -214,7 +214,7 @@ class Clock implements ClockInterface {
 }
 ```
 ### 继承接口 `extends`
-```ts
+```typescript
 interface Shape {
     color: string;
 }
@@ -231,7 +231,7 @@ square.sideLength = 10;
 与c++中namespace一样作用
 - 使用namespace避免与其他对象命名冲突
 - 使用import 命名namespace别名
-```ts
+```typescript
 namespace Utility {
   export function log(msg) {
     console.log(msg);
@@ -256,7 +256,7 @@ let sq = new polygons.Square(); // Same as "new Shapes.Polygons.Square()"
 ```
 ## 声明文件 `declare`
 TypeScript 作为 JavaScript 的超集，在开发过程中不可避免要引用其他第三方的 JavaScript 的库。虽然通过直接引用可以调用库的类和方法，但是却无法使用TypeScript 诸如类型检查等特性功能。为了解决这个问题，需要将这些库里的函数和方法体去掉后只保留导出类型声明，而产生了一个描述 JavaScript 库和模块信息的声明文件。通过引用这个声明文件，就可以借用 TypeScript 的各种特性来使用库文件了。
-```ts
+```typescript
 declare var jQuery: (selector: string) => any;
 
 jQuery('#foo');

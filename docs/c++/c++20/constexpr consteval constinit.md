@@ -14,7 +14,7 @@ categories:
 ## constexp
 - `constexpr`说明符声明可以在编译时或在运行时求得函数或变量的值
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <stdexcept>
 
@@ -43,7 +43,7 @@ int main()
 ## consteval
 - `consteval`说明符声明函数或函数模板为立即函数，即该函数的每次潜在求值的调用（即不求值语境外的调用）必须（直接或间接）产生编译时常量表达式
 - 示例
-```c++
+```cpp
 consteval int sqr(int n) {
 	return n * n;
 }
@@ -67,7 +67,7 @@ int main()
 ## constinit
 - constinit 说明符声明拥有静态或线程存储期的变量,在编译期初始化（即初始化时需要常量），但可在运行期改变。
 - 示例
-```c++
+```cpp
 #include <iostream>
 constinit int constinitVal = 1000;
 int main() {
@@ -86,7 +86,7 @@ int main() {
   - constexpr、consteval隐含常量特性，不可改变
   - constinit编译器常量初始化，运行期可以改变吧，不含常量特性
 - 示例
-```c++
+```cpp
 #include <iostream>
 
 constexpr int constexprVal = 1000;

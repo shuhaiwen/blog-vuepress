@@ -17,7 +17,7 @@ categories:
 * &lt;all&gt; 指示器规定子元素可以按照任意顺序出现
 
 #### myXsd.xsd文件
-```xsd
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="www.shuhaiwen.com" targetNamespace="www.shuhaiwen.com" elementFormDefault="qualified">
 	<xsd:complexType name="Student">
@@ -60,7 +60,7 @@ categories:
 * &lt;choice&gt; 指示器规定元素只能出现一次
 
 #### myXsd.xsd文件
-```xsd
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="www.shuhaiwen.com" targetNamespace="www.shuhaiwen.com" elementFormDefault="qualified">
 	<xsd:complexType name="Student">
@@ -117,7 +117,7 @@ categories:
 * Example
 
 #### myXsd.xsd文件
-```xsd
+```xml
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="www.shuhaiwen.com" targetNamespace="www.shuhaiwen.com" elementFormDefault="qualified">
 	<xsd:complexType name="Student">
 		<xsd:sequence minOccurs="1" maxOccurs="1">

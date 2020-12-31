@@ -27,7 +27,7 @@ categories:
 # c++的奇怪知识点
 ## 函数
 ### 函数中定义类或结构
-```c++
+```cpp
 //1.函数中定义类或结构
 void func() {
     struct MyStruct
@@ -46,7 +46,7 @@ int main()
 ### 函数类型、函数指针
 - 写法：函数类型是由2部分组成，函数返回值类型和参数类型。(将函数声明式的函数名和参数名去掉就是函数类型的写法)
 
-```c++
+```cpp
 int func(int, int) {
     return 0;
 }
@@ -66,7 +66,7 @@ int main()
 -----
 ### 函数引用
 - 函数引用和函数指针类似，函数引用需要声明时初始化(和引用变量一样)
-```c
+```cpp
 int fun(int i)
 {
 	return i;
@@ -80,7 +80,7 @@ int main()
 -------------------
 ### 函数只声明不定义可以使用吗
 一般情况下函数只声明不定义时函数是不能用的，但当处于*不求值语境*下，是可以使用的。例如，`decltype`推导数据类型时，是不需要计算表达式的值的。
-```c++
+```cpp
 template<class T>
 T Func() {
     cout << "done" << endl;
@@ -99,7 +99,7 @@ int main()
 ## 类
 ### 强制类型转换如何实现
 在类中实现转换函数，形如`operator Type ();`
-```c++
+```cpp
 class A
 {
 public:
@@ -148,7 +148,7 @@ int main()
     - `Args`是函数参数类型
 - 功能：用来重定向某一类成员变量或成员函数
 - 示例
-```c++
+```cpp
 class A {
 public:
     A() :a1(1), a2(2), a3(3) {
@@ -212,7 +212,7 @@ int main() {
 ### 成员函数引用限定
 - 功能：限定成员函数只能从左值或右值调用
 - 示例
-```c++
+```cpp
 #include <iostream>
 struct Test {
     //引用限定只能用在非静态成员函数中
@@ -238,7 +238,7 @@ int main() {
 ```
 ### 类中巧用`using`
 #### 改变基类成员私用性
-```c++
+```cpp
 class Base {
 protected:
     void print(double d) {
@@ -266,7 +266,7 @@ int main() {
 }
 ```
 #### 继承基类构造
-```c++
+```cpp
 class Base {
 public:
     Base() :m_i(1), m_d(1.1) {}
@@ -296,7 +296,7 @@ int main() {
   - 命名空间作用域的匿名联合体必须声明为 static，除非它们出现于无名命名空间
   - 全局匿名联合体必须声明为 static
 - 示例
-```c++
+```cpp
 namespace nm {
 class A 
 {
@@ -329,7 +329,7 @@ int main() {
 - 功能：使用预先分配的内存空间去分配给待分配对象
 - 注意事项：保证预先分配的内存大小大于待分配对象所需内存大小
 - 示例
-```c++
+```cpp
 #include<iostream> 
 using namespace std;
 int main()
@@ -367,7 +367,7 @@ mem : 010FF8C8
 - `*&`：指针的引用，功能和作用与`**`指针的指针类型相似
 - 解释：`*&`指针的引用，是一个特殊的引用，常见的引用是直接指向对象，而这个引用是执行指针，具有引用所有功能，因此在一定场合可以替代指针的指针`**`使用。
 - 示例
-```c++
+```cpp
 void pass_by_point(int* p)
 {
 	//Allocate memory for int and store the address in p

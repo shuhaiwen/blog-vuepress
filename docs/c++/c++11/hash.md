@@ -15,7 +15,7 @@ categories:
 - hash模板类具体化
 ## 源码分析
 **源码如下**
-```c++
+```cpp
 // 前置声明，为了后面_Conditionally_enabled_hash使用
 template <class _Kty>
 struct hash;
@@ -65,7 +65,7 @@ struct hash<float> {
 ## 自定义hash
 自定义hash的实现有2种方式，一种是定义独立的函数对象，另一种是具体化`hash`，使注入如`std::hash`中
 ### 方式一:独立函数对象
-```c++
+```cpp
 // 自定义散列函数能是独立函数对象：
 struct MyHash
 {
@@ -78,7 +78,7 @@ struct MyHash
 };
 ```
 ### 方式二:注入`std::hash`中
-```c++
+```cpp
 // std::hash 的自定义特化能注入 namespace std
 namespace std
 {

@@ -12,7 +12,7 @@ categories:
 - 头文件： `cstddef`
 - 功能：std::nullptr_t 是空指针字面量 nullptr 的类型。它是既非指针类型亦非指向成员指针类型的独立类型
 - 示例
-```c++
+```cpp
 #include <cstddef>
 #include <iostream>
  
@@ -49,7 +49,7 @@ int main()
   - `nullptr_t`类中定义了类型转换函数` operator _Tp* () const {return 0;}`,一次`nullptr`可以隐式转换为任意类型指针，且指向`0`,即空指针。
   - `nullptr_t`中重载了判等运算符，且将其作为友元，因此。
 
-```c++
+```cpp
 // -*- C++ -*-
 //===--------------------------- __nullptr --------------------------------===//
 //

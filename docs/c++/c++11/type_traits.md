@@ -42,7 +42,7 @@ categories:
 - 源码分析:
   - `extent`继承自`integral_constant`
   - `extent_v`利用继承递归展开，最终当展开到维度为0时结束
-```c
+```cpp
 template <class _Ty, unsigned int _Ix = 0>
 _INLINE_VAR constexpr size_t extent_v = 0; // determine extent of dimension _Ix of array _Ty
 
@@ -59,7 +59,7 @@ template <class _Ty, unsigned int _Ix = 0>
 struct extent : integral_constant<size_t, extent_v<_Ty, _Ix>> {};
 ```
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <type_traits>
 
@@ -83,7 +83,7 @@ int main()
 - 源码分析:
   - `rank`继承自`integral_constant`
   - `rank_v`递归展开数组维度，并+1
-```c
+```cpp
 template <class _Ty>
 _INLINE_VAR constexpr size_t rank_v = 0; // determine number of dimensions of array _Ty
 
@@ -98,7 +98,7 @@ struct rank : integral_constant<size_t, rank_v<_Ty>> {};
 
 ```
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <type_traits>
 
@@ -117,7 +117,7 @@ int main()
   - A实现了转换B函数，则A可以转B，(但A的指针或引用不能转B的引用或指针)
   - B实现了完美构造函数`template<class T> B(T&&){...}`，任何类型（包括指针和引用）都可以转换成B
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <type_traits>
 
@@ -145,7 +145,7 @@ int main()
 - 功能：移除最顶层 const 、最顶层 volatile 或两者，若存在
   - 解释：如`const volatile int*p`,其中`const volatile`修饰的是p指向的数据，并不是限定`int*`的，因此`remove_cv`会匹配无cv限定的模板实现，即内部type类型指向`const volatile int*`。又如`int* const volatile p`，cv限定符修饰的是`int*`,因此`remove_cv`内部type指向`int*`。
 - 源码分析:实现4个模板函数，分别匹配const volatile限定符，而内部type始终指向无cv限定符类型，从而达到去除cv限定符功能
-```c++
+```cpp
 // STRUCT TEMPLATE remove_cv
 template <class _Ty>
 struct remove_cv { // remove top-level const and volatile qualifiers
@@ -184,7 +184,7 @@ using remove_cv_t = typename remove_cv<_Ty>::type;
 
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
  
@@ -210,7 +210,7 @@ int main() {
 ### `remove_reference`
 - 功能：移除类型的引用`&`或`&&`
 - 源码分析:`remove_reference_t`是`remove_reference::type`的别名，`remove_reference`有3个定义，分别接收`T`、`T&`和`T&&`，即左值，左值引用和右值引用，而`type`始终指向`T`,即左值，因此达到去除引用的目的。
-```c++
+```cpp
 // STRUCT TEMPLATE remove_reference
 template <class _Ty>
 struct remove_reference {
@@ -234,7 +234,7 @@ template <class _Ty>
 using remove_reference_t = typename remove_reference<_Ty>::type;
 ```
 - 示例
-```c++
+```cpp
 #include <iostream> // std::cout
 #include <type_traits> // std::is_same
  
@@ -267,7 +267,7 @@ int main() {
   - `remove_exten`:从给定数组类型移除一个维度
   - `remove_all_extents`:从给定数组类型移除全部维度
 - 源码分析:特化`_Ty[]`类型，优先匹配数组
-```c
+```cpp
 template <class _Ty>
 struct remove_extent { // remove array extent
     using type = _Ty;
@@ -284,7 +284,7 @@ struct remove_extent<_Ty[]> {
 };
 ```
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <type_traits>
 using namespace std;
@@ -302,7 +302,7 @@ int main()
 - 功能：基于类型特性条件性地从重载决议移除函数，并对不同类型特性提供分离的函数重载与特化的便利方法；std::enable_if 可用作额外的函数参数（不可应用于运算符重载）、返回类型（不可应用于构造函数与析构函数），或类模板或函数模板形参。
 - 使用场景：
   - 利用`enable_if`的决断能力，实现多个同参函数，不受同名函数不能重载限制
-```c++
+```cpp
 struct T {
     enum { int_t,float_t } m_type;
     template <typename Integer,
@@ -318,7 +318,7 @@ struct T {
 ```
 - 源码分析：`enable_if`有2个参数，参数1是`bool`类型数据，当参数1是`false`时，`enable_if_t`将会编译报错。
 
-```c++
+```cpp
 template <bool _Test, class _Ty = void>
 struct enable_if {}; // no member "type" when !_Test
 
@@ -336,7 +336,7 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 - 源码分析：
   - 实现2个模板类，含3个参数，当参数1是`false`时匹配特化`false`版类，当参数1为`true`时匹配普通模板类
   - 2个模板类内部`type`分别指向参数2和参数3类型，从而达到根据参数1真假选择参数2或参数3功能
-```c++
+```cpp
 template <bool _Test, class _Ty1, class _Ty2>
 struct conditional { // Choose _Ty1 if _Test is true, and _Ty2 otherwise
     using type = _Ty1;
@@ -352,7 +352,7 @@ using conditional_t = typename conditional<_Test, _Ty1, _Ty2>::type;
 
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
 #include <typeinfo>
@@ -379,7 +379,7 @@ int main()
 - 源码分析:
 
 **`decay`中通过`is_array_v` 和`is_function_v`来检查是否是数组或函数类型，再通过`_Select`来根据`is_array_v` 和`is_function_v`的检查结果来选择`_Apply`参数中的前者还是后者。对应数组就移除[],再去除引用，对于函数就添加指针,对应对象就移除cv限定符和引用**
-```c++
+```cpp
 // STRUCT TEMPLATE decay
 template <class _Ty>
 struct decay { // determines decayed version of _Ty
@@ -395,7 +395,7 @@ template <class _Ty>
 using decay_t = typename decay<_Ty>::type;
 ```
 **`_Select`类主要用来匹配`_Select<true>`还是`_Select<false>`从而使`_Apply`等价于模板参数的第一个`_Ty1`还是第二个`_Ty2`**
-```c++
+```cpp
 // STRUCT TEMPLATE make_signed
 template <bool>
 struct _Select { // Select between aliases that extract either their first or second parameter
@@ -410,7 +410,7 @@ struct _Select<false> {
 };
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
  
@@ -441,7 +441,7 @@ int main()
 - 功能：复制类型`T`
 - 使用场景：当一个模板函数如sum可以计算int和float值，但只有一个模板参数T，为避免如`sum(1,1.2)`编译报错，可使用type_identity
 - 示例
-```c
+```cpp
 template<class T>
 void f(T, T);
  
@@ -454,7 +454,7 @@ int main()
     g(0, 4.2); // OK ：调用 g<int>
 }
 - 源码分析:使用类型别名指向_Ty
-```c
+```cpp
 template <class _Ty>
 struct type_identity {
 	using type = _Ty;
@@ -465,7 +465,7 @@ using type_identity_t = typename type_identity<_Ty>::type;
 ### `invoke_result`
 - 功能：计算可调用类型的返回值类型
 - 示例
-```c
+```cpp
 #include <type_traits>
 //识别call返回值类型
 template<typename _CallBack,typename... Args>
@@ -491,7 +491,7 @@ int main()
 ```
 #### 源码分析：本质是利用`decltype`和`declval`编译期识别类型特点
 - 利用`conditional_t`判断可调用类型是否含参
-```c
+```cpp
 template <class _Callable, class... _Args>
 using _Select_invoke_traits = conditional_t<sizeof...(_Args) == 0, _Invoke_traits_zero<void, _Callable>,
     _Invoke_traits_nonzero<void, _Callable, _Args...>>;
@@ -501,7 +501,7 @@ using invoke_result_t = typename _Select_invoke_traits<_Callable, _Args...>::typ
 
 ```
 - 利用`decltype`和`declval`来计算可调用类型的返回值
-```c
+```cpp
 //无参版本
 template <class _Void, class _Callable>
 struct _Invoke_traits_zero {
@@ -538,7 +538,7 @@ struct _Invoke_traits_zero<void_t<_Decltype_invoke_zero<_Callable>>, _Callable> 
     - 单参版继承自双参版
     - 多参版最终转化成双参版
   - 最终`common_type`会展开到`_Conditional_type`,`_Conditional_type`是一个模板变量,等号右边是个`decltype`+三元表达式`decltype(false ? _STD declval<_Ty1>() : _STD declval<_Ty2>());`,这个三元表达式正是判断类型是否相同的关键，三目运算符要求表达式2和表达式3必须是同一类型或可隐式转化另一类型，故当类型不同会编译报错
-```c
+```cpp
 template <class _Ty1, class _Ty2, class = void>
 struct _Const_lvalue_cond_oper {};
 
@@ -587,7 +587,7 @@ template <class _Ty1, class _Ty2, class... _Rest>
 struct common_type<_Ty1, _Ty2, _Rest...> : _Common_type3<void, _Ty1, _Ty2, _Rest...> {};
 ```
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <type_traits>
  
@@ -616,7 +616,7 @@ int main()
   - 类模板包含2个参数，分别是类型参数和非类型参数
   - 实现转换函数使`integral_constant`可以转换成`T`类型
   - 实现`()`函数对象使`integral_constant`对象可以函数调用形式返回数据
-```c++
+```cpp
 template <class _Ty, _Ty _Val>
 struct integral_constant {
     static constexpr _Ty value = _Val;
@@ -634,7 +634,7 @@ struct integral_constant {
 };
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
 int main()
@@ -651,7 +651,7 @@ int main()
   - `true_type`是对`bool_constant`特化`true`的别名
   - `false_type`是对`bool_constant`特化`false`的别名
 - 源码分析
-```c++
+```cpp
 template <bool _Val>
 using bool_constant = integral_constant<bool, _Val>;
 
@@ -659,7 +659,7 @@ using true_type  = bool_constant<true>;
 using false_type = bool_constant<false>;
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
 int main()
@@ -678,7 +678,7 @@ int main()
 ### `conjunction`
 - 功能：在特性序列上进行逻辑与
 - 源码分析
-```c++
+```cpp
 // 类1 本可以匹配任意参数且第一个参数false和true均可，但由于类2具体化第一个参数为true，导致只能在只剩一个参数 _First时才可以去匹配ture
 template <bool _First_value, class _First, class... _Rest>
 struct _Conjunction { // handle false trait or last trait
@@ -703,7 +703,7 @@ template <class... _Traits>
 _INLINE_VAR constexpr bool conjunction_v = conjunction<_Traits...>::value;
 ```
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <type_traits>
  

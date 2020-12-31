@@ -20,7 +20,7 @@ categories:
 - 功能：类似于`using namespace`声明，`using enum` 声明将枚举值暴露在当前作用域中
 - 注意事项：同一作用域不能有相同命令（会命名冲突）
 - 示例
-```c++
+```cpp
 enum class fruit { orange, apple };
 struct S1 {
 
@@ -40,7 +40,7 @@ void f()
 - 功能：将枚举中某一具体子项名暴露在当前作用域中
 - 注意事项：同一作用域不能有相同命令（会命名冲突）
 - 示例
-```c++
+```cpp
 enum class fruit { orange, apple };
 
 struct S2 {

@@ -11,7 +11,7 @@ categories:
 - 解释：Substitution Failure Is Not An Error(替换失败不是错误)
 - 使用场景：在模板重载集中，匹配一个失败时会尝试下一个重载，直到所有都匹配失败，这时才是错误
 - 示例
-```c++
+```cpp
 /*
  The compiler will try this overload since it's less generic than the variadic.
  T will be replace by int which gives us void f(const int& t, int::iterator* b = nullptr);

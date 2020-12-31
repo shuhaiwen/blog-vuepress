@@ -16,7 +16,7 @@ categories:
   - [mongoose创建的collection名带后缀s？](#mongoose创建的collection名带后缀s)
 ## mongoose创建的collection名带后缀s？
 可能代码如下：
-```js
+```javascript
 const schema = new mongoose.Schema({
   username: {
     type: String
@@ -30,7 +30,7 @@ mongoose.model('User', schema)
 原因：这个问题是因为没有给collection指定名称，而导致系统默认使用modle名称按一定规则产生（modle小写+s）
 
 解决方法如下：
-```js
+```javascript
 //方法1
 let collectionName = 'User'
 let M = mongoose.model('User', schema, collectionName);

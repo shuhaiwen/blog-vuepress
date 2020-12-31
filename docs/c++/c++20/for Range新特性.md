@@ -15,7 +15,7 @@ categories:
 # for Range新特性
 ## for 结构化绑定
 - 功能：结合c++17机构化绑定使用
-```c++
+```cpp
 #include <iostream>
 #include <map>
 int main(){
@@ -29,7 +29,7 @@ int main(){
 ## for Range初始化语句
 - 功能：在for的`()`内进行初始化
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 int main() {

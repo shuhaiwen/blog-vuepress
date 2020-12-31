@@ -13,7 +13,7 @@ categories:
 - 头文件： `<functional>`
 - 功能：`std::reference_wrapper` 是包装引用于可复制、可赋值对象的类模板。它常用作将引用存储入无法正常保有引用的标准容器（类似 `std::vector` ）的机制。
 - 源码分析
-```c++
+```cpp
 template <class _Ty>
 class reference_wrapper
 #if !_HAS_CXX20
@@ -56,7 +56,7 @@ public:
 };
 ```
 - 示例
-```c++
+```cpp
 #include <functional>
 #include<vector>
 int main(){

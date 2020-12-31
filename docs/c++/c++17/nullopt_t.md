@@ -11,7 +11,7 @@ categories:
 - 功能：std::nullopt_t 是空类类型，用于表示不含数据的空类
 - 使用场景：配合`std::optional`,用于指示 `std::optional` 类型拥有未初始化状态
 - 源码分析:`nullopt_t`自定义的构造函数，也隐含的使编译器提供的默认构造函数失效，初始化生成`nullopt_t`实例对象只能通过显式调用`nullopt_t(_Tag)`构造，而不能使用如默认构造`nullopt_t npt;`。
-```c++
+```cpp
 struct nullopt_t { // no-value state indicator
     struct _Tag {};
     constexpr explicit nullopt_t(_Tag) {}
@@ -19,7 +19,7 @@ struct nullopt_t { // no-value state indicator
 inline constexpr nullopt_t nullopt{nullopt_t::_Tag{}};
 ```
 - 示例:
-```c++
+```cpp
 int main(){
     //调用显式构造
     nullopt_t npt1{ nullopt_t::_Tag{} };//正确

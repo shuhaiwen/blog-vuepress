@@ -30,7 +30,7 @@ categories:
 ## 关键字
 ### this
 JavaScript中this值是在函数被调用时确定的，this指向调用的对象
-```js
+```javascript
 var o = {
     a:10,
     b:{
@@ -48,7 +48,7 @@ j();//undefined this指向 window
 JavaScript中的类是一个语法糖
 - 类是一个function类型，执行原型的构造器，`Point===Point.prototype.constructor`
 - 类必须由`new`构造，`let p=new Point()`
-```js
+```javascript
 //使用构造函数
 function Point(x, y) {
   this.x = x;
@@ -75,7 +75,7 @@ class Point(x,y){
 - 静态方法中`this`指的是类 `Foo`，而不是实例 `foo`
 - 静态方法内部可以调用类静态方法，而不能调用非静态方法
 - 静态方法和非静态方法可重名 `static baz() {}` 和`baz() {}`
-```js
+```javascript
 class Foo {
   static  prop=1;//静态属性
   static bar() {//静态方法
@@ -94,7 +94,7 @@ Foo.bar() // hello
 ### 私有属性和私有方法
 私有属性和私有方法前加 `#` 表示私有
 - 私有属性和方法不能由类实例调用，只能在类内部使用
-```js
+```javascript
 class Foo {
   #a;//私有属性
   #b;
@@ -113,7 +113,7 @@ class Foo {
 ### extends 继承
 - `this`指代当前类，`super`指代父类
 - 需要在子类构造函数中调用父类构造函数 `super(x, y);`
-```js
+```javascript
 class Point {
 }
 class ColorPoint extends Point {
@@ -138,7 +138,7 @@ class ColorPoint extends Point {
 - 使用export统一导出
 - 使用export default导出
 - 使用as重命名导出变量
-```js
+```javascript
 // profile.js
 
 //1.使用export 一个一个导出
@@ -167,7 +167,7 @@ export {v1 as streamV1}
 - 使用 `as` 重命名导入变量
 - 使用 `* as`整体导入
 - 执行所加载的模块，但不导入任何东西
-```js
+```javascript
 //1.使用 * as整体导入
 // circle.js
 export function area(radius) {
@@ -191,7 +191,7 @@ import 'lodash';
 #### 错误导出示例
 - 定义声明时立即导出
 - 定义时不导出，只能统一放入{}导出
-```js
+```javascript
 // 写法一
 export var m = 1;
 
@@ -217,7 +217,7 @@ export {f};
 #### import 导出
 - 导入文件，可以是相对路径，也可以是绝对路径，`.js`后缀可以省略
 - 导入模块，可以指定路径，或者不带有路径时，那么必须有配置文件（package.json）
-```js
+```javascript
 //main.js
 //1.导入模块名
 import { stat, exists, readFile } from 'fs';
@@ -228,7 +228,7 @@ import { lastName as surname } from './profile.js';
 ```
 #### export 与 import 的复合写法
 - 导入同时导出
-```js
+```javascript
 export { foo, bar } from 'my_module';
 
 // 可以简单理解为
@@ -252,7 +252,7 @@ import * as ns from "mod";
 export {ns};
 ```
 ### CommonJS 模块语法
-```js
+```javascript
 // lib.js
 var counter = 3;
 function incCounter() {
@@ -273,7 +273,7 @@ console.log(mod.counter); // 3
 **作用:函数的复用**
 - 用于改变函数执行时this指向(重新绑定对象)
 - 第一个参数是绑定的对象，后面参数是函数执行时接受的参数
-```js
+```javascript
   let obj = {name: 'tony'};
   
   function Child(name){

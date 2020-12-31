@@ -17,7 +17,7 @@ categories:
 - 使用场景：当if或switch语句的条件需要计算时，此计算表达式可放入if或switch条件区，而不必在外面声明
 - 注意事项：表达式或声明必须由**分号**`;`结束且只能有一个**分号**`;`
 - 示例
-```c++
+```cpp
 int fun(int x) {
     return x;
 }
@@ -41,7 +41,7 @@ int main() {
 ## constexpr if
 - 功能：定义条件为常量表达式，编译器会在编译期做优化，当条件为`false`时会舍弃`true`语句块，当条件为`true`时会舍弃`false`语句块。
 - 示例
-```c++
+```cpp
 template <typename T>
 auto get_value(T t) {
     if constexpr (std::is_pointer_v<T>)

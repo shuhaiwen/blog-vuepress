@@ -19,7 +19,7 @@ categories:
   - `variant`不容许保有引用、数组，或类型 void 
   - 默认构造的`variant`保有其首个选项的值,如`std::variant<int, float> v;`,v存有int类型0值。
 - 示例
-```c
+```cpp
 #include <variant>
 #include <string>
 int main()
@@ -54,7 +54,7 @@ int main()
   - `T`类型匹配`variant`参数列表中类型
   - `T`类型能转换成`variant`参数列表中类型
 - 示例
-```c
+```cpp
 #include <variant>
 #include <string>
 int main()
@@ -73,7 +73,7 @@ int main()
 - 注意事项：`emplace`模板参数可以是0值开始的索引值也可以是具体类型
   - 当`variant`保有多个相同类型参数时，不能使用具体类型模板参数，因为编译器不知道你需要赋值给具体哪一个
 - 示例
-```c
+```cpp
 #include <iostream>
 #include <string>
 #include <variant>
@@ -95,7 +95,7 @@ int main()
 ## `variant`成员函数`index`
 - 功能：返回 `variant` 当前所保有的可选项的零基下标
 - 示例
-```c
+```cpp
 #include <variant>
 #include <string>
 #include <iostream>
@@ -116,7 +116,7 @@ int main()
   - 基于下标访问或基于类型访问必须要确保`variant`中存的是对应下标的数据或对应类型的数据
   - 当`variant`含有多个相同类型时，基于类型的访问不能访问这种含有多个相同类型的数据
 - 示例
-```c
+```cpp
 #include <variant>
 #include <string>
  
@@ -142,7 +142,7 @@ int main()
 - 注意事项：
   - 可调用对象`vis`中函数参数应该是具体数据类型中一种，而不是`variant`类型
 - 示例
-```c
+```cpp
 #include <variant>
 #include <string>
 #include <iostream>
@@ -166,7 +166,7 @@ int main()
 //string value:123
 ```
 - 可调用对象的其它形式
-```c
+```cpp
 #include <variant>
 #include <string>
 #include <iostream>

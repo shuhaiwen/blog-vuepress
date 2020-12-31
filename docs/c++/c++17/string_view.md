@@ -21,7 +21,7 @@ categories:
   - 由于`string_view`仅由指针和大小表示字符串，并不由终止符`\0`结束，所以如`data()`操作返回字符串实际范围可能更大（因为匹配到最近一个`\0`）。
   - 由于`string_view`仅仅是引用字符串，故要保证`string_view`指向的字符串生命周期要长于`string_view`
 - 示例
-```c++
+```cpp
 #include <iostream>
 #include <string>
 #include <string_view>

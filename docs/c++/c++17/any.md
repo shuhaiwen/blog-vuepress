@@ -16,7 +16,7 @@ categories:
   - 当储存的是指针时，any内保存了指针数据(把指针当作一个数据)，外部指针所指的数据改变会影响any内部存储的指针所指向的数据，外部指针被重新赋值，不会影响any内储存的指针数据
   - 当储存的是对象时，外部对象数据改变不影响any内存储数据。
 - 示例
-```c++
+```cpp
 #include <any>
 #include <iostream>
 
@@ -76,7 +76,7 @@ int main()
 ## 源码分析
 any是一个普通类（非模板类），它构造实现可以匹配任意类型对象或指针，然后内部会重新分配一块内存用来保存数据。它内部有一个`_Storage_t`类型成员变量`_Storage`,这个`_Storage`拥有并管理数据（保存数据的类型，数据值）。当any生命周期结束时，会将`_Storage`中分配的资源删除。
 - 部分源码及分析
-```c++
+```cpp
 //value 可以是任意类型，包括指针
   template <class _ValueType, enable_if_t<conjunction_v<negation<is_same<decay_t<_ValueType>, any>>,
         negation<_Is_specialization<decay_t<_ValueType>, in_place_type_t>>,

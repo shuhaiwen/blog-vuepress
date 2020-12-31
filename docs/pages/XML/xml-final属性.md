@@ -13,7 +13,7 @@ categories:
 
 ## 举例如下：
 * 设置final属性 extension； 防止通过扩展派生。
-```
+```xml
     <xsd:complexType name="Student">
 		<xsd:complexContent>
 			<xsd:extension base="Person">
@@ -34,7 +34,7 @@ categories:
 **分析**：此时检验文件会报错：Type 'Student' is not a valid extension of type 'Person'. 
 由报错信息可以知道，由于<xsd:complexType name="Person" final="extension">中final属性是extension，导致Person不能被Student派生。
 * 设置final属性 restriction； 防止通过限制派生。
-```
+```xml
 	<xsd:simpleType name="Id"  final="restriction">
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="[a-zA-Z0-9\\\-\.\|:_#/]+"/>
@@ -49,7 +49,7 @@ categories:
 * 设置final属性 #all； 防止通过限制和扩展派生。
 ## 完整代码
 xsd.xsd文件
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="www.shuhaiwen.com" targetNamespace="www.shuhaiwen.com" elementFormDefault="qualified">
 	<xsd:complexType name="Student">
@@ -77,7 +77,7 @@ xsd.xsd文件
 </xsd:schema>
 ```
 xml.xml文件
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <entry xmlns="www.shuhaiwen.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="www.shuhaiwen.com myXsd.xsd">
 	<person xsi:type="Student">

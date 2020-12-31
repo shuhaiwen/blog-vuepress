@@ -12,7 +12,7 @@ categories:
 - 功能：函数模板 bind 生成 f 的转发调用包装器
 ## 源码分析
 - bind函数模板原型由2个，一个匹配隐式返回类型，一个匹配显式返回类型
-```c++
+```cpp
 // FUNCTION TEMPLATE bind (implicit return type)
 template <class _Fx, class... _Types>
 _NODISCARD _CONSTEXPR20 _Binder<_Unforced, _Fx, _Types...> bind(_Fx&& _Func, _Types&&... _Args) {

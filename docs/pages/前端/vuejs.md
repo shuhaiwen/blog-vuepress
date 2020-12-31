@@ -96,7 +96,7 @@ categories:
 
 1. 共同点：两者都作为组件的数据使用。
 2. 不同点：props可以使父组件数据传入子组件，而data不能。
-```js
+```javascript
 
 Vue.component('temp-data', {
   data:['text'],
@@ -118,7 +118,7 @@ Vue.component('temp-props', {
 ------------
 ## mixins
 分发 Vue 组件中的可复用功能。一个混入对象可以包含任意组件选项。当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项。
-```js
+```javascript
 var mixin = {
   created: function () {
     console.log('混入对象的钩子被调用')
