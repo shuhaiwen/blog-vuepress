@@ -4,8 +4,9 @@ date: 2020-05-21
 sidebarDepth: 2
 tags:
  - Bat
-categories:
  - Cmd
+categories:
+ - Windows
 ---
 # bat批处理指令
 - dir 　　　列文件名 

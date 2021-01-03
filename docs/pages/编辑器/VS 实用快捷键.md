@@ -6,7 +6,7 @@ tags:
  - Vs
  - 快捷键
 categories:
- - 编辑器
+ - Editor
 ---
 
 # Vs 实用快捷键

@@ -3,9 +3,9 @@ title: boost
 date: 2020-06-07
 sidebarDepth: 2
 tags:
- - boost
+ - 编译
 categories:
- - C++
+ - Boost
 ---
 - [boost](#boost)
   - [boost库编译](#boost库编译)

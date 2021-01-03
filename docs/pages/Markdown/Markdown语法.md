@@ -5,7 +5,7 @@ sidebarDepth: 2
 tags:
  - Markdown
 categories:
- - 富文本
+ - Markdown
 ---
 # Markdown语法
 ## 链接

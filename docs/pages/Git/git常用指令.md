@@ -3,9 +3,10 @@ title: Git
 date: 2020-05-04
 sidebarDepth: 2
 tags:
- - Git
+ - Cmd
 categories:
- - 版本控制
+ - Git
+ - Kit
 ---
 - [git常用指令](#git常用指令)
   - [git配置](#git配置)
