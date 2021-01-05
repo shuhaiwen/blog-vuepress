@@ -67,8 +67,16 @@ b2 --show-libraries
 3. filesystem 文件系统（c++17）
 4. log 日志库
 5. Timer (Event timer, progress timer, and progress display classes.)
-6. System (Operating system support, including the diagnostics support that will be part of the C++0x standard library.)
-7. Serialization (Serialization for persistence and marshalling.)
-8. Pool (Memory pool management.)
-9. Parameter (Boost.Parameter Library - Write functions that accept arguments by name)
-10. JSON (JSON parsing, serialization, and DOM in C++11)
+6. Serialization (Serialization for persistence and marshalling.)
+7. Pool (Memory pool management.)
+8. Parameter (Boost.Parameter Library - Write functions that accept arguments by name)
+9.  JSON (JSON parsing, serialization, and DOM in C++11)
+10. Asio (Portable networking and other low-level I/O, including sockets, timers, hostname resolution, socket iostreams, serial ports, file descriptors and Windows HANDLEs.)
+11. Compute (Library for comfortable work with DLL and DSO.)
+12. DLL (Library for comfortable work with DLL and DSO.)
+13. Process (Library to create processes in a portable way.)
+14. Stacktrace (Gather, store, copy and print backtraces.)
+15. System (Operating system support, including the diagnostics support that will be part of the C++0x standard library.)
+16. Timer (Event timer, progress timer, and progress display classes.) 
+17. Units (Zero-overhead dimensional analysis and unit/quantity manipulation and conversion.)
+18. 
