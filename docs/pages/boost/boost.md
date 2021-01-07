@@ -61,22 +61,21 @@ b2 --show-libraries
 * msvc-10.0是vs2010
 -----------------------
 ## boost库常用部分
-
-1. lexical_cast 字符串与数值的转换
-2. format 字符串的格式化
-3. filesystem 文件系统（c++17）
-4. log 日志库
-5. Timer (Event timer, progress timer, and progress display classes.)
-6. Serialization (Serialization for persistence and marshalling.)
-7. Pool (Memory pool management.)
-8. Parameter (Boost.Parameter Library - Write functions that accept arguments by name)
-9.  JSON (JSON parsing, serialization, and DOM in C++11)
-10. Asio (Portable networking and other low-level I/O, including sockets, timers, hostname resolution, socket iostreams, serial ports, file descriptors and Windows HANDLEs.)
-11. Compute (Library for comfortable work with DLL and DSO.)
-12. DLL (Library for comfortable work with DLL and DSO.)
-13. Process (Library to create processes in a portable way.)
-14. Stacktrace (Gather, store, copy and print backtraces.)
-15. System (Operating system support, including the diagnostics support that will be part of the C++0x standard library.)
-16. Timer (Event timer, progress timer, and progress display classes.) 
-17. Units (Zero-overhead dimensional analysis and unit/quantity manipulation and conversion.)
-18. 
+- [ ] Asio (Portable networking and other low-level I/O, including sockets, timers, hostname resolution, socket iostreams, serial ports, file descriptors and Windows HANDLEs.)
+- [ ] Compute (Parallel/GPU-computing library)
+- [ ] DLL (Library for comfortable work with DLL and DSO.)
+- [ ] format 字符串的格式化
+- [ ] filesystem 文件系统（c++17）
+- [ ] Interprocess (进程间通讯)
+- [ ] JSON (JSON parsing, serialization, and DOM in C++11)
+- [ ] lexical_cast 字符串与数值的转换
+- [ ] log 日志
+- [ ] Timer (Event timer, progress timer, and progress display classes.)
+- [ ] Pool (Memory pool management.)
+- [ ] Parameter (Boost.Parameter Library - Write functions that accept arguments by name)
+- [x] Process 可移植创建进程
+- [x] Serialization (序列化)
+- [ ] Stacktrace (Gather, store, copy and print backtraces.)
+- [ ] System (错误处理)
+- [ ] Timer (Event timer, progress timer, and progress display classes.) 
+- [ ] Units (Zero-overhead dimensional analysis and unit/quantity manipulation and conversion.)
