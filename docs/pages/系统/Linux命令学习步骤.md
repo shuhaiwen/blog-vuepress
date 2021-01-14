@@ -25,7 +25,7 @@ bash: llk：未找到命令
 hello
 ```
 ### `chmod`
-- `chmod [ugoa][+-=][file]`
+- `chmod [ugoa][+-=][rwx][file]`
   - u  用户user，表现文件或目录的所有者
   - g  用户组group，表现文件或目录所属的用户组
   - o  其他用户other
@@ -33,6 +33,9 @@ hello
   - +  增加权限（附加）
   - -  移除权限
   - =  重赋值权限（覆盖之前的权限）
+  - r  读权限
+  - w  写权限
+  - x  可执行权限
 ```cmd
 ~/code/test$ ls -l
 总用量 0
