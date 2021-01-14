@@ -8,7 +8,7 @@ categories:
  - CMake
 ---
 # cmake-help
-```sh
+```shell
 Usage
 
   cmake [options] <path-to-source>

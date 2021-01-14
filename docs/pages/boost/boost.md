@@ -45,11 +45,11 @@ categories:
 ------------------------
 ### 示例
 * 常用的编译命令
-```sh
+```shell
 b2 stage --with-regex toolset=msvc-14.2 link=static runtime-link=shared --stagedir="E:\boost\lib"
 ```
 * 查询需要编译的库
-```sh
+```shell
 b2 --show-libraries
 ```
 以上命令会在E:\boost\lib目录下生成静态、多线程、适用vs2019的32|64位、debug|release版的regex库。

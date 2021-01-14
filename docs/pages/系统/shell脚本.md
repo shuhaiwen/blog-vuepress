@@ -3,7 +3,7 @@ title: shell脚本
 date: 2021-01-12
 sidebarDepth: 2
 tags:
- - shell脚本
+ - Shell
 categories:
  - Linux
 ---
@@ -48,7 +48,7 @@ categories:
   - ${变量名}
   - $变量名
 - 修改变量值：变量名=变量新值
-```sh
+```shell
 #!/bin/bash
 # 变量
 
@@ -65,7 +65,7 @@ echo ${str}
 ```
 ### 局部变量
 - 局部变量用`local`标识，一般用于函数
-```sh
+```shell
 hello() {
   local str="hello"
   echo $str
@@ -79,7 +79,7 @@ echo "\$str=$str"
 - `${var:?message}`	如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。若此替换出现在Shell脚本中，那么脚本将停止运行。
 - `${var:+word}` 如果变量 var 被定义，那么返回 word，但不改变 var 的值。
 ### 特殊变量($$ $1 $* $@ $@ $n)
-```sh
+```shell
 #!/bin/bash
 # 特殊变量
 echo "\$0脚本名 "$0
@@ -91,7 +91,7 @@ echo "\$@脚本所有参数 "$@
 echo "\$?上一个脚本执行结果"$?
 ```
 **当`$*`被双引号包裹时，将是一个整体，这时与`$@`有点不同**
-```sh
+```shell
 #!/bin/bash
 # test.sh
 for val in "$@"
@@ -104,7 +104,7 @@ do
 done
 ```
 执行脚本结果如下`$*`被当成一个整体被输出
-```sh
+```shell
 $ ./test.sh 1 2 3 4 5
 1
 2
@@ -116,7 +116,7 @@ $ ./test.sh 1 2 3 4 5
 ## 读取命令结果
 - $(命令)
 - \`命令\`
-```sh
+```shell
 echo $(cat 1.txt)
 str=`cat 1.txt`
 echo ${str}
@@ -126,7 +126,7 @@ echo ${str}
 - 整形计算：利用`((表达式))`语法计算，或者使用linux上安装的可执行计算文件，如`expr`
 - 浮点运算：使用`bc`计算
   - `scale`指定精度，如`scale=6`,代表保留小数点后6位
-```sh
+```shell
 #!/bin/bash
 #算术运算
 
@@ -146,7 +146,7 @@ echo $a
   - 表达式与`[]`之间要空格隔开
   - 比较符如`-lt -ge`需要与比较数用空格隔开
   - `[]`也可以测试文件属性，具体请看`test`文档
-```sh
+```shell
 #!/bin/bash
 #关系运算
 
@@ -176,7 +176,7 @@ fi
 ## 字符串操作
 - `${#str}`和`${str:1:3}`分别求字符串长度和截取字符串子串
 - `test`也可以操作字符串，功能更多
-```sh
+```shell
 #!/bin/bash
 #字符串操作
 
@@ -199,7 +199,7 @@ echo "${str}从索引1开始子串=${str:1}"
   - `${array[*]}`
 - 某一索引数据
   - `${array[0]}`
-```sh
+```shell
 #!/bin/bash
 set -xeu
 # 数组
@@ -227,7 +227,7 @@ echo "${array3[1]}"
 ## 条件语句
 ### if条件语句
 - `if...then...elif...then...else...fi`,其中`if`和`elif`语句块由`then`引导
-```sh
+```shell
 #!/bin/bash
 
 str="hello"
@@ -243,7 +243,7 @@ fi
 - `case...in...esac`
 - `case`由`esac`结尾（case反序）
 - 每一个条件的语句块`;;`结束
-```sh
+```shell
 #!/bin/bash
 
 printf "请输入数字1—4\n"
@@ -274,7 +274,7 @@ esac
 - `continue`:跳出当前循环，继续下一循环（参考c，java等语言）
 ### for 循环
 - `for ((i = 0; i < 10; i++));do ... done`
-```sh
+```shell
 #!/bin/bash
 
 array=(
@@ -290,7 +290,7 @@ done
 ```
 ### for in循环
 - `for ... in ... do ... done`
-```sh
+```shell
 #!/bin/bash
 
 array=(
@@ -323,7 +323,7 @@ fi
 ```
 ### while循环
 - `while command do ... done`，与c中`while`一样，当条件假时退出循环
-```sh
+```shell
 #!/bin/bash
 
 echo -e "请输入任意整形值，输入0结束:\c"
@@ -339,7 +339,7 @@ done
 ```
 ### until循环
 - `until command do ... done`,与c中`do while`一样,当条件真时退出循环
-```sh
+```shell
 #!/bin/bash
 
 a=0
@@ -352,7 +352,7 @@ done
 - `break`和`continue`不同于c语言，可以指定跳出那一层循环，**其中`continue n+1`等价于`break n`,跳出第n层循环**。（n的含义是从当前循环层从里往外数，第几层，当前层为1）
 ### break
 - `break n`：跳出第n层循环，如空3层循环，2表示跳出第2层循环，3表示跳出最外层循环，1表示跳出当前层循环，默认n就是1
-```sh
+```shell
 #!/bin/bash
 
 #跳出循环break
@@ -379,7 +379,7 @@ done
 ### continue
 - `continue`:从此循环体中断，继续下一循环，类似c
 - `continue n`:继续到第n层循环，类似break （n-1；n>1）
-```sh
+```shell
 #!/bin/bash
 
 #继续下一循环
@@ -409,7 +409,7 @@ done
 - 调用函数不需要带`()`，传参接着函数名后写，如:`fun_name 1 2 "3"`,表示调用函数fun_name并且传给函数3个参数
 - 函数中也能使用`return`,但只能返回整形数值，如:`return 2`,能不能`return "2"`
 - `function`标识可有可无，如`function add(){}`等价于`add(){}`
-```sh
+```shell
 #!/bin/bash
 
 add() {
@@ -428,7 +428,7 @@ echo "函数add 1 2 3 4返回值:$?"
 **包含文件类似与c语言中的include，可以将外部脚本合并到当前脚本文件中**
 - 方式一:`. file.sh`,其中`.`与文件名间有一空格
 - 方式二:`source file.sh`
-```sh
+```shell
 #!/bin/bash
 
 # shellcheck disable=SC1091

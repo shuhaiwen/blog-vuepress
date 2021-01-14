@@ -41,7 +41,7 @@ app.allowRendererProcessReuse=false;
 ### NODE_MODULE_VERSION 版本不对
 - 问题原因：electron自带的node版本与本地node版本不一致
 - 解决方法：使用electron-rebuild工具重新编译
-```sh
+```shell
 # 安装electron-rebuild
 npm i -D electron-rebuild
 # 执行编译

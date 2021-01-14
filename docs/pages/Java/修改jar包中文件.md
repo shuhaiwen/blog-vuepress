@@ -16,14 +16,14 @@ categories:
 
 ## 步骤二：.java文件生成.class文件
 1. 将hello.java文件和原hello.jar包放在同一目录下，执行以下命令,将会在当前目录生成hello.class文件(与hello.java文件同名)
-```sh
+```shell
 javac -cp hello.jar hello.java
 ``` 
 ## 步骤三：打包jar包
 1. 复制jar包到另一目录下，将hello.jar改名hello.zip并解压
 2. 将步骤二生成的hello.class文件替换目录下的hello.class文件
 3. 在解压目录下执行以下命令，将会生成hello.jar文件
-```sh
+```shell
 # hello.jar 指定生成jar包名 META-INF hello 是解压hello.zip中得到的文件夹名称（所有文件夹名都要列出）
 jar -cvfM0 hello.jar META-INF hello
 ```
