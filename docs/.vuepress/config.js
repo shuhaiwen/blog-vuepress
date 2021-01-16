@@ -13,7 +13,7 @@ module.exports = {
     [
       require('./plugins/KanBanNiang'),
       {
-        theme: ['miku','tsumiki']	,
+        theme: ['miku', 'tsumiki'],
         width: 200,
         height: 470,
         modelStyle: {
@@ -49,7 +49,7 @@ module.exports = {
       }
     ],
     [
-      '@vuepress/pwa', 
+      '@vuepress/pwa',
       {
         serviceWorker: true,
         updatePopup: {
@@ -67,22 +67,21 @@ module.exports = {
     type: 'blog',
     // 导航栏配置
     nav: [
-      { text: '首页', link: '/' },
+      { text: 'Home', link: '/', icon: 'reco-home' },
       {
-        text: '教程', link: '/pages/' //引用到docs/pages/README.md
-        // ariaLabel: '教程1',
-        // items: [
-        //   { text: 'C++', link: '/pages/C++/' },
-        //   { text: 'Git', link: '/pages/Git/git常用指令.md' },
-        //   { text: 'cmake', link: '/pages/cmake/cmake 错误汇总.md' },
-        //   { text: 'Linux', link: '/pages/Linux/Linux命令学习步骤.md' },
-        //   { text: 'markdown', link: '/pages/markdown/README.md' },
-        //   { text: 'npm', link: '/pages/npm/npm命令.md' },
-        //   { text: 'XML', link: '/pages/XML/xml总结.md' },
-        // ]
+        text: 'Document', link: '/pages/', icon: 'reco-document'//引用到docs/pages/README.md
       },
       { text: 'TimeLine', link: '/timeline/', icon: 'reco-date' },
-      { text: 'GitHub', link: 'https://github.com/shuhaiwen' }
+      {
+        text: 'webSite',
+        icon: 'reco-menu',
+        ariaLabel: 'Language Menu',
+        items: [
+          { text: 'GitHub', link: 'https://github.com/shuhaiwen', icon: 'reco-github' },
+          { text: 'Gitee', link: 'https://gitee.com/shuhaiwen', icon: 'reco-mayun' },
+          { text: 'CSDN', link: 'https://blog.csdn.net/u014140383', icon: 'reco-csdn' }
+        ]
+      }
     ],
     // 博客设置
     blogConfig: {
@@ -96,7 +95,8 @@ module.exports = {
       }
     },
     //侧边栏
-    sidebarDepth: 1,
+    sidebarDepth: 0,
+    subSidebar: 'auto',//在所有页面中启用自动生成子侧边栏
     displayAllHeaders: false, // 默认值：false
     activeHeaderLinks: true, // 默认值：true
     sidebar: {
@@ -117,11 +117,11 @@ module.exports = {
       //       'Git/git常用指令',
       //     ]
       //   },
-       
+
       // ],
-      '/pages/':require('../pages')('./docs/pages')//后一个路径以项目package.json所在路径为起点
+      '/pages/': require('../pages')('./docs/pages')//后一个路径以项目package.json所在路径为起点
     },
-   
+
     //主题色
     mode: 'auto', // 默认 auto，auto 跟随系统，dark 暗色模式，light 亮色模式
     modePicker: true, // 默认 true，false 不显示模式调节按钮，true 则显示

@@ -4,7 +4,7 @@
 set -e
 # 提交当前目录下源码到github
 git add .
-git commit -m "$1."
+git commit -m "${1}."
 
 git push origin main
 
@@ -25,6 +25,6 @@ mv ../blogTemp/* ./
 
 # 提交blog目录下源码github.io 仓库
 git add .
-git commit -m "$1."
+git commit -m "${1}."
 
 git push origin main
