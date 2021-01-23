@@ -1,5 +1,5 @@
 ---
-title: shell脚本
+title: shell教程
 date: 2021-01-12
 sidebarDepth: 2
 tags:
@@ -7,7 +7,7 @@ tags:
 categories:
  - Linux
 ---
-- [shell脚本](#shell脚本)
+- [shell教程](#shell教程)
   - [set参数设置](#set参数设置)
   - [变量和常量](#变量和常量)
     - [局部变量](#局部变量)
@@ -32,7 +32,7 @@ categories:
     - [continue](#continue)
   - [函数](#函数)
   - [包含其它shell文件](#包含其它shell文件)
-# shell脚本
+# shell教程
 ## set参数设置
 - `set -u`：如果有不存在的变量，打印错误信息，并退出
 - `set -x`：在执行命令前，打印执行的命令
