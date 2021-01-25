@@ -11,14 +11,13 @@ categories:
   - [基本操作](#基本操作)
     - [命令连接符`&&`、`||`和`;`](#命令连接符和)
     - [文件重定向符](#文件重定向符)
-  - [常用命令](#常用命令)
+  - [文件操作](#文件操作)
     - [chmod](#chmod)
     - [tar](#tar)
       - [打包、解包](#打包解包)
       - [解压包](#解压包)
       - [查看压缩包内容](#查看压缩包内容)
       - [附加文件](#附加文件)
-    - [cat](#cat)
     - [mv](#mv)
     - [cp](#cp)
     - [touch](#touch)
@@ -28,7 +27,11 @@ categories:
     - [ln](#ln)
       - [软链接：](#软链接)
       - [硬链接：](#硬链接)
+  - [显示信息操作](#显示信息操作)
+    - [cat](#cat)
     - [ls](#ls)
+    - [locale](#locale)
+    - [pwd](#pwd)
   - [Linux命令学习步骤](#linux命令学习步骤)
 # Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
@@ -96,7 +99,7 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
 > del
 
 ```
-## 常用命令
+## 文件操作
 ### chmod
 - `chmod [ugoa][+-=][rwx][file]`
   - `u`  用户user，表现文件或目录的所有者
@@ -193,29 +196,6 @@ $ tar -rvf 1.tar 2.md
 $ tar -tvf 1.tar
 -r-xr--r-- xxx/xxx 0 2021-01-03 13:30 1.md
 -rw-r--r-- xxx/xxx 0 2021-01-03 14:16 2.md
-```
-### cat
-- 语法形式：`cat [option] [文件]`
-- 功能：打印文件内容到控制台
-- `-n`和`-b`输出行号，`-b`会忽略空行
-- `-T`将tab以`^I`符号表示
-- `-E`行尾显示`$`符号
-- `-A`等价于`-vET`
-```
-$ cat -n 1.txt 
-     1  hello
-     2
-     3  world
-$ cat -b 1.txt 
-     1  hello
-
-     2  world
-$ cat -A 1.file
-C$
-C.UTF-8$
-en_US.utf8$
-POSIX$
-zh_CN.utf8$
 ```
 ### mv
 - 语法形式：`mv [option] [原文件] [目标文件]`
@@ -318,6 +298,30 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
 3. 不允许给目录创建硬链接（`-d`选项可强制给目录建立硬链接）
 4. 硬链接只有在同一个文件系统中才能创建
 5. 硬链接与原文件索引节点相同
+## 显示信息操作
+### cat
+- 语法形式：`cat [option] [文件]`
+- 功能：打印文件内容到控制台
+- `-n`和`-b`输出行号，`-b`会忽略空行
+- `-T`将tab以`^I`符号表示
+- `-E`行尾显示`$`符号
+- `-A`等价于`-vET`
+```
+$ cat -n 1.txt 
+     1  hello
+     2
+     3  world
+$ cat -b 1.txt 
+     1  hello
+
+     2  world
+$ cat -A 1.file
+C$
+C.UTF-8$
+en_US.utf8$
+POSIX$
+zh_CN.utf8$
+```
 ### ls
 - 语法形式：`ls [option]`
 - 功能：列出目录内容
@@ -334,6 +338,42 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
     - `-S`按文件大小排序，大->小
     - `-t`按修改时间排序，新->旧
     - `-X`按扩展名字母排序
+### locale
+- 语法形式：`locale [option]`
+- 功能：给出区域特定的信息
+  - `-a`显示可用locale信息
+  - `locale`显示当前locale信息
+```shell
+~/code/sh$ locale
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN
+LC_CTYPE="zh_CN.UTF-8"
+LC_NUMERIC="zh_CN.UTF-8"
+LC_TIME="zh_CN.UTF-8"
+LC_COLLATE="zh_CN.UTF-8"
+LC_MONETARY="zh_CN.UTF-8"
+LC_MESSAGES="zh_CN.UTF-8"
+LC_PAPER="zh_CN.UTF-8"
+LC_NAME="zh_CN.UTF-8"
+LC_ADDRESS="zh_CN.UTF-8"
+LC_TELEPHONE="zh_CN.UTF-8"
+LC_MEASUREMENT="zh_CN.UTF-8"
+LC_IDENTIFICATION="zh_CN.UTF-8"
+LC_ALL=
+~/code/sh$ locale -a
+C
+C.UTF-8
+en_US.utf8
+POSIX
+zh_CN.utf8
+```
+### pwd
+- 语法形式：`locale [option]`
+- 功能：显示当前路径信息
+```shell
+~/code/sh$ pwd
+/home/shuhaiwen/code/sh
+```
 ## Linux命令学习步骤
 
 1. pwd 显示当前所在路径 
