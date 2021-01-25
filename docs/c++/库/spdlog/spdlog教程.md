@@ -8,6 +8,7 @@ categories:
  - C++库
 ---
 - [spdlog教程](#spdlog教程)
+	- [编译安装](#编译安装)
 	- [入门](#入门)
 		- [使用默认logger记录器](#使用默认logger记录器)
 		- [设置默认日志记录器属性](#设置默认日志记录器属性)
@@ -28,6 +29,8 @@ categories:
 - sink 日志输出目标
 - logger 日志信息源
 - formater 日志信息格式化
+## 编译安装
+spdlog只含头文件，不需要额外编译，使用时直接包含apdlog库中的include目录就行。
 ## 入门
 ### 使用默认logger记录器
 - 使用方式：
