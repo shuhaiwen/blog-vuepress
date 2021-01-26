@@ -11,7 +11,7 @@ categories:
   - [基本操作](#基本操作)
     - [命令连接符`&&`、`||`和`;`](#命令连接符和)
     - [文件重定向符](#文件重定向符)
-  - [文件操作](#文件操作)
+  - [文件修改操作](#文件修改操作)
     - [chmod](#chmod)
     - [tar](#tar)
       - [打包、解包](#打包解包)
@@ -27,11 +27,19 @@ categories:
     - [ln](#ln)
       - [软链接：](#软链接)
       - [硬链接：](#硬链接)
+  - [文件查找操作](#文件查找操作)
+    - [find](#find)
+    - [file](#file)
+    - [whereis](#whereis)
+    - [which](#which)
   - [显示信息操作](#显示信息操作)
     - [cat](#cat)
     - [ls](#ls)
     - [locale](#locale)
     - [pwd](#pwd)
+  - [库相关](#库相关)
+    - [ldconfig](#ldconfig)
+    - [ldd](#ldd)
   - [Linux命令学习步骤](#linux命令学习步骤)
 # Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
@@ -99,7 +107,7 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
 > del
 
 ```
-## 文件操作
+## 文件修改操作
 ### chmod
 - `chmod [ugoa][+-=][rwx][file]`
   - `u`  用户user，表现文件或目录的所有者
@@ -112,7 +120,7 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
   - `r`  读权限
   - `w`  写权限
   - `x`  可执行权限
-```cmd
+```shell
 $ ls -l
 总用量 0
 -rw-r--r-- 1 xxx xxx 0 1月   3 13:30 1.md
@@ -122,7 +130,7 @@ $ ls -l
 ---xr--r-- 1 xxx xxx 0 1月   3 13:30 1.md
 总用量 0
 ```
-```cmd
+```shell
 $ chmod u+r 1.md
 $ ls -l
 总用量 0
@@ -133,7 +141,7 @@ $ ls -l
   - 1 `x`权限
   - 2 `w`权限
   - 4 `r`权限
-```cmd
+```shell
 $ chmod 0544 1.md
 $ ls -l
 总用量 0
@@ -263,12 +271,12 @@ mv：是否覆盖'2.txt'？ n
   - `-v`显示详细信息
 ### rmdir
 - 语法形式：`rm [option] [文件]`
-- 功能：删除***空目录***
+- 功能：删除***空目录***，不能用来删除非空目录
   - `-p --parents`删除目录及其祖先，如`rmdir -p a/b/c`等价于`rmdir a/b/c a/b a`
 ### mkdir
 - 语法形式：`mkdir [option] [文件]`
 - 功能：创建目录
-  - `-p`如果目录存在不创建，也不会报错
+  - `-p`如果目录存在则不创建，也不会报错
   - `-m`指定目录权限
 ```shell
 ~/code/sh$ mkdir fd1
@@ -298,6 +306,41 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
 3. 不允许给目录创建硬链接（`-d`选项可强制给目录建立硬链接）
 4. 硬链接只有在同一个文件系统中才能创建
 5. 硬链接与原文件索引节点相同
+## 文件查找操作
+### find
+- 语法形式：`find [path] -name [文件名] [option]`
+- 功能：查找指定目录下文件
+  - `-name fileName`：指定查找文件名如`find /opt -name 1.txt`,在/opt目录下查找1.txt文件
+  - `-iname fileName`:同`-name`但忽略大小写
+  - `-type fileType`:指定文件类型
+  - `-size [+][-]fileSize`:指定文件大小，+大于，-小于
+  - `-exec command {} \;`：查到文件后对文件执行命令，如`find /opt -name 1.txt -exec rm -f {} \;`,查找1.txt并删除
+  - `-ok command {} \;`
+### file
+- 语法形式：`file [option] [文件名]`
+- 功能：打印文件信息
+```shell
+~/code/cpp$ file 1.file
+1.file: ASCII text
+~/code/cpp$ file locale.cpp
+locale.cpp: C++ source, ASCII text
+```
+### whereis
+- 语法形式：`whereis [option] [文件名]`
+- 功能：查找二进制文件、源码文件、man手册文件位置，查找路径在$PATH and $MANPATH环境变量
+```shell
+~/code/cpp$ whereis rm
+rm: /usr/bin/rm /usr/share/man/man1/rm.1.gz
+~/code/cpp$ whereis gcc
+gcc: /usr/bin/gcc /usr/lib/gcc
+``` 
+### which
+- 语法形式：`which [option] [文件名]`
+- 功能：查找可执行文件位置，查找路径在$PATH环境变量
+```shell
+~/code/cpp$ which rm
+/usr/bin/rm
+```
 ## 显示信息操作
 ### cat
 - 语法形式：`cat [option] [文件]`
@@ -373,6 +416,23 @@ zh_CN.utf8
 ```shell
 ~/code/sh$ pwd
 /home/shuhaiwen/code/sh
+```
+## 库相关
+### ldconfig
+- 功能：设置运行时期动态链接，通常在向/lib和/usr/lib添加了新动态库后用来更新动态库
+```shell
+~/code/cpp$ sudo ldconfig
+```
+### ldd
+- 功能：打印动态库的依赖关系
+```shell
+shuhaiwen@shuhaiwen:~/code/cpp$ ldd liblocale.so
+linux-vdso.so.1 (0x00007ffd5e582000)
+libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f8ffeb07000)
+libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f8ffe984000)
+libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f8ffe96a000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8ffe7a9000)
+/lib64/ld-linux-x86-64.so.2 (0x00007f8ffecb5000)
 ```
 ## Linux命令学习步骤
 
