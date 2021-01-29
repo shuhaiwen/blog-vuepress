@@ -13,6 +13,8 @@ categories:
     - [文件重定向符](#文件重定向符)
   - [文件修改操作](#文件修改操作)
     - [chmod](#chmod)
+    - [chgrp](#chgrp)
+    - [chown](#chown)
     - [tar](#tar)
       - [打包、解包](#打包解包)
       - [解压包](#解压包)
@@ -146,6 +148,39 @@ $ chmod 0544 1.md
 $ ls -l
 总用量 0
 -r-xr--r-- 1 xxx xxx 0 1月   3 13:30 1.md
+```
+### chgrp
+- 功能:改变文件所属组
+- 语法形式:`chgrp [option] group file`
+  - `-R`：如果是目录，则会递归到子文件
+```shell
+~/code/cpp$ ls -l 1.file 
+-rw-r--r-- 1 shuhaiwen shuhaiwen 38 1月  23 10:49 1.file
+~/code/cpp$ sudo chgrp root 1.file 
+~/code/cpp$ ls -l 1.file 
+-rw-r--r-- 1 shuhaiwen root 38 1月  23 10:49 1.file
+```
+### chown
+- 功能:改变文件拥有者或拥有组
+- 语法形式:`chown [option] [OWNER][:[GROUP]] file`
+  - `-R`：如果是目录，则会递归到子文件
+
+示例1：改变文件拥有者
+```shell
+~/code/cpp$ ls -l 1.file 
+-rw-r--r-- 1 shuhaiwen root 38 1月  23 10:49 1.file
+~/code/cpp$ sudo chown root 1.file 
+~/code/cpp$ ls -l 1.file 
+-rw-r--r-- 1 root root 38 1月  23 10:49 1.file
+```
+示例2：改变文件拥有者和所属组
+```shell
+~/code/cpp$ ls -l 1.txt 
+-rw-r--r-- 1 shuhaiwen shuhaiwen 0 1月  28 11:06 1.txt
+~/code/cpp$ sudo chown root:root 1.txt 
+~/code/cpp$ ls -l 1.txt 
+-rw-r--r-- 1 root root 0 1月  28 11:06 1.txt
+
 ```
 ### tar
 `tar`本质上只具有打包功能，而不具有解压缩功能，其内部调用`gzip`或其它打包工具才能执行解压缩功能

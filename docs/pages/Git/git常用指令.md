@@ -153,5 +153,3 @@ git branch --no-merged
 ```git
 git branch -m oldName newName
 ```
-
-

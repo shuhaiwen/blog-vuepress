@@ -28,4 +28,8 @@ categories:
 - `EXTRACT_STATIC`：设置`YES`时静态成员会被文档化
 更多设置请移步[官网](https://www.doxygen.nl/manual/config.html "https://www.doxygen.nl/manual/config.html")
 ## 问题汇总
+- 文件头声明的`@file`指令会在html文档导航栏产生file标签
+- 在任意文件注释包含`@mainpage`指令会在html文档的MainPage产生信息
+- 源码文件含有命名空间，在html文档导航栏会产生namespaces标签
+- 链接函数需要把函数参数带上
 在官网有大量问题及解答，请移步[官网](https://www.doxygen.nl/manual/faq.html "https://www.doxygen.nl/manual/faq.html")
