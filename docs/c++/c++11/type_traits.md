@@ -25,7 +25,6 @@ categories:
     - [`decay`](#decay)
     - [`type_identity`](#type_identity)
     - [`invoke_result`](#invoke_result)
-      - [源码分析：本质是利用`decltype`和`declval`编译期识别类型特点](#源码分析本质是利用decltype和declval编译期识别类型特点)
     - [`common_type`](#common_type)
   - [辅助类](#辅助类)
     - [`integral_constant`](#integral_constant)
@@ -453,6 +452,7 @@ int main()
     g(4.2, 0); // OK ：调用 g<double>
     g(0, 4.2); // OK ：调用 g<int>
 }
+```
 - 源码分析:使用类型别名指向_Ty
 ```cpp
 template <class _Ty>
@@ -489,8 +489,8 @@ int main()
 	auto val = call(fun,1,2);//val=3 int类型
 }
 ```
-#### 源码分析：本质是利用`decltype`和`declval`编译期识别类型特点
-- 利用`conditional_t`判断可调用类型是否含参
+源码分析：本质是利用`decltype`和`declval`编译期识别类型特点
+- 利用`conditional_t`判断可调用类型是否含参，由此来展开无参和有参版本的处理
 ```cpp
 template <class _Callable, class... _Args>
 using _Select_invoke_traits = conditional_t<sizeof...(_Args) == 0, _Invoke_traits_zero<void, _Callable>,
@@ -679,7 +679,7 @@ int main()
 - 功能：在特性序列上进行逻辑与
 - 源码分析
 ```cpp
-// 类1 本可以匹配任意参数且第一个参数false和true均可，但由于类2具体化第一个参数为true，导致只能在只剩一个参数 _First时才可以去匹配ture
+// 类1 本可以匹配任意参数且第一个参数false和true均可，但由于类2具体化第一个参数为true，导致要想匹配true只能在只剩一个参数 _First时；
 template <bool _First_value, class _First, class... _Rest>
 struct _Conjunction { // handle false trait or last trait
     using type = _First;

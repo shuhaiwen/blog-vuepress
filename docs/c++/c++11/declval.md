@@ -11,7 +11,7 @@ categories:
 # declval
 - 头文件：utility
 - 功能：declval是一个模板函数，常与`decltype`一起使用，令在 `decltype` 表达式中不必经过构造函数就能使用成员函数
-- 注意：因为`declval`只有声明没有定义，因此只能用在*不求值语境*，所有可以用在`decltype`中
+- 注意：因为`declval`只有声明没有定义，因此只能用在*不求值语境*，所以可以用在`decltype`中
 - 示例
 ```cpp
 #include <utility>
