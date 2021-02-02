@@ -11,32 +11,37 @@ categories:
   - [类型属性](#类型属性)
     - [类型类别判断](#类型类别判断)
     - [类型属性判断](#类型属性判断)
-      - [`extent`](#extent)
-      - [`rank`](#rank)
+      - [extent](#extent)
+      - [rank](#rank)
     - [类型关系判断](#类型关系判断)
-      - [`is_convertible`](#is_convertible)
+      - [is_convertible](#is_convertible)
   - [类型修改](#类型修改)
-    - [`remove_cv`](#remove_cv)
-    - [`remove_reference`](#remove_reference)
-    - [`remove_exten`和`remove_all_extents`](#remove_exten和remove_all_extents)
+    - [add_pointer](#add_pointer)
+    - [remove_pointer](#remove_pointer)
+    - [make_signed](#make_signed)
+    - [make_unsigned](#make_unsigned)
+    - [remove_cv](#remove_cv)
+    - [remove_reference](#remove_reference)
+    - [add_lvalue_reference和add_rvalue_reference](#add_lvalue_reference和add_rvalue_reference)
+    - [remove_exten`和`remove_all_extents](#remove_exten和remove_all_extents)
   - [其它类](#其它类)
-    - [`enable_if`](#enable_if)
-    - [`conditional`](#conditional)
-    - [`decay`](#decay)
-    - [`type_identity`](#type_identity)
-    - [`invoke_result`](#invoke_result)
-    - [`common_type`](#common_type)
+    - [enable_if](#enable_if)
+    - [conditional](#conditional)
+    - [decay](#decay)
+    - [type_identity](#type_identity)
+    - [invoke_result](#invoke_result)
+    - [common_type](#common_type)
   - [辅助类](#辅助类)
-    - [`integral_constant`](#integral_constant)
-    - [`bool_constant true_type false_type`](#bool_constant-true_type-false_type)
+    - [integral_constant](#integral_constant)
+    - [bool_constant true_type false_type](#bool_constant-true_type-false_type)
   - [逻辑运算类](#逻辑运算类)
-    - [`conjunction`](#conjunction)
+    - [conjunction](#conjunction)
 # type_traits
 **c++ 类型特性（type_traits）定义一个编译时基于模板的结构，以查询或修改类型的属性**
 ## 类型属性
 ### 类型类别判断
 ### 类型属性判断
-#### `extent`
+#### extent
 - 功能：获取数组类型在指定维度的大小
 - 源码分析:
   - `extent`继承自`integral_constant`
@@ -77,7 +82,7 @@ int main()
 	std::cout << std::extent<decltype(ints)>::value << '\n'; // < 数组大小 
 }
 ```
-#### `rank`
+#### rank
 - 功能：计算指定数组的维度，当非数组时结果为0
 - 源码分析:
   - `rank`继承自`integral_constant`
@@ -109,7 +114,7 @@ int main()
 }
 ```
 ### 类型关系判断
-#### `is_convertible`
+#### is_convertible
 - 功能：判断是否可以由A转换到B
 - 规则：
   - 子类指针或引用可转基类指针或引用
@@ -140,7 +145,205 @@ int main()
 }
 ```
 ## 类型修改
-### `remove_cv`
+### add_pointer
+- 功能：对给定类型添加一层指针
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+int main()
+{
+	int i = 123;
+	int* p = &i;
+	int& ri = i;
+	typedef std::add_pointer<decltype(p)>::type IntPtr3;
+	typedef std::add_pointer<decltype(i)>::type IntPtr;
+	typedef std::add_pointer<decltype(ri)>::type IntPtr2;
+
+	static_assert(std::is_pointer<IntPtr>::value, "IntPtr should be a pointer");
+	static_assert(std::is_same<IntPtr, int*>::value, "IntPtr should be a pointer to int");
+	static_assert(std::is_same<IntPtr2, IntPtr>::value, "IntPtr2 should be equal to IntPtr");
+    static_assert(std::is_same<IntPtr3, int**>::value, "IntPtr3 should be equal to int**");
+}
+```
+源码分析:先去除引用再增加一层指针，添加指针的方式很直接，在类型后增加一个符号`*`
+- `_Add_pointer`含2个版本，版本1作为主模板类，当版本2不满足时被使用，版本2通过判断针对移除引用再添加指针后是否被`void_t`匹配（即是否是类型）
+```cpp
+template <class _Ty, class = void>
+struct _Add_pointer { // add pointer (pointer type cannot be formed)
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct _Add_pointer<_Ty, void_t<remove_reference_t<_Ty>*>> { // (pointer type can be formed)
+    using type = remove_reference_t<_Ty>*;
+};
+
+template <class _Ty>
+struct add_pointer {
+    using type = typename _Add_pointer<_Ty>::type;
+};
+
+template <class _Ty>
+using add_pointer_t = typename _Add_pointer<_Ty>::type;
+```
+### remove_pointer
+- 功能：移除给定类型的一层指针
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+template<class T1, class T2>
+void print_is_same() 
+{
+    std::cout << std::is_same<T1, T2>() << '\n';
+}
+ 
+void print_separator() 
+{
+    std::cout << "-----\n";
+}
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+ 
+    print_is_same<int, int>();   // true
+    print_is_same<int, int*>();  // false
+    print_is_same<int, int**>(); // false
+ 
+    print_separator();
+ 
+    print_is_same<int, std::remove_pointer<int>::type>();   // true
+    print_is_same<int, std::remove_pointer<int*>::type>();  // true
+    print_is_same<int, std::remove_pointer<int**>::type>(); // false
+ 
+    print_separator();
+ 
+    print_is_same<int, std::remove_pointer<int* const>::type>();          // true
+    print_is_same<int, std::remove_pointer<int* volatile>::type>();       // true
+    print_is_same<int, std::remove_pointer<int* const volatile>::type>(); // true
+}
+```
+源码分析：类似[remove_reference](#remove_reference),对`_Ty*`及cv限定符的具体化
+```cpp
+template <class _Ty>
+struct remove_pointer {
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct remove_pointer<_Ty*> {
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct remove_pointer<_Ty* const> {
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct remove_pointer<_Ty* volatile> {
+    using type = _Ty;
+};
+
+template <class _Ty>
+struct remove_pointer<_Ty* const volatile> {
+    using type = _Ty;
+};
+
+template <class _Ty>
+using remove_pointer_t = typename remove_pointer<_Ty>::type;
+```
+### make_signed
+- 功能：将有符号或无符号的 char 、 short 、 int 、 long 、 long long 统一转换成有符号类型
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+
+int main() {
+	typedef std::make_signed<char>::type char_type;
+	typedef std::make_signed<int>::type int_type;
+	typedef std::make_signed<volatile long>::type long_type;
+
+	bool ok1 = std::is_same<char_type, signed char>::value;
+	bool ok2 = std::is_same<int_type, signed int>::value;
+	bool ok3 = std::is_same<long_type, volatile signed long>::value;
+
+	std::cout << std::boolalpha
+		<< "char_type is 'signed char'?          : " << ok1 << '\n'
+		<< "int_type  is 'signed int'?           : " << ok2 << '\n'
+		<< "long_type is 'volatile signed long'? : " << ok3 << '\n';
+}
+```
+源码分析：枚举判断整形类型的有符号和无符号，统一返回有符号版
+- 使用`remove_cv`去除cv限定符，并调用`_Apply`（作用使`_Make_signed1`以去除了cv限定符的`_Ty`作为模板参数），`_Make_signed1`是`_Make_signed2`的模板别名，`_Make_signed2`（有多个版本）以整形字节大小作为模板参数，并调用内部`_Apply`
+```cpp
+template <class _Ty>
+using _Make_signed1 = // signed partner to cv-unqualified _Ty
+    typename _Make_signed2<sizeof(_Ty)>::template _Apply<_Ty>;
+
+template <class _Ty>
+struct make_signed { // signed partner to _Ty
+    static_assert(_Is_nonbool_integral<_Ty> || is_enum_v<_Ty>,
+        "make_signed<T> requires that T shall be a (possibly cv-qualified) "
+        "integral type or enumeration but not a bool type.");
+
+    using type = typename remove_cv<_Ty>::template _Apply<_Make_signed1>;
+};
+
+template <class _Ty>
+using make_signed_t = typename make_signed<_Ty>::type;
+```
+- `_Make_signed2`分别实现了1字节、2字节、4字节、8字节版本,内部的`_Apply`直接是对应整形的有符号版，在4字节版本实现中使用了`_Select`，这个作用类似于三元运算`bool:A?B`
+```cpp
+template <size_t>
+struct _Make_signed2; // Choose make_signed strategy by type size
+
+template <>
+struct _Make_signed2<1> {
+    template <class>
+    using _Apply = signed char;
+};
+
+template <>
+struct _Make_signed2<2> {
+    template <class>
+    using _Apply = short;
+};
+
+template <>
+struct _Make_signed2<4> {
+    template <class _Ty>
+    using _Apply = // assumes LLP64
+        typename _Select<is_same_v<_Ty, long> || is_same_v<_Ty, unsigned long>>::template _Apply<long, int>;
+};
+
+template <>
+struct _Make_signed2<8> {
+    template <class>
+    using _Apply = long long;
+};
+```
+- `_Select`2个版本，具体化`false`版,使`_Apply`等价于第二个参数，另一个版本匹配`true`，使`_Apply`等价于第一个参数
+```cpp
+template <bool>
+struct _Select { // Select between aliases that extract either their first or second parameter
+    template <class _Ty1, class>
+    using _Apply = _Ty1;
+};
+
+template <>
+struct _Select<false> {
+    template <class, class _Ty2>
+    using _Apply = _Ty2;
+};
+```
+### make_unsigned
+原理使用方法同[make_signed](#make_signed)
+### remove_cv
 - 功能：移除最顶层 const 、最顶层 volatile 或两者，若存在
   - 解释：如`const volatile int*p`,其中`const volatile`修饰的是p指向的数据，并不是限定`int*`的，因此`remove_cv`会匹配无cv限定的模板实现，即内部type类型指向`const volatile int*`。又如`int* const volatile p`，cv限定符修饰的是`int*`,因此`remove_cv`内部type指向`int*`。
 - 源码分析:实现4个模板函数，分别匹配const volatile限定符，而内部type始终指向无cv限定符类型，从而达到去除cv限定符功能
@@ -206,7 +409,7 @@ int main() {
         ? "passed" : "failed") << '\n';
 }
 ```
-### `remove_reference`
+### remove_reference
 - 功能：移除类型的引用`&`或`&&`
 - 源码分析:`remove_reference_t`是`remove_reference::type`的别名，`remove_reference`有3个定义，分别接收`T`、`T&`和`T&&`，即左值，左值引用和右值引用，而`type`始终指向`T`,即左值，因此达到去除引用的目的。
 ```cpp
@@ -261,7 +464,71 @@ int main() {
 //true
 //true
 ```
-### `remove_exten`和`remove_all_extents`
+### add_lvalue_reference和add_rvalue_reference
+- 功能：向给定类型添加左值引用或右值引用
+- 规则：
+  - `std::add_lvalue_reference<T>::type` 是 `T&`
+  - `std::add_lvalue_reference<T&>::type` 是 `T&`
+  - `std::add_lvalue_reference<T&&>::type` 是 `T&`
+  - `std::add_rvalue_reference<T>::type` 是 `T&&`
+  - `std::add_rvalue_reference<T&>::type` 是 `T&`
+  - `std::add_rvalue_reference<T&&>::type` 是 `T&&`
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+
+int main() {
+	using nonref = int;
+	using lref = typename std::add_lvalue_reference<nonref>::type;//int&
+	using rref = typename std::add_rvalue_reference<nonref>::type;//int&&
+	using llref = typename std::add_lvalue_reference<lref>::type;//int&
+	using rlref = typename std::add_rvalue_reference<lref>::type;//int&
+	using lrref = typename std::add_lvalue_reference<rref>::type;//int&
+	using rrref = typename std::add_rvalue_reference<rref>::type;//int&&
+	std::cout << std::boolalpha;
+	std::cout << std::is_lvalue_reference<nonref>::value << '\n';
+	std::cout << std::is_lvalue_reference<lref>::value << '\n';
+	std::cout << std::is_rvalue_reference<rref>::value << '\n';
+}
+```
+源码分析：利用万能引用和[引用坍缩](/c++/c++11/reference.md)特性（右值引用的右值引用依然是右值引用，左值或左值引用的右值引用是左值引用）。
+- `add_lvalue_reference`和`add_rvalue_reference`中`type`分别来自`_Add_reference`中定义的`_Lvalue`和`_Rvalue`
+```cpp
+// STRUCT TEMPLATE add_lvalue_reference
+template <class _Ty>
+struct add_lvalue_reference {
+    using type = typename _Add_reference<_Ty>::_Lvalue;
+};
+
+template <class _Ty>
+using add_lvalue_reference_t = typename _Add_reference<_Ty>::_Lvalue;
+
+// STRUCT TEMPLATE add_rvalue_reference
+template <class _Ty>
+struct add_rvalue_reference {
+    using type = typename _Add_reference<_Ty>::_Rvalue;
+};
+
+template <class _Ty>
+using add_rvalue_reference_t = typename _Add_reference<_Ty>::_Rvalue;
+```
+- `_Add_reference`的实现由2个版本，一个主模板，一个部分具体化。具体化版本中`void_t<_Ty&>`用来判断`_Ty&`是否是一个类型，在上面的示例程序中，`int`、`int&`和`int&&`都会匹配这个版本。`using _Lvalue = _Ty&;`和`using _Rvalue = _Ty&&;`这以语法完全遵循应勇坍缩规则
+```cpp
+//主模板
+template <class _Ty, class = void>
+struct _Add_reference { // add reference (non-referenceable type)
+    using _Lvalue = _Ty;
+    using _Rvalue = _Ty;
+};
+//部分具体化
+template <class _Ty>
+struct _Add_reference<_Ty, void_t<_Ty&>> { // (referenceable type)
+    using _Lvalue = _Ty&;
+    using _Rvalue = _Ty&&;
+};
+```
+### remove_exten`和`remove_all_extents
 - 功能：
   - `remove_exten`:从给定数组类型移除一个维度
   - `remove_all_extents`:从给定数组类型移除全部维度
@@ -297,7 +564,7 @@ int main()
 }
 ```
 ## 其它类
-### `enable_if`
+### enable_if
 - 功能：基于类型特性条件性地从重载决议移除函数，并对不同类型特性提供分离的函数重载与特化的便利方法；std::enable_if 可用作额外的函数参数（不可应用于运算符重载）、返回类型（不可应用于构造函数与析构函数），或类模板或函数模板形参。
 - 使用场景：
   - 利用`enable_if`的决断能力，实现多个同参函数，不受同名函数不能重载限制
@@ -305,13 +572,11 @@ int main()
 struct T {
     enum { int_t,float_t } m_type;
     template <typename Integer,
-              std::enable_if_t<std::is_integral_v<Integer>, int> = 0
-    >
+              std::enable_if_t<std::is_integral_v<Integer>, int> = 0>
     T(Integer) : m_type(int_t) {}
  
     template <typename Floating,
-              std::enable_if_t<std::is_floating_point_v<Floating>, int> = 0
-    >
+              std::enable_if_t<std::is_floating_point_v<Floating>, int> = 0>
     T(Floating) : m_type(float_t) {} // OK
 };
 ```
@@ -330,7 +595,7 @@ template <bool _Test, class _Ty = void>
 using enable_if_t = typename enable_if<_Test, _Ty>::type;
 
 ```
-### `conditional`
+### conditional
 - 功能：根据条件真假选择，功能如三目运算符`?:`
 - 源码分析：
   - 实现2个模板类，含3个参数，当参数1是`false`时匹配特化`false`版类，当参数1为`true`时匹配普通模板类
@@ -371,7 +636,7 @@ int main()
 //double
 //double
 ```
-### `decay`
+### decay
 - 功能：
   - 对类型 T 应用左值到右值、数组到指针及函数到指针隐式转换
   - 移除 cv 限定符
@@ -436,7 +701,7 @@ int main()
 //true
 //true
 ```
-### `type_identity`
+### type_identity
 - 功能：复制类型`T`
 - 使用场景：当一个模板函数如sum可以计算int和float值，但只有一个模板参数T，为避免如`sum(1,1.2)`编译报错，可使用type_identity
 - 示例
@@ -462,7 +727,7 @@ struct type_identity {
 template <class _Ty>
 using type_identity_t = typename type_identity<_Ty>::type;
 ```
-### `invoke_result`
+### invoke_result
 - 功能：计算可调用类型的返回值类型
 - 示例
 ```cpp
@@ -530,7 +795,7 @@ struct _Invoke_traits_zero<void_t<_Decltype_invoke_zero<_Callable>>, _Callable> 
         conjunction_v<_Is_nothrow_invocable, disjunction<is_void<_Rx>, _Is_nothrow_convertible<type, _Rx>>>>;
 };
 ```
-### `common_type`
+### common_type
 - 功能：确定一组类型的公共类型
 - 源码分析
   - `common_type`分别对0参、单参、双参、多参版特化
@@ -610,7 +875,7 @@ int main()
 }
 ```
 ## 辅助类
-### `integral_constant`
+### integral_constant
 - 功能：包装特定类型的静态常量
 - 源码分析：
   - 类模板包含2个参数，分别是类型参数和非类型参数
@@ -645,7 +910,7 @@ int main()
 	int i3 = std::integral_constant<int, 2>();//i3经 operator value_type() 返回2，i3是int类型
 }
 ```
-### `bool_constant true_type false_type`
+### bool_constant true_type false_type
 - 功能:
   - `bool_constant`是对`integral_constant`特化`bool`的别名
   - `true_type`是对`bool_constant`特化`true`的别名
@@ -675,7 +940,7 @@ int main()
 //value of true_type true
 ```
 ## 逻辑运算类
-### `conjunction`
+### conjunction
 - 功能：在特性序列上进行逻辑与
 - 源码分析
 ```cpp
