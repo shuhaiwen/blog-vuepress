@@ -8,22 +8,43 @@ categories:
  - C++11
 ---
 - [type_traits](#type_traits)
-  - [类型属性](#类型属性)
-    - [类型类别判断](#类型类别判断)
-    - [类型属性判断](#类型属性判断)
-      - [extent](#extent)
+  - [类型类别判断](#类型类别判断)
+    - [is_void](#is_void)
+    - [is_null_pointer](#is_null_pointer)
+    - [is_integral](#is_integral)
+    - [is_floating_point](#is_floating_point)
+    - [is_array](#is_array)
+    - [is_enum](#is_enum)
+    - [is_union](#is_union)
+    - [is_class](#is_class)
+    - [is_function](#is_function)
+    - [is_pointer](#is_pointer)
+    - [is_reference、is_lvalue_reference和is_rvalue_reference](#is_referenceis_lvalue_reference和is_rvalue_reference)
+    - [is_member_object_pointer](#is_member_object_pointer)
+    - [is_member_function_pointer](#is_member_function_pointer)
+    - [is_member_pointer](#is_member_pointer)
+    - [is_arithmetic](#is_arithmetic)
+    - [is_fundamental](#is_fundamental)
+    - [is_object](#is_object)
+  - [类型属性判断](#类型属性判断)
+    - [is_const](#is_const)
+    - [is_volatile](#is_volatile)
+    - [extent](#extent)
       - [rank](#rank)
-    - [类型关系判断](#类型关系判断)
-      - [is_convertible](#is_convertible)
+  - [类型关系判断](#类型关系判断)
+    - [is_same](#is_same)
+    - [is_base_of](#is_base_of)
+    - [is_convertible](#is_convertible)
   - [类型修改](#类型修改)
     - [add_pointer](#add_pointer)
     - [remove_pointer](#remove_pointer)
     - [make_signed](#make_signed)
     - [make_unsigned](#make_unsigned)
     - [remove_cv](#remove_cv)
+    - [add_cv、add_const和add_volatile](#add_cvadd_const和add_volatile)
     - [remove_reference](#remove_reference)
     - [add_lvalue_reference和add_rvalue_reference](#add_lvalue_reference和add_rvalue_reference)
-    - [remove_exten`和`remove_all_extents](#remove_exten和remove_all_extents)
+    - [remove_exten和remove_all_extents](#remove_exten和remove_all_extents)
   - [其它类](#其它类)
     - [enable_if](#enable_if)
     - [conditional](#conditional)
@@ -36,32 +57,694 @@ categories:
     - [bool_constant true_type false_type](#bool_constant-true_type-false_type)
   - [逻辑运算类](#逻辑运算类)
     - [conjunction](#conjunction)
+    - [disjunction](#disjunction)
 # type_traits
 **c++ 类型特性（type_traits）定义一个编译时基于模板的结构，以查询或修改类型的属性**
-## 类型属性
-### 类型类别判断
-### 类型属性判断
-#### extent
-- 功能：获取数组类型在指定维度的大小
-- 源码分析:
-  - `extent`继承自`integral_constant`
-  - `extent_v`利用继承递归展开，最终当展开到维度为0时结束
+- 注意事项：在`type_traits`的实现中，有很多需要编译器支持，仅仅利用语言特性实现不了，如
+  - `is_enum`
+  - `is_union`
+  - `is_class`
+## 类型类别判断
+### is_void
+- 功能：检查是否为 void 类型
+- 示例
 ```cpp
-template <class _Ty, unsigned int _Ix = 0>
-_INLINE_VAR constexpr size_t extent_v = 0; // determine extent of dimension _Ix of array _Ty
+#include <iostream>
+#include <type_traits>
+
+int main()
+{
+	decltype(1, 2.2) d;
+	std::cout << std::boolalpha;
+	std::cout << std::is_void<void>::value << '\n';
+	std::cout << std::is_void<int>::value << '\n';
+}
+```
+- 源码分析:
+  1. 移除类型cv限定符
+  2. 使用[is_same](#is_same)判断是否是void
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_void_v = is_same_v<remove_cv_t<_Ty>, void>;
+
+template <class _Ty>
+struct is_void : bool_constant<is_void_v<_Ty>> {};
+```
+### is_null_pointer
+- 功能：检查类型是否为 std::nullptr_t
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+//is_null_pointer
+int main()
+{
+	std::cout << std::boolalpha
+		<< std::is_null_pointer< decltype(nullptr) >::value << ' '
+		<< std::is_null_pointer< int* >::value << '\n'
+		<< std::is_pointer< decltype(nullptr) >::value << ' '
+		<< std::is_pointer<int*>::value << '\n';
+}
+```
+- 源码分析：原理同[is_void](#is_void)
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_null_pointer_v =
+    is_same_v<remove_cv_t<_Ty>, nullptr_t>; // determine whether _Ty is cv-qualified nullptr_t
+
+template <class _Ty>
+struct is_null_pointer : bool_constant<is_null_pointer_v<_Ty>> {};
+```
+### is_integral
+- 功能：检查类型是否为整型( bool 、 char 、 char8_t 、 char16_t 、 char32_t 、 wchar_t 、 short 、 int 、 long 、 long long)
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+enum E : int {};
+ 
+template <class T>
+T f(T i)
+{
+    static_assert(std::is_integral<T>::value, "Integral required.");
+    return i;
+}
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_integral<A>::value << '\n';
+    std::cout << std::is_integral<E>::value << '\n';
+    std::cout << std::is_integral<float>::value << '\n';
+    std::cout << std::is_integral<int>::value << '\n';
+    std::cout << std::is_integral<bool>::value << '\n';
+    std::cout << f(123) << '\n';
+}
+```
+- 源码分析:原理同[is_void](#is_void);其中_Is_any_of_v间接使用了[disjunction_v](#disjunction)
+```cpp
+template <class _Ty, class... _Types>
+_INLINE_VAR constexpr bool _Is_any_of_v = // true if and only if _Ty is in _Types
+    disjunction_v<is_same<_Ty, _Types>...>;
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_integral_v = _Is_any_of_v<remove_cv_t<_Ty>, bool, char, signed char, unsigned char,
+    wchar_t,
+#ifdef __cpp_char8_t
+    char8_t,
+#endif // __cpp_char8_t
+    char16_t, char32_t, short, unsigned short, int, unsigned int, long, unsigned long, long long, unsigned long long>;
+
+template <class _Ty>
+struct is_integral : bool_constant<is_integral_v<_Ty>> {};
+```
+### is_floating_point
+- 功能：检查类型是否是浮点类型( float 、 double 、 long double)
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_floating_point<A>::value << '\n';
+    std::cout << std::is_floating_point<float>::value << '\n';
+    std::cout << std::is_floating_point<float&>::value << '\n';
+    std::cout << std::is_floating_point<double>::value << '\n';
+    std::cout << std::is_floating_point<double&>::value << '\n';
+    std::cout << std::is_floating_point<int>::value << '\n';
+}
+```
+- 源码分析:原理同[is_integral](#is_integral)
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_floating_point_v = _Is_any_of_v<remove_cv_t<_Ty>, float, double, long double>;
+
+template <class _Ty>
+struct is_floating_point : bool_constant<is_floating_point_v<_Ty>> {};
+```
+### is_array
+- 功能：检查类型是否是数组类型
+- 示例
+```cpp
+#include <array>
+#include <iostream>
+#include <type_traits>
+
+class A {};
+
+int main()
+{
+	std::cout << std::boolalpha;
+	std::cout << std::is_array<A>::value << '\n';
+	std::cout << std::is_array<A[]>::value << '\n';
+	std::cout << std::is_array<A[3]>::value << '\n';
+	std::cout << std::is_array<float>::value << '\n';
+	std::cout << std::is_array<int>::value << '\n';
+	std::cout << std::is_array<int[]>::value << '\n';
+	std::cout << std::is_array<int[3]>::value << '\n';
+	std::cout << std::is_array<std::array<int, 3>>::value << '\n';
+}
+```
+- 源码分析:针对数组特点，直接具体化`_Ty[]`来匹配数组，其它显然就不是数组
+```cpp
+template <class>
+_INLINE_VAR constexpr bool is_array_v = false; // determine whether type argument is an array
 
 template <class _Ty, size_t _Nx>
-_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], 0> = _Nx;
+_INLINE_VAR constexpr bool is_array_v<_Ty[_Nx]> = true;
 
-template <class _Ty, unsigned int _Ix, size_t _Nx>
-_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], _Ix> = extent_v<_Ty, _Ix - 1>;
+template <class _Ty>
+_INLINE_VAR constexpr bool is_array_v<_Ty[]> = true;
 
-template <class _Ty, unsigned int _Ix>
-_INLINE_VAR constexpr size_t extent_v<_Ty[], _Ix> = extent_v<_Ty, _Ix - 1>;
+template <class _Ty>
+struct is_array : bool_constant<is_array_v<_Ty>> {};
 
-template <class _Ty, unsigned int _Ix = 0>
-struct extent : integral_constant<size_t, extent_v<_Ty, _Ix>> {};
 ```
+### is_enum
+- 功能：检查类型是否是枚举类型（enum class或enum均可）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+
+class A {};
+
+enum E {};
+
+enum class Ec : int {};
+int main()
+{
+	std::cout << std::boolalpha;
+	std::cout << std::is_enum<A>::value << '\n';
+	std::cout << std::is_enum<E>::value << '\n';
+	std::cout << std::is_enum<Ec>::value << '\n';
+	std::cout << std::is_enum<int>::value << '\n';
+}
+```
+- 源码分析:需要编译器支持
+### is_union
+- 功能：检查类型是否为联合体类型
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+struct A {};
+ 
+typedef union {
+    int a;
+    float b;
+} B;
+ 
+struct C {
+    B d;
+};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_union<A>::value << '\n';
+    std::cout << std::is_union<B>::value << '\n';
+    std::cout << std::is_union<C>::value << '\n';
+    std::cout << std::is_union<int>::value << '\n';
+}
+```
+- 源码分析:需要编译器支持
+### is_class
+- 功能：检查类型是否非联合类类型（不能是union，enum class）
+- 示例 
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+struct A {};
+ 
+class B {};
+ 
+enum class C {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_class<A>::value << '\n';
+    std::cout << std::is_class<B>::value << '\n';
+    std::cout << std::is_class<C>::value << '\n';
+    std::cout << std::is_class<int>::value << '\n';
+}
+```
+- 源码分析:先`is_union`排除是联合体，再使用`int T::*`作为类成员指针来确保`T`是一个类，`decltype`是不求值语境，所有模板函数`test`不需要实现
+```cpp
+namespace detail {
+template <class T>
+std::integral_constant<bool, !std::is_union<T>::value> test(int T::*);
+ 
+template <class>
+std::false_type test(...);
+}
+ 
+template <class T>
+struct is_class : decltype(detail::test<T>(nullptr))
+{};
+```
+### is_function
+- 功能：
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+struct A {
+    int fun() const&;
+};
+ 
+template<typename>
+struct PM_traits {};
+ 
+template<class T, class U>
+struct PM_traits<U T::*> {
+    using member_type = U;
+};
+ 
+int f();
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_function<A>::value << '\n';
+    std::cout << std::is_function<int(int)>::value << '\n';
+    std::cout << std::is_function<decltype(f)>::value << '\n';
+    std::cout << std::is_function<int>::value << '\n';
+ 
+    using T = PM_traits<decltype(&A::fun)>::member_type; // T 为 int() const&
+    std::cout << std::is_function<T>::value << '\n';
+}
+```
+- 源码分析:
+  - 借助语言特性：函数和引用不能被cv限定
+  - 先使用`is_const_v`来判断`_Ty`是否能增加`const`限定（用于限定`_Ty`在函数和引用之间）
+  - 再利用`is_reference_v`判断是否是`引用`（排除掉了引用，只剩下函数了）
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_function_v = // only function types and reference types can't be const qualified
+    !is_const_v<const _Ty> && !is_reference_v<_Ty>;
+
+template <class _Ty>
+struct is_function : bool_constant<is_function_v<_Ty>> {};
+```
+- 扩展：以上实现很巧妙，还有更务实的方法见[cppreference.com](https://zh.cppreference.com/w/cpp/types/is_function "https://zh.cppreference.com/w/cpp/types/is_function")
+### is_pointer
+- 功能：检查 T 是否为指向对象指针或指向函数指针（但不是指向成员/成员函数指针）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_pointer<A>::value << '\n';
+    std::cout << std::is_pointer<A *>::value << '\n';
+    std::cout << std::is_pointer<A &>::value << '\n';
+    std::cout << std::is_pointer<int>::value << '\n';
+    std::cout << std::is_pointer<int *>::value << '\n';
+    std::cout << std::is_pointer<int **>::value << '\n';
+    std::cout << std::is_pointer<int[10]>::value << '\n';
+    std::cout << std::is_pointer<std::nullptr_t>::value << '\n';
+}
+```
+- 源码分析:
+  - 针对cv限定和指针具体化不同版本
+```cpp
+template <class>
+_INLINE_VAR constexpr bool is_pointer_v = false; // determine whether _Ty is a pointer
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_pointer_v<_Ty*> = true;
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_pointer_v<_Ty* const> = true;
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_pointer_v<_Ty* volatile> = true;
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_pointer_v<_Ty* const volatile> = true;
+
+template <class _Ty>
+struct is_pointer : bool_constant<is_pointer_v<_Ty>> {};
+```
+- 其它实现:
+  - 去除cv限定，再具体化指针版本
+```cpp
+template<class T>
+struct is_pointer_helper : std::false_type {};
+ 
+template<class T>
+struct is_pointer_helper<T*> : std::true_type {};
+ 
+template<class T>
+struct is_pointer : is_pointer_helper< typename std::remove_cv<T>::type > {};
+```
+- 上面2个版本分析：本质都是围绕指针和cv限定，一个是移除cv限定，一个是增加cv限定的具体化模板
+### is_reference、is_lvalue_reference和is_rvalue_reference
+- 功能：检查类型是否为引用或左值引用或右值引用
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_lvalue_reference<A>::value << '\n';
+    std::cout << std::is_lvalue_reference<A&>::value << '\n';
+    std::cout << std::is_lvalue_reference<A&&>::value << '\n';
+    std::cout << std::is_rvalue_reference<A>::value << '\n';
+    std::cout << std::is_rvalue_reference<A&>::value << '\n';
+    std::cout << std::is_rvalue_reference<A&&>::value << '\n';
+}
+```
+- 源码分析：
+  - 具体化`T&`或`T&&`来实现
+```cpp
+// STRUCT TEMPLATE is_lvalue_reference
+template <class>
+_INLINE_VAR constexpr bool is_lvalue_reference_v = false; // determine whether type argument is an lvalue reference
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_lvalue_reference_v<_Ty&> = true;
+
+template <class _Ty>
+struct is_lvalue_reference : bool_constant<is_lvalue_reference_v<_Ty>> {};
+
+// STRUCT TEMPLATE is_rvalue_reference
+template <class>
+_INLINE_VAR constexpr bool is_rvalue_reference_v = false; // determine whether type argument is an rvalue reference
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_rvalue_reference_v<_Ty&&> = true;
+
+template <class _Ty>
+struct is_rvalue_reference : bool_constant<is_rvalue_reference_v<_Ty>> {};
+
+// STRUCT TEMPLATE is_reference
+template <class>
+_INLINE_VAR constexpr bool is_reference_v = false; // determine whether type argument is a reference
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_reference_v<_Ty&> = true;
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_reference_v<_Ty&&> = true;
+
+template <class _Ty>
+struct is_reference : bool_constant<is_reference_v<_Ty>> {};
+
+```
+### is_member_object_pointer
+- 功能：检查类型是否为指向非静态成员对象的指针
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+
+int main() {
+	class cls {};
+	std::cout << (std::is_member_object_pointer<int(cls::*)>::value
+		? "T is member object pointer"
+		: "T is not a member object pointer") << '\n';
+	std::cout << (std::is_member_object_pointer<int(cls::*)()>::value
+		? "T is member object pointer"
+		: "T is not a member object pointer") << '\n';
+}
+```
+- 源码分析：由于`T U::*`既能匹配类成员对象又能匹配类成员函数，所以在此基础上再判断是否是函数。
+  1. 先去除cv限定符
+  2. 再具体化`_Ty1 _Ty2::*`版本`_Is_member_object_pointer`
+  3. 最后再使用`is_function_v`排除类成员函数
+```cpp
+template <class>
+struct _Is_member_object_pointer {
+    static constexpr bool value = false;
+};
+
+template <class _Ty1, class _Ty2>
+struct _Is_member_object_pointer<_Ty1 _Ty2::*> {
+    static constexpr bool value = !is_function_v<_Ty1>;
+    using _Class_type           = _Ty2;
+};
+template <class _Ty>
+_INLINE_VAR constexpr bool is_member_object_pointer_v = _Is_member_object_pointer<remove_cv_t<_Ty>>::value;
+
+template <class _Ty>
+struct is_member_object_pointer : bool_constant<is_member_object_pointer_v<_Ty>> {};
+```
+### is_member_function_pointer
+- 功能：检查类型是否为指向非静态成员函数的指针
+- 示例
+```cpp
+#include <type_traits>
+class A {
+public:
+	void member() { }
+};
+
+int main()
+{
+	decltype(&A::member) pfun;//void(A::* pfun)()
+	std::is_member_function_pointer<int>::value;//false
+	std::is_member_function_pointer<int (A::*)(int)>::value;//true
+	std::is_member_function_pointer<decltype(&A::member)>::value;//true
+}
+```
+- 源码分析:由于`T U::*`既能匹配类成员对象又能匹配类成员函数，所以在此基础上再判断是否是函数。
+  1. 具体化`T U::*`版模板且再继承自`is_function`来判断是类成员对象还是类成员函数
+```cpp
+template< class T >
+struct is_member_function_pointer_helper : std::false_type {};
+
+template< class T, class U>
+struct is_member_function_pointer_helper<T U::*> : std::is_function<T> {};
+
+template< class T >
+struct is_member_function_pointer
+	: is_member_function_pointer_helper< typename std::remove_cv<T>::type > {};
+```
+- 扩展：在上面的源码中使用了`Ret T::*`既能匹配类成员对象又能匹配类成员函数的原理，其实我们也可以使用`Ret (T::*)(Args...)`（类成员函数指针语法）来实现，代码如下
+```cpp
+#include <type_traits>
+template< class T >
+struct is_member_function_pointer_helper : std::false_type {};
+
+template< class Ret, class U, class...Args>
+struct is_member_function_pointer_helper<Ret(U::*)(Args...)> : std::true_type {};
+
+template< class T >
+struct is_member_function_pointer
+	: is_member_function_pointer_helper< typename std::remove_cv<T>::type > {};
+class A {
+public:
+	void member() { }
+};
+
+int main()
+{
+	is_member_function_pointer<int A::*>::value;//false
+	is_member_function_pointer<int (A::*)(int,int)>::value;//true
+	is_member_function_pointer<decltype(&A::member)>::value;//true
+}
+```
+### is_member_pointer
+- 功能：检查类型是否为指向非静态成员函数或对象的指针类型
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+int main() {
+    class cls {};
+    std::cout << (std::is_member_pointer<int(cls::*)>::value
+                     ? "T is member pointer"
+                     : "T is not a member pointer") << '\n';
+    std::cout << (std::is_member_pointer<int>::value
+                     ? "T is member pointer"
+                     : "T is not a member pointer") << '\n';
+}
+```
+- 源码分析:在有了[is_member_object_pointer](#is_member_object_pointer)和[is_member_function_pointer](#is_member_function_pointer)后，直接利用或运算判断即可
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_member_pointer_v = is_member_object_pointer_v<_Ty> || is_member_function_pointer_v<_Ty>;
+struct is_member_pointer : bool_constant<is_member_pointer_v<_Ty>> {}; // determine whether _Ty is a pointer to member
+```
+- 扩展：上面或操作也可以使用`disjunction_v`来代替，如下
+```cpp
+template <class _Ty>
+constexpr bool is_member_pointer_v = std::disjunction_v<std::is_member_object_pointer<_Ty>,std::is_member_function_pointer<_Ty>>;
+```
+### is_arithmetic
+- 功能：检查类型是否为算术类型（即整数类型或浮点类型）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << "A:           " <<  std::is_arithmetic<A>::value << '\n';
+    std::cout << "bool:        " <<  std::is_arithmetic<bool>::value << '\n';
+    std::cout << "int:         " <<  std::is_arithmetic<int>::value << '\n';
+    std::cout << "int const:   " <<  std::is_arithmetic<int const>::value << '\n';
+    std::cout << "int &:       " <<  std::is_arithmetic<int&>::value << '\n';
+    std::cout << "int *:       " <<  std::is_arithmetic<int*>::value << '\n';
+    std::cout << "float:       " <<  std::is_arithmetic<float>::value << '\n';
+    std::cout << "float const: " <<  std::is_arithmetic<float const>::value << '\n';
+    std::cout << "float &:     " <<  std::is_arithmetic<float&>::value << '\n';
+    std::cout << "float *:     " <<  std::is_arithmetic<float*>::value << '\n';
+    std::cout << "char:        " <<  std::is_arithmetic<char>::value << '\n';
+    std::cout << "char const:  " <<  std::is_arithmetic<char const>::value << '\n';
+    std::cout << "char &:      " <<  std::is_arithmetic<char&>::value << '\n';
+    std::cout << "char *:      " <<  std::is_arithmetic<char*>::value << '\n';
+}
+```
+- 源码分析:利用[is_integral](#is_integral)和[is_floating_point](#is_floating_point)进行或运算
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_arithmetic_v = // determine whether _Ty is an arithmetic type
+    is_integral_v<_Ty> || is_floating_point_v<_Ty>;
+
+template <class _Ty>
+struct is_arithmetic : bool_constant<is_arithmetic_v<_Ty>> {};
+
+```
+### is_fundamental
+- 功能：检查是否是基础类型（算术类型+void+nullptr_t）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << "A\t"      << std::is_fundamental<A>::value << '\n';
+    std::cout << "int\t"    << std::is_fundamental<int>::value << '\n';
+    std::cout << "int&\t"   << std::is_fundamental<int&>::value << '\n';
+    std::cout << "int*\t"   << std::is_fundamental<int*>::value << '\n';
+    std::cout << "float\t"  << std::is_fundamental<float>::value << '\n';
+    std::cout << "float&\t" << std::is_fundamental<float&>::value << '\n';
+    std::cout << "float*\t" << std::is_fundamental<float*>::value << '\n';
+}
+```
+- 源码分析:利用[is_arithmetic](#is_arithmetic)和[is_void](#is_void)和[is_null_pointer](#is_null_pointer)进行或运算
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_fundamental_v = is_arithmetic_v<_Ty> || is_void_v<_Ty> || is_null_pointer_v<_Ty>;
+
+template <class _Ty>
+struct is_fundamental : bool_constant<is_fundamental_v<_Ty>> {}; // determine whether _Ty is a fundamental type
+
+```
+### is_object
+- 功能：检查是否是对象类型（即任何函数、引用或 void 类型外的可有 cv 限定的类型）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+int main() {
+    class cls {};
+    std::cout << std::boolalpha;
+    std::cout << std::is_object<int>::value << '\n';
+    std::cout << std::is_object<int&>::value << '\n';
+    std::cout << std::is_object<cls>::value << '\n';
+    std::cout << std::is_object<cls&>::value << '\n';
+}
+```
+- 源码分析:利用函数和引用最顶层不能用cv限定的语言特来排除函数与引用，再排除void  
+```cpp
+template <class _Ty>
+_INLINE_VAR constexpr bool is_object_v = // only function types and reference types can't be const qualified
+    is_const_v<const _Ty> && !is_void_v<_Ty>;
+
+template <class _Ty>
+struct is_object : bool_constant<is_object_v<_Ty>> {};
+```
+扩展：以上实现还可这样
+```cpp
+template< class T>
+struct is_object : std::integral_constant<bool,
+                     std::is_scalar<T>::value ||
+                     std::is_array<T>::value  ||
+                     std::is_union<T>::value  ||
+                     std::is_class<T>::value> {};
+```
+## 类型属性判断
+### is_const
+- 功能：检查类型是否为 const 限定（即 const 或 const volatile ）
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+int main() 
+{
+    std::cout << std::boolalpha
+        << std::is_const_v<int> << '\n' // false
+        << std::is_const_v<const int> << '\n' // true
+        << std::is_const_v<const int*> /*false*/
+        << " because the pointer itself can be changed but not the int pointed at\n"
+        << std::is_const_v<int* const> /*true*/ 
+        << " because the pointer itself can't be changed but the int pointed at can\n"
+        << std::is_const_v<const int&> << '\n' // false
+        << std::is_const_v<std::remove_reference_t<const int&>> << '\n' // true
+        ;
+}
+```
+- 源码分析：具体化`const`版本的is_const_v用于匹配`const`
+```cpp
+template <class>
+_INLINE_VAR constexpr bool is_const_v = false; // determine whether type argument is const qualified
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_const_v<const _Ty> = true;
+
+template <class _Ty>
+struct is_const : bool_constant<is_const_v<_Ty>> {};
+```
+### is_volatile
+- 功能：检查类型是否为 volatile 限定
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << std::is_volatile<int>::value << '\n';
+    std::cout << std::is_volatile<volatile int>::value  << '\n';
+}
+```
+- 源码分析：原理同[is_const](#is_const)
+### extent
+- 功能：获取数组类型在指定维度的大小
 - 示例
 ```cpp
 #include <iostream>
@@ -82,8 +765,39 @@ int main()
 	std::cout << std::extent<decltype(ints)>::value << '\n'; // < 数组大小 
 }
 ```
+- 源码分析:
+  - `extent`继承自`integral_constant`
+  - `extent_v`利用继承递归展开，最终当展开到维度为0时结束
+```cpp
+template <class _Ty, unsigned int _Ix = 0>
+_INLINE_VAR constexpr size_t extent_v = 0; // determine extent of dimension _Ix of array _Ty
+
+template <class _Ty, size_t _Nx>
+_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], 0> = _Nx;
+
+template <class _Ty, unsigned int _Ix, size_t _Nx>
+_INLINE_VAR constexpr size_t extent_v<_Ty[_Nx], _Ix> = extent_v<_Ty, _Ix - 1>;
+
+template <class _Ty, unsigned int _Ix>
+_INLINE_VAR constexpr size_t extent_v<_Ty[], _Ix> = extent_v<_Ty, _Ix - 1>;
+
+template <class _Ty, unsigned int _Ix = 0>
+struct extent : integral_constant<size_t, extent_v<_Ty, _Ix>> {};
+```
 #### rank
 - 功能：计算指定数组的维度，当非数组时结果为0
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+
+int main()
+{
+	std::cout << std::rank<int[1][2][3]>::value << '\n';
+	std::cout << std::rank<int[][2][3][4]>::value << '\n';
+	std::cout << std::rank<int>::value << '\n';
+}
+```
 - 源码分析:
   - `rank`继承自`integral_constant`
   - `rank_v`递归展开数组维度，并+1
@@ -101,20 +815,86 @@ template <class _Ty>
 struct rank : integral_constant<size_t, rank_v<_Ty>> {};
 
 ```
+## 类型关系判断
+### is_same
+- 功能：检查两个类型是否相同
 - 示例
 ```cpp
 #include <iostream>
 #include <type_traits>
-
 int main()
 {
-	std::cout << std::rank<int[1][2][3]>::value << '\n';
-	std::cout << std::rank<int[][2][3][4]>::value << '\n';
-	std::cout << std::rank<int>::value << '\n';
+	std::cout << std::boolalpha;
+	// 'int' 为隐式的 'signed'
+	std::cout << std::is_same<int, int>::value << "\n";          // true
+	std::cout << std::is_same<int, unsigned int>::value << "\n"; // false
+	std::cout << std::is_same<int, signed int>::value << "\n";   // true
+
+	// 不同于其他类型， 'char' 既非 'unsigned' 亦非 'signed'
+	std::cout << std::is_same<char, char>::value << "\n";          // true
+	std::cout << std::is_same<char, unsigned char>::value << "\n"; // false
+	std::cout << std::is_same<char, signed char>::value << "\n";   // false
 }
 ```
-### 类型关系判断
-#### is_convertible
+- 源码分析：`is_same_v`是模板变量含2个模板参数，`is_same_v<_Ty, _Ty>`匹配同一类型类型的模板参数，`is_same`继承`bool_constant`,使其含有value成员变量。
+```cpp
+template <class, class>
+_INLINE_VAR constexpr bool is_same_v = false; // determine whether arguments are the same type
+template <class _Ty>
+_INLINE_VAR constexpr bool is_same_v<_Ty, _Ty> = true;
+
+template <class _Ty1, class _Ty2>
+struct is_same : bool_constant<is_same_v<_Ty1, _Ty2>> {};
+```
+### is_base_of
+- 功能：判断A是否是B的基类(基本类型如std::is_base_of<int, int>::value是false)
+- 语法形式：`template< class Base, class Derived > struct is_base_of;`
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+class A {};
+ 
+class B : A {};
+ 
+class C {};
+ 
+int main() 
+{
+    std::cout << std::boolalpha;
+    std::cout << "a2b: " << std::is_base_of<A, B>::value << '\n';
+    std::cout << "b2a: " << std::is_base_of<B, A>::value << '\n';
+    std::cout << "c2b: " << std::is_base_of<C, B>::value << '\n';
+    std::cout << "same type: " << std::is_base_of<C, C>::value << '\n';
+}
+```
+- 源码分析：`is_base_of`继承`integral_constant`，先后判断`is_class`，再通过`test_pre_is_base_of`来测试`D*`是否能转换成`B*`,不能就会转换成`void*`
+```cpp
+namespace details {
+    template <typename B>
+    std::true_type  test_pre_ptr_convertible(const volatile B*);
+    template <typename>
+    std::false_type test_pre_ptr_convertible(const volatile void*);
+ 
+    template <typename, typename>
+    auto test_pre_is_base_of(...) -> std::true_type;
+    template <typename B, typename D>
+    auto test_pre_is_base_of(int) ->
+        decltype(test_pre_ptr_convertible<B>(static_cast<D*>(nullptr)));
+}
+ 
+template <typename Base, typename Derived>
+struct is_base_of :
+    std::integral_constant<
+        bool,
+        std::is_class<Base>::value && std::is_class<Derived>::value &&
+        decltype(details::test_pre_is_base_of<Base, Derived>(0))::value
+    > { };
+```
+- 扩展知识
+  - `is_base_of<A,A>::value`也是ture？源码中`test_pre_ptr_convertible<B>(static_cast<D*>(nullptr))`这一段D与B一样当然没问题。
+### is_convertible
 - 功能：判断是否可以由A转换到B
 - 规则：
   - 子类指针或引用可转基类指针或引用
@@ -409,6 +1189,58 @@ int main() {
         ? "passed" : "failed") << '\n';
 }
 ```
+### add_cv、add_const和add_volatile
+- 功能：给类型添加cv限定符
+- 示例
+```cpp
+#include <iostream>
+#include <type_traits>
+ 
+struct foo
+{
+    void m() { std::cout << "Non-cv\n"; }
+    void m() const { std::cout << "Const\n"; }
+    void m() volatile { std::cout << "Volatile\n"; }
+    void m() const volatile { std::cout << "Const-volatile\n"; }
+};
+ 
+int main()
+{
+    foo{}.m();
+    std::add_const<foo>::type{}.m();
+    std::add_volatile<foo>::type{}.m();
+    std::add_cv<foo>::type{}.m();
+}
+```
+源码分析:原理很简单，直接在类型前增加`const`或`volatile`关键字。（多个const或volatile会自动解析成一个，即`const cosnt int i=2`依然是`const int i=2`）
+```cpp
+template <class _Ty>
+struct add_const { // add top-level const qualifier
+    using type = const _Ty;
+};
+
+template <class _Ty>
+using add_const_t = typename add_const<_Ty>::type;
+
+// STRUCT TEMPLATE add_volatile
+template <class _Ty>
+struct add_volatile { // add top-level volatile qualifier
+    using type = volatile _Ty;
+};
+
+template <class _Ty>
+using add_volatile_t = typename add_volatile<_Ty>::type;
+
+// STRUCT TEMPLATE add_cv
+template <class _Ty>
+struct add_cv { // add top-level const and volatile qualifiers
+    using type = const volatile _Ty;
+};
+
+template <class _Ty>
+using add_cv_t = typename add_cv<_Ty>::type;
+
+```
 ### remove_reference
 - 功能：移除类型的引用`&`或`&&`
 - 源码分析:`remove_reference_t`是`remove_reference::type`的别名，`remove_reference`有3个定义，分别接收`T`、`T&`和`T&&`，即左值，左值引用和右值引用，而`type`始终指向`T`,即左值，因此达到去除引用的目的。
@@ -528,7 +1360,7 @@ struct _Add_reference<_Ty, void_t<_Ty&>> { // (referenceable type)
     using _Rvalue = _Ty&&;
 };
 ```
-### remove_exten`和`remove_all_extents
+### remove_exten和remove_all_extents
 - 功能：
   - `remove_exten`:从给定数组类型移除一个维度
   - `remove_all_extents`:从给定数组类型移除全部维度
@@ -993,5 +1825,53 @@ int main() {
 //输出：
 //all types in pack are T
 //not all types in pack are T
+```
+### disjunction
+- 功能：变参的逻辑或元函数
+- 示例:disjunction_v实现is_member_pointer
+```cpp
+#include <iostream>
+#include <type_traits>
+template <class _Ty>
+constexpr bool is_member_pointer_v = std::disjunction_v<std::is_member_object_pointer<_Ty>,std::is_member_function_pointer<_Ty>>;
+
+template <class _Ty>
+struct is_member_pointer : std::bool_constant<is_member_pointer_v<_Ty>> {}; 
+
+int main() {
+	
+	class cls {};
+	std::cout << (is_member_pointer<int(cls::*)>::value
+		? "T is member pointer"
+		: "T is not a member pointer") << '\n';
+	std::cout << (is_member_pointer<int>::value
+		? "T is member pointer"
+		: "T is not a member pointer") << '\n';
+}
+```
+- 源码分析：
+  - `disjunction`2个版本，主模板用于适配无参输入，且返回false
+  - `_Disjunction`2个1版本，主模板作为递归终止条件，当匹配到true或最后一个参数时结束
+```cpp
+template <bool _First_value, class _First, class... _Rest>
+struct _Disjunction { // handle true trait or last trait
+    using type = _First;
+};
+
+template <class _False, class _Next, class... _Rest>
+struct _Disjunction<false, _False, _Next, _Rest...> { // first trait is false, try the next trait
+    using type = typename _Disjunction<_Next::value, _Next, _Rest...>::type;
+};
+
+template <class... _Traits>
+struct disjunction : false_type {}; // If _Traits is empty, false_type
+
+template <class _First, class... _Rest>
+struct disjunction<_First, _Rest...> : _Disjunction<_First::value, _First, _Rest...>::type {
+    // the first true trait in _Traits, or the last trait if none are true
+};
+
+template <class... _Traits>
+_INLINE_VAR constexpr bool disjunction_v = disjunction<_Traits...>::value;
 ```
 

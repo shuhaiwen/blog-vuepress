@@ -8,6 +8,10 @@ categories:
  - C++
 ---
 - [c++的奇怪知识点](#c的奇怪知识点)
+  - [语言标准](#语言标准)
+    - [函数和引用最顶层不能用cv限定](#函数和引用最顶层不能用cv限定)
+  - [type_trait](#type_trait)
+    - [why std::is_const_v<const int*>is false?](#why-stdis_const_vconst-intis-false)
   - [函数](#函数)
     - [函数中定义类或结构](#函数中定义类或结构)
     - [函数类型、函数指针](#函数类型函数指针)
@@ -25,6 +29,55 @@ categories:
   - [`*&`的使用](#的使用)
 
 # c++的奇怪知识点
+## 语言标准
+### 函数和引用最顶层不能用cv限定
+首先看下面示例代码
+```cpp
+typedef void F();
+typedef int& rint;
+typedef int* pint;
+struct S {
+	const int& cri;//=>const int& cri
+	const pint pi;//=>const int* pi
+	const rint ri;//=>int& ri
+	const F f; // =>void f();
+};
+```
+*问题1：*`const rint ri`和`const F f`展开后`const`被忽略了,这是为何？
+- 解释：因为函数和引用不是对象类型，所以不能被cv限定符限定
+*问题2：*为什么`const int& cri`中`const`却保存下来了？
+- 解释：因为`const`限定的是引用的对象，即例如`int i=2;const int & ir=i;`，`const`限定的是不能改变`i`的数据；`const rint ri`展开实际等价于`int& const ri`,这与`const int&`是完全不同的，就像`const int*p`和`int* const p`，但引用时不允许写成`int& const ri`,所以编译器遇到`const rint ri`这种情况会自动优化，将`const`去除掉。[参考stackoverflow](https://stackoverflow.com/questions/35352168/cannot-apply-const-to-typedef-reference "https://stackoverflow.com/questions/35352168/cannot-apply-const-to-typedef-reference")
+## type_trait
+### why std::is_const_v<const int*>is false?
+看如下示例代码，`std::is_const_v<const int*>`是 false 但是`std::is_const_v<int* const>`是 true。
+```cpp
+#include <iostream>
+#include <type_traits>
+
+int main()
+{
+	std::cout << std::boolalpha
+		<< std::is_const_v<int> << '\n' // false
+		<< std::is_const_v<const int> << '\n' // true
+		<< std::is_const_v<const int*> /*false*/
+		<< " because the pointer itself can be changed but not the int pointed at\n"
+		<< std::is_const_v<int* const> /*true*/
+		<< " because the pointer itself can't be changed but the int pointed at can\n"
+		<< std::is_const_v<const int&> << '\n' // false
+		<< std::is_const_v<std::remove_reference_t<const int&>> << '\n' // true
+		;
+}
+```
+解释这种情况要从`is_const_v`源码中找寻，源码如下：
+```cpp
+template <class>
+_INLINE_VAR constexpr bool is_const_v = false; // determine whether type argument is const qualified
+
+template <class _Ty>
+_INLINE_VAR constexpr bool is_const_v<const _Ty> = true;
+```
+源码中`is_const_v<const _Ty>`，const是用来限定`_Ty`的，在`const int* p`中`_Ty`等价于`p`,`const`限定的却时p所指向的值。所以`std::is_const_v<const int*>`是false。再来看看`is_const_v<int* const>`是true,这个`const`限定的才是int指针。
+[指针与const的关系分析在这](/c++/指针引用.md#const和指针的关系)
 ## 函数
 ### 函数中定义类或结构
 ```cpp
@@ -365,7 +418,7 @@ mem : 010FF8C8
 ```
 ## `*&`的使用
 - `*&`：指针的引用，功能和作用与`**`指针的指针类型相似
-- 解释：`*&`指针的引用，是一个特殊的引用，常见的引用是直接指向对象，而这个引用是执行指针，具有引用所有功能，因此在一定场合可以替代指针的指针`**`使用。
+- 解释：`*&`指针的引用，是一个特殊的引用，常见的引用是直接指向对象，而这个引用是指向指针，具有引用所有功能，因此在一定场合可以替代指针的指针`**`使用。
 - 示例
 ```cpp
 void pass_by_point(int* p)
@@ -396,4 +449,5 @@ int main()
 	return 0;
 }
 ```
+
 
