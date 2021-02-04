@@ -18,13 +18,10 @@ cd ./blog
 git pull
 
 #将README.md文件先移到别处
-mv README.md ../
+mv README.md ../blogTemp/
 
 #删除blog目录下除.git文件外所有资源
 rm -rf *
-
-#将../README.md移到当前目录
-mv ../README.md .
 
 #移动blogTemp下文件到blog文件夹
 mv ../blogTemp/* ./
