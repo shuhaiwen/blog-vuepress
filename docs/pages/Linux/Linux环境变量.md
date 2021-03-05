@@ -29,7 +29,7 @@ PATH环境变量冒号`:`作用是作为分割符,如`PATH=/usr/local/bin:/usr/b
 
 ### 系统变量文件/etc/profile
 `/etc/profile`文件中导出了PATH变量
-```shellsession
+```shell
 $ cat /etc/profile
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
@@ -68,7 +68,7 @@ fi
 tty | egrep -q tty[1-6] && export LC_ALL=C
 ```
 但这个文件也可以导出其它变量，如下例导出自定义变量`HELLO`
-```shellsession
+```shell
 shuhaiwen@shuhaiwen:/etc$ cat /etc/profile
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
@@ -85,7 +85,7 @@ export HELLO=hello world
 ...
 ```
 要使新增加的变量生效，使用source命令
-```shellsession
+```shell
 $ source /etc/profile
 $ echo $HELLO
 hello
@@ -96,13 +96,13 @@ hello
 用户变量文件只对当前用户有效，使用和系统变量文件/etc/profile一样。设置后依然需要用`source`命令进行更新
 ## export临时导入环境变量
 使用export向PATH中导入变量hello
-```shellsession
+```shell
 $ export PATH=hello:$PATH
 $ echo $PATH
 hello:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin
 ```
 但这只对当前shell有效，打开另一个bash，再次打印PATH,hello不存在了
-```shellsession
+```shell
 ~$ echo $PATH
 /usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin
 ```

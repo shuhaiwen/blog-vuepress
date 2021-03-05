@@ -56,7 +56,7 @@ int main(){
 - 编译`-S`:`g++ -S xxx.i`,生成`xxx.s`汇编文件
 - 汇编`-c`:`g++ -c xxx.s`,生成`xxx.o`目标文件
 - 链接`g++ xxx.o -o xxx.exe`,生成`xxx.exe`可执行文件
-```shellsession
+```shell
 $ ls
 1.cpp
 $ cat 1.cpp 
@@ -85,7 +85,7 @@ hello world!
 ### 编译多个文件
 假设有3个文件：main.cpp  print.cpp  print.h
 - 方式一：直接生产可执行程序
-```shellsession
+```shell
 $ ls
 main.cpp  print.cpp  print.h
 $ g++ main.cpp print.cpp -o main.exe
@@ -93,7 +93,7 @@ $ ls
 main.cpp  main.exe  print.cpp  print.h
 ```
 - 方式二：生产目标文件，再链接
-```shellsession
+```shell
 $ ls
 main.cpp  print.cpp  print.h
 $ g++ -c main.cpp
@@ -112,7 +112,8 @@ main.cpp  main.exe  main.o  print.cpp  print.h  print.o
 - `-std=c++17`
 - `-std=c++2a`
 ### 选项-save-temps保存中间文间(.i .s .o文件)
-```shellsession$ ls
+```shell
+$ ls
 main.cpp  print.cpp  print.h
 
 $ g++ main.cpp  print.cpp -save-temps
@@ -136,7 +137,7 @@ Linux上库命名格式,以lib起始，xxx表示库名，.a结尾是静态库，
 #### 生成
 1. 将源文件生产目标文件
 2. 使用ar打包从静态库
-```shellsession
+```shell
 $ g++ -c print.cpp 
 $ ls
 main.cpp  print.cpp  print.h  print.o
@@ -149,14 +150,14 @@ libprint.a  main.cpp  print.cpp  print.h  print.o
 - `-lxxx`指定静态库或`libxxx.a`
 
 **注意：**`-o xxx.exe`应该放入最后，即libxxx.a不应该在xxx.exe后
-```shellsession
+```shell
 $ g++ -static main.cpp libprint.a -o main.exe
 $ ls
 libprint.a  main.cpp  main.exe  print.cpp  print.h  print.o
 shuhaiwen@shuhaiwen-PC:~/code/cpp$ ./main.exe
 hello world!
 ```
-```shellsession
+```shell
 $ g++ main.cpp -o main.exe -static -L /home/shuhaiwen/code/cpp/ -lprint
 $ ls
 libprint.a  main.cpp  main.exe  print.cpp  print.h  print.o
@@ -165,7 +166,7 @@ hello world!
 ```
 ### 编译和链接动态库
 #### 生成
-```shellsession
+```shell
 $ g++ -fpic -shared print.cpp -o libprint.so
 $ ls
 libprint.a  libprint.so  main.cpp  print.cpp  print.h
@@ -182,7 +183,7 @@ libprint.a  libprint.so  main.cpp  print.cpp  print.h
 - 在Windows上，导入动态库不使用`__declspec(dllimport)`可以正常使用函数类等，但要使用导出的变量需要加上`__declspec(dllimport)`;
 ## 扩展
 ### ldd命令查看可执行程序依赖的共享库
-```shellsession
+```shell
 $ ldd libprint.so
         linux-vdso.so.1 (0x00007ffd48119000)
         libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f94c2660000)

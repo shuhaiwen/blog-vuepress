@@ -33,11 +33,11 @@ categories:
 - 问题场景：当通过外部程序调用（如c++）调用bat时，此程序exe所在路径会成为bat执行时工作路径，而我们需要的bat执行时工作路径是bat所在文件
 - 处理方法：在bat文件中增加基础路径设置信息
 - 原bat文件
-```shellsession
+```shell
 dir > test.txt
 ```
 - 修改后bat文件
-```shellsession
+```shell
 set base_dir=%~dp0  
 %base_dir:~0,2%  
 pushd %base_dir%  

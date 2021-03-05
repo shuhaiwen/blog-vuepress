@@ -35,7 +35,7 @@ categories:
   - targets：规则的目标，可以是 Object File（一般称它为中间文件），也可以是可执行文件，还可以是一个标签；
   - prerequisites：是我们的依赖文件，要生成 targets 需要的文件或者是目标。可以是多个，也可以是没有；
   - command：make 需要执行的命令（任意的 shell 命令）。可以有多条命令，每一条命令占一行。
-```shellsession
+```shell
 targets : prerequisites
     command
 ```
@@ -45,7 +45,7 @@ test:test.c
 gcc -o test test.c
 ```
 执行make，报错如下
-```shellsession
+```shell
 ~/code/makefile$ make
 makefile:2: *** 遗漏分隔符 (null)。 停止。
 ```
@@ -57,7 +57,7 @@ test:test.c
 ## 入门
 ### 一个简单的makefile示例
 使用make编译c++源码，目录结构如下
-```shellsession
+```shell
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -79,7 +79,7 @@ clean:
         rm -rf *.o
 ```
 使用make来构建生成目标文件，make也可以指定makefile文件名,指令如`make -f filename`
-```shellsession
+```shell
 ~/code/makefile$ make
 g++ -c src/main.cpp -o main.o
 g++ -c src/include/math.cpp -o math.o
@@ -88,7 +88,7 @@ g++ main.o math.o -o math
 main.o  makefile  math  math.o  src
 ```
 使用make clean命令删除中间文件
-```shellsession
+```shell
 ~/code/makefile$ make clean
 rm -rf *.o
 ~/code/makefile$ ls
@@ -136,7 +136,7 @@ main.o:main.cpp math.h
 </br>
 假设源文件结构层次如下
 </br>
-```shellsession
+```shell
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -179,7 +179,7 @@ clean:
 其中PATTERN指待寻找文件(可由通配符组合)，DIRECTORIES指查找路径
 </br>
 假设源文件结构层次如下
-```shellsession
+```shell
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -221,7 +221,7 @@ clean:
 	rm -rf *.o
 ```
 当执行一条命令时，控制台会打印当前执行的命令，如下
-```shellsession
+```shell
 ~/code/makefile$ make clean
 rm -rf *.o
 ```
@@ -232,7 +232,7 @@ clean:
 	@rm -rf *.o
 ```
 执行clean，命令不会打印出来
-```shellsession
+```shell
 ~/code/makefile$ make clean
 ```
 ### -忽略命令执行错误
