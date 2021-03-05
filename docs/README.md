@@ -2,7 +2,7 @@
 home: true
 heroImage: /github.svg
 heroText: 小锋哥的博客
-tagline: 一点一滴都是进步
+tagline: 一点一滴都是进步!
 actionText: 马上进入 →
 actionLink: /pages/Git/
 features:
@@ -14,5 +14,4 @@ features:
   details: VuePress 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。
 ---
 
-## 主页
 己所不欲勿施于人！

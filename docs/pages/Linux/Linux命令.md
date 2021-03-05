@@ -50,7 +50,7 @@ categories:
 - `&&`连接的多条命令会按顺序执行，直到命令出现错误就停止执行后面命令
 - `||`连接的命令直到正确执行了一条命令就会终止后续命令的执行
 - `;`连接的命令会按顺序一直执行，不管命令是否有误都不影响后续的命令执行
-```shell
+```shellsession
 $ llk && echo "hello"
 bash: llk：未找到命令
 $ llk || echo "hello" || echo "world"
@@ -68,7 +68,7 @@ hello
   - `stdout`标准输出流为1
   - `stderr`标准错误流为2
 - `command 1>file1 2>file2`表示将command执行结果的正确结果重定向到file1，错误结果重定向到file2(如果未指定文件标识符，默认为1，即标准输出流)
-```shell
+```shellsession
 $ ls
 test.sh
 $ cat -n test.sh 
@@ -86,7 +86,7 @@ $ cat 2.err
 test.sh:行5: error：未找到命令
 ```
 - `command 2>file 1>&2`或者`command >file 2>&1`：其中`1>&2`表示标准输出流合并到标准错误流中，`2>&1`反之
-```shell
+```shellsession
 $ ls
 test.sh
 $ bash test.sh 2>2.err 1>&2
@@ -101,7 +101,7 @@ test.sh:行5: error：未找到命令
 2021年 01月 14日 星期四 17:28:44 CST
 ```
 - `command <<del data1 date2 del`:表示将del分隔符范围的数据作为输入
-```shell
+```shellsession
 shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
 > 123
 > 456
@@ -122,7 +122,7 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
   - `r`  读权限
   - `w`  写权限
   - `x`  可执行权限
-```shell
+```shellsession
 $ ls -l
 总用量 0
 -rw-r--r-- 1 xxx xxx 0 1月   3 13:30 1.md
@@ -132,18 +132,18 @@ $ ls -l
 ---xr--r-- 1 xxx xxx 0 1月   3 13:30 1.md
 总用量 0
 ```
-```shell
+```shellsession
 $ chmod u+r 1.md
 $ ls -l
 总用量 0
 -r-xr--r-- 1 xxx xxx 0 1月   3 13:30 1.md
 ```
-- `chmod [0124567][file]`
+- `chmod [01234567][file]`
   - 0 无权限
   - 1 `x`权限
   - 2 `w`权限
   - 4 `r`权限
-```shell
+```shellsession
 $ chmod 0544 1.md
 $ ls -l
 总用量 0
@@ -153,7 +153,7 @@ $ ls -l
 - 功能:改变文件所属组
 - 语法形式:`chgrp [option] group file`
   - `-R`：如果是目录，则会递归到子文件
-```shell
+```shellsession
 ~/code/cpp$ ls -l 1.file 
 -rw-r--r-- 1 shuhaiwen shuhaiwen 38 1月  23 10:49 1.file
 ~/code/cpp$ sudo chgrp root 1.file 
@@ -166,7 +166,7 @@ $ ls -l
   - `-R`：如果是目录，则会递归到子文件
 
 示例1：改变文件拥有者
-```shell
+```shellsession
 ~/code/cpp$ ls -l 1.file 
 -rw-r--r-- 1 shuhaiwen root 38 1月  23 10:49 1.file
 ~/code/cpp$ sudo chown root 1.file 
@@ -174,7 +174,7 @@ $ ls -l
 -rw-r--r-- 1 root root 38 1月  23 10:49 1.file
 ```
 示例2：改变文件拥有者和所属组
-```shell
+```shellsession
 ~/code/cpp$ ls -l 1.txt 
 -rw-r--r-- 1 shuhaiwen shuhaiwen 0 1月  28 11:06 1.txt
 ~/code/cpp$ sudo chown root:root 1.txt 
@@ -188,13 +188,13 @@ $ ls -l
 - `-c`或`--create` 建立新的备份文件
 - `-f`指定文件名
 - `-v`生成详细执行信息
-```shell
+```shellsession
 $ tar -cvf 1.tar 1.md
 1.md
 $ ls
 1.md 1.tar
 ```
-```shell
+```shellsession
 $ ls
 1.tar
 $ tar -xvf 1.tar
@@ -205,13 +205,13 @@ $ ls
 #### 解压包
 - `-z`使用gzip压缩或解压
 - `-x`执行解压
-```shell
+```shellsession
 $ tar -cvzf 1.tar.gz 1.md
 1.md
 $ ls
 1.md  1.tar.gz
 ```
-```shell
+```shellsession
 $ ls 
 1.tar.gz
 $ tar -xzvf 1.tar.gz
@@ -221,7 +221,7 @@ $ ls
 ```
 #### 查看压缩包内容
 - `-t`查看压缩包内容
-```shell
+```shellsession
 $ tar -cvf 1.tar 1.md
 1.md
 $ tar -tf 1.tar
@@ -229,7 +229,7 @@ $ tar -tf 1.tar
 ```
 #### 附加文件
 - `-r`或`--append` 新增文件到已存在的备份文件的结尾部分
-```shell
+```shellsession
 $ tar -cvf 1.tar 1.md
 1.md
 $ tar -tf 1.tar
@@ -250,7 +250,7 @@ $ tar -tvf 1.tar
 - `-f`当目标文件存在时覆盖，不提示(默认)
 - `-i`当目标文件存在时提示用户选择是否覆盖，y是，n否
 - `-u`当目标文件存在时，源文件比目标文件新时才覆盖
-```shell
+```shellsession
 ~/code/sh$ ls
 1.txt  2.txt
 ~/code/sh$ mv -b 1.txt 2.txt
@@ -258,7 +258,7 @@ $ tar -tvf 1.tar
 1  2.txt  2.txt~
 ```
 上例由于目标文件已存在，指定了`-b`选项后会生成备份文件2.txt~
-```shell
+```shellsession
 ~/code/sh$ ls
 1.txt  2.txt
 ~/code/sh$ mv -n 1.txt 2.txt
@@ -266,7 +266,7 @@ $ tar -tvf 1.tar
 1.txt  2.txt
 ```
 上例由于目标文件已存在，指定了`-n`选项后不会执行移动操作
-```shell
+```shellsession
 ~/code/sh$ ls
 1.txt  2.txt
 ~/code/sh$ mv -f 1.txt 2.txt
@@ -274,7 +274,7 @@ $ tar -tvf 1.tar
 2.txt
 ```
 上例由于目标文件已存在，指定了`-f`直接覆盖
-```shell
+```shellsession
 ~/code/sh$ mv -i 1.txt 2.txt
 mv：是否覆盖'2.txt'？ n
 ~/code/sh$ ls
@@ -313,7 +313,7 @@ mv：是否覆盖'2.txt'？ n
 - 功能：创建目录
   - `-p`如果目录存在则不创建，也不会报错
   - `-m`指定目录权限
-```shell
+```shellsession
 ~/code/sh$ mkdir fd1
 ~/code/sh$ mkdir -m=777 fd2
 ~/code/sh$ ls -lF
@@ -354,7 +354,7 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
 ### file
 - 语法形式：`file [option] [文件名]`
 - 功能：打印文件信息
-```shell
+```shellsession
 ~/code/cpp$ file 1.file
 1.file: ASCII text
 ~/code/cpp$ file locale.cpp
@@ -363,7 +363,7 @@ locale.cpp: C++ source, ASCII text
 ### whereis
 - 语法形式：`whereis [option] [文件名]`
 - 功能：查找二进制文件、源码文件、man手册文件位置，查找路径在$PATH and $MANPATH环境变量
-```shell
+```shellsession
 ~/code/cpp$ whereis rm
 rm: /usr/bin/rm /usr/share/man/man1/rm.1.gz
 ~/code/cpp$ whereis gcc
@@ -372,7 +372,7 @@ gcc: /usr/bin/gcc /usr/lib/gcc
 ### which
 - 语法形式：`which [option] [文件名]`
 - 功能：查找可执行文件位置，查找路径在$PATH环境变量
-```shell
+```shellsession
 ~/code/cpp$ which rm
 /usr/bin/rm
 ```
@@ -421,7 +421,7 @@ zh_CN.utf8$
 - 功能：给出区域特定的信息
   - `-a`显示可用locale信息
   - `locale`显示当前locale信息
-```shell
+```shellsession
 ~/code/sh$ locale
 LANG=zh_CN.UTF-8
 LANGUAGE=zh_CN
@@ -448,19 +448,19 @@ zh_CN.utf8
 ### pwd
 - 语法形式：`locale [option]`
 - 功能：显示当前路径信息
-```shell
+```shellsession
 ~/code/sh$ pwd
 /home/shuhaiwen/code/sh
 ```
 ## 库相关
 ### ldconfig
 - 功能：设置运行时期动态链接，通常在向/lib和/usr/lib添加了新动态库后用来更新动态库
-```shell
+```shellsession
 ~/code/cpp$ sudo ldconfig
 ```
 ### ldd
 - 功能：打印动态库的依赖关系
-```shell
+```shellsession
 shuhaiwen@shuhaiwen:~/code/cpp$ ldd liblocale.so
 linux-vdso.so.1 (0x00007ffd5e582000)
 libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f8ffeb07000)

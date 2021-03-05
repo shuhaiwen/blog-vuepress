@@ -8,7 +8,7 @@ categories:
  - CMake
 ---
 # cmake-help
-```shell
+```shellsession
 Usage
 
   cmake [options] <path-to-source>

@@ -35,7 +35,7 @@ categories:
   - targets：规则的目标，可以是 Object File（一般称它为中间文件），也可以是可执行文件，还可以是一个标签；
   - prerequisites：是我们的依赖文件，要生成 targets 需要的文件或者是目标。可以是多个，也可以是没有；
   - command：make 需要执行的命令（任意的 shell 命令）。可以有多条命令，每一条命令占一行。
-```shell
+```shellsession
 targets : prerequisites
     command
 ```
@@ -45,7 +45,7 @@ test:test.c
 gcc -o test test.c
 ```
 执行make，报错如下
-```shell
+```shellsession
 ~/code/makefile$ make
 makefile:2: *** 遗漏分隔符 (null)。 停止。
 ```
@@ -57,7 +57,7 @@ test:test.c
 ## 入门
 ### 一个简单的makefile示例
 使用make编译c++源码，目录结构如下
-```shell
+```shellsession
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -78,8 +78,8 @@ math.o:src/include/math.cpp src/include/math.h
 clean:
         rm -rf *.o
 ```
-使用make来构建生成目标文件，make也可以知道makefile文件名,指令如`make -f filename`
-```shell
+使用make来构建生成目标文件，make也可以指定makefile文件名,指令如`make -f filename`
+```shellsession
 ~/code/makefile$ make
 g++ -c src/main.cpp -o main.o
 g++ -c src/include/math.cpp -o math.o
@@ -88,7 +88,7 @@ g++ main.o math.o -o math
 main.o  makefile  math  math.o  src
 ```
 使用make clean命令删除中间文件
-```shell
+```shellsession
 ~/code/makefile$ make clean
 rm -rf *.o
 ~/code/makefile$ ls
@@ -136,7 +136,7 @@ main.o:main.cpp math.h
 </br>
 假设源文件结构层次如下
 </br>
-```shell
+```shellsession
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -179,7 +179,7 @@ clean:
 其中PATTERN指待寻找文件(可由通配符组合)，DIRECTORIES指查找路径
 </br>
 假设源文件结构层次如下
-```shell
+```shellsession
 ~/code/makefile$ tree
 .
 ├── makefile
@@ -211,7 +211,7 @@ clean:
 clean:
 	rm -rf *.o
 ```
-伪目标的作用是，伪目标后的命令总是会被执行;因为makefile规则中是否去执行一条命令是需要根据依赖的文件是否比目标文件新特征来决定的，假设上例makefile文件所在目录下存在clean文件，而目标clean并没有依赖，也就说明目标永远比依赖新，所有当没有指定clean是伪目标时，clean将永远不会执行。
+伪目标的作用是，伪目标后的命令总是会被执行;因为makefile规则中是否去执行一条命令是需要根据依赖的文件是否比目标文件新特征来决定的，假设上例makefile文件所在目录下存在clean文件，而目标clean并没有依赖，也就说明目标永远比依赖新，所以当没有指定clean是伪目标时，clean将永远不会执行。
 
 ### @不显示命令
 假设makefile文件如下：
@@ -221,7 +221,7 @@ clean:
 	rm -rf *.o
 ```
 当执行一条命令时，控制台会打印当前执行的命令，如下
-```shell
+```shellsession
 ~/code/makefile$ make clean
 rm -rf *.o
 ```
@@ -232,7 +232,7 @@ clean:
 	@rm -rf *.o
 ```
 执行clean，命令不会打印出来
-```shell
+```shellsession
 ~/code/makefile$ make clean
 ```
 ### -忽略命令执行错误
@@ -253,7 +253,7 @@ make规则中有4个用条件判断的关键字
 |`ifndef`|判断是否有值|同`ifndef`|
 ### 变量
 #### 变量赋值
-变量的赋值有4中符号，如下
+变量的赋值有4种符号，如下
 - 简单赋值 `:=` 编程语言中常规理解的赋值方式，只对当前语句的变量有效。
 - 递归赋值 `= `赋值语句可能影响多个变量，所有目标变量相关的其他变量都受影响。
 - 条件赋值 `?=` 如果变量未定义，则使用符号中的值定义变量。如果该变量已经赋值，则该赋值语句无效。

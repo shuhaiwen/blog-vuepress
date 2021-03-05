@@ -10,7 +10,7 @@ categories:
 # googletest教程
 ## 编译安装
 1. 执行以下指令下载安装
-```shell
+```shellsession
 git clone https://github.com/google/googletest.git
 cd googletest        # 仓库代码主目录.
 mkdir build          # Create a directory to hold the build output.

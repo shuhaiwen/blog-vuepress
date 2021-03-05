@@ -12,7 +12,7 @@ categories:
 # 解决npm yarn 包安装失败方法
 1. 在项目根目录（package.json所在目录）下新建 .npmrc 或 .yarnrc 文件
 2. 复制对应的配置到 .npmrc 或 .yarnrc 文件中
-```shell
+```shellsession
 # .npmrc 配置文件
 registry=https://registry.npm.taobao.org
 sass_binary_site=https://npm.taobao.org/mirrors/node-sass/

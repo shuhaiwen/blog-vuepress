@@ -32,7 +32,7 @@ categories:
 注意：以下内容用`src`代替安装路径`/opt/gcc-10.2.0`
 1. 执行步骤2时，指定gcc安装位置：`../configure --prefix=/opt/gcc-10.2.0`指定了gcc安装位置在`/opt/gcc-10.2.0`下
 2. 在执行完步骤5,6或，创建符号链接,在`/opt/gcc-10.2.0/bin`下新建`gcc-ln.sh`文件，输入以下内容
-```shell
+```shellsession
 #!/bin/bash
 #将/opt/gcc-10.2.0/bin/下二进制文件 符号链接到/usr/local/bin下，并且都加上后缀-10，
 for file in *; do
@@ -40,11 +40,11 @@ for file in *; do
 done
 ```
 3. 执行`gcc-ln.sh`文件
-```shell
+```shellsession
 chmod u+x gcc-ln.sh
 ```
 4. 使用gcc-10 或g++-10指令来编译c或c++文件
-```shell
+```shellsession
 $ g++-10 1.cpp
 $ ./a.out
 hello world!

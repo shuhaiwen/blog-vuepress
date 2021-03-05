@@ -10,7 +10,7 @@ categories:
 ---
 # cmake 错误汇总
 ## 更换生成器导致的问题
-```shell
+```shellsession
 CMake Error: Error: generator : Unix Makefiles
 Does not match the generator used previously: MinGW Makefiles
 Either remove the CMakeCache.txt file and CMakeFiles directory or choose a different binary directory.
