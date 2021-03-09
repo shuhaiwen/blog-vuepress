@@ -1285,12 +1285,12 @@
   dependencies:
     nprogress "^0.2.0"
 
-"@vuepress/plugin-pwa@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.npm.taobao.org/@vuepress/plugin-pwa/download/@vuepress/plugin-pwa-1.5.0.tgz#700ac453e1f670a662af2fbc6455b3e98488843d"
-  integrity sha1-cArEU+H2cKZiry+8ZFWz6YSIhD0=
+"@vuepress/plugin-pwa@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.npm.taobao.org/@vuepress/plugin-pwa/download/@vuepress/plugin-pwa-1.8.2.tgz#a82ecaa9f920bfc79f283fb3c224a42540109e19"
+  integrity sha1-qC7Kqfkgv8efKD+zwiSkJUAQnhk=
   dependencies:
-    "@vuepress/shared-utils" "1.5.0"
+    "@vuepress/shared-utils" "1.8.2"
     register-service-worker "^1.7.0"
     workbox-build "^4.3.1"
 
@@ -1319,6 +1319,21 @@
     gray-matter "^4.0.1"
     hash-sum "^1.0.2"
     semver "^6.0.0"
+    upath "^1.1.0"
+
+"@vuepress/shared-utils@1.8.2":
+  version "1.8.2"
+  resolved "https://registry.npm.taobao.org/@vuepress/shared-utils/download/@vuepress/shared-utils-1.8.2.tgz#5ec1601f2196aca34ad82eed7c9be2d7948f705b"
+  integrity sha1-XsFgHyGWrKNK2C7tfJvi15SPcFs=
+  dependencies:
+    chalk "^2.3.2"
+    escape-html "^1.0.3"
+    fs-extra "^7.0.1"
+    globby "^9.2.0"
+    gray-matter "^4.0.1"
+    hash-sum "^1.0.2"
+    semver "^6.0.0"
+    toml "^3.0.0"
     upath "^1.1.0"
 
 "@vuepress/theme-default@1.5.0":
