@@ -34,6 +34,7 @@ categories:
     - [file](#file)
     - [whereis](#whereis)
     - [which](#which)
+    - [whatis](#whatis)
   - [显示信息操作](#显示信息操作)
     - [cat](#cat)
     - [ls](#ls)
@@ -42,7 +43,6 @@ categories:
   - [库相关](#库相关)
     - [ldconfig](#ldconfig)
     - [ldd](#ldd)
-  - [Linux命令学习步骤](#linux命令学习步骤)
 # Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
 ## 基本操作
@@ -376,6 +376,13 @@ gcc: /usr/bin/gcc /usr/lib/gcc
 ~/code/cpp$ which rm
 /usr/bin/rm
 ```
+### whatis
+- 语法形式：`whatis [option] [命令名]`
+- 功能：查询一个命令执行什么功能
+```shell
+fzbk@fzbk:~$ whatis rm
+rm (1)               - remove files or directories
+```
 ## 显示信息操作
 ### cat
 - 语法形式：`cat [option] [文件]`
@@ -469,12 +476,6 @@ libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f8ffe96a000)
 libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8ffe7a9000)
 /lib64/ld-linux-x86-64.so.2 (0x00007f8ffecb5000)
 ```
-## Linux命令学习步骤
-
-1. pwd 显示当前所在路径 
-2. cd
-3. ls  显示指定目录下文件及其属性
-4. cp
-5. mkdir rmdir
-6. cat
-7. 
+::: tip
+ldd不是一个可执行程序而是一个shell脚本。
+:::

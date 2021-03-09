@@ -120,7 +120,7 @@ int main(){
 #### 复合要求
 - 语法：`{ 表达式 } noexcept(可选) ->返回类型要求(可选) ;`
 - 示例
-```C++
+```cpp
 template<typename T> concept C2 =
 requires(T x) {
     {*x} -> std::convertible_to<typename T::inner>; // 表达式 *x 必须合法
