@@ -54,7 +54,7 @@ const _Ty* addressof(const _Ty&&) = delete;
 ```
 
 ## 与取地址运算符`operator&`比较
-- 区别：当对象实现了自定义的`operator&`取地址运算符时，且，返回的地址不是本对象的实际地址，这时运用`&T`将会得到非预期的T类型对象地址，而`addressof`将始终返回实际的对象地址
+- 区别：当对象实现了自定义的`operator&`取地址运算符时，且返回的地址不是本对象的实际地址，这时运用`&T`将会得到非预期的T类型对象地址，而`addressof`将始终返回实际的对象地址
 - 示例
 ```cpp
 #include <iostream>

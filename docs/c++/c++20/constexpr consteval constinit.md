@@ -11,7 +11,7 @@ categories:
  - C++20
 ---
 # constexp consteval constinit
-## constexp
+## constexpr
 - `constexpr`说明符声明可以在编译时或在运行时求得函数或变量的值
 - 示例
 ```cpp

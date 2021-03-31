@@ -8,11 +8,11 @@ categories:
  - C++17
 ---
 - [variant](#variant)
-  - [`variant`赋值运算符`=`](#variant赋值运算符)
-  - [`variant`成员函数`emplace](#variant成员函数emplace)
-  - [`variant`成员函数`index`](#variant成员函数index)
-  - [非成员函数`get`](#非成员函数get)
-  - [非成员函数`visit`](#非成员函数visit)
+	- [`variant`赋值运算符`=`](#variant赋值运算符)
+	- [`variant`成员函数`emplace`](#variant成员函数emplace)
+	- [`variant`成员函数`index`](#variant成员函数index)
+	- [非成员函数`get`](#非成员函数get)
+	- [非成员函数`visit`](#非成员函数visit)
 # variant
 - 功能：`variant`是一个联合体类型，可保持多个类型（同一类型可重复），但任意时刻只能保存一种类型数据
 - 注意事项
@@ -68,7 +68,7 @@ int main()
 	v3 = "abc"; // OK ：选择 string ； bool 不是候选
 }
 ```
-## `variant`成员函数`emplace
+## `variant`成员函数`emplace`
 - 功能：给`variant`对象赋值
 - 注意事项：`emplace`模板参数可以是0值开始的索引值也可以是具体类型
   - 当`variant`保有多个相同类型参数时，不能使用具体类型模板参数，因为编译器不知道你需要赋值给具体哪一个

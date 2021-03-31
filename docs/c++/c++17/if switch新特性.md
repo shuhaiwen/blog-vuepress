@@ -10,7 +10,7 @@ categories:
 ---
 - [if switch新特性](#if-switch新特性)
   - [if switch 初始化语句](#if-switch-初始化语句)
-  - [constexpr if](#constexpr-if)
+  - [if constexpr](#if-constexpr)
 # if switch新特性
 ## if switch 初始化语句
 - 功能：在`if`或`switch`条件块中增加变量声明或表达式语句
@@ -38,7 +38,7 @@ int main() {
     }
 }
 ```
-## constexpr if
+## if constexpr
 - 功能：定义条件为常量表达式，编译器会在编译期做优化，当条件为`false`时会舍弃`true`语句块，当条件为`true`时会舍弃`false`语句块。
 - 示例
 ```cpp
