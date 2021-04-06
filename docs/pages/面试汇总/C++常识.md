@@ -275,7 +275,7 @@ int main()
 ```
 ## this
 ### this是一个const指针
-- 为什么`this`需要使`const`呢？假设`this`不是`const`，则`this`可以被赋值如`this=NULL;`,显然这是不能出现的
+- 为什么`this`需要是`const`呢？假设`this`不是`const`，则`this`可以被赋值如`this=NULL;`,显然这是不能出现的
 ## private、protected、public
 - 成员关系
   - private、protected成员在类外都不可访问
