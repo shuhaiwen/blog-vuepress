@@ -17,7 +17,10 @@ mkdir build          # Create a directory to hold the build output.
 cd build
 cmake ..             # 只生成GoogleTest不生成GoogleMock
 ```
-**注意：`cd googletest`是进入主目录下，而不是googletest/googletest目录**
+::: warning
+`cd googletest`是进入主目录下，而不是googletest/googletest目录
+:::
+
 2. 在windows下build目录会生成.sln文件，使用visual studio打开
 3. 生成gtest、gtest_main项目的静态库
 ## googletest的使用

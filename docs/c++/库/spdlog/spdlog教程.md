@@ -30,7 +30,7 @@ categories:
 - logger 日志信息源
 - formater 日志信息格式化
 ## 编译安装
-spdlog只含头文件，不需要额外编译，使用时直接包含apdlog库中的include目录就行。
+spdlog只含头文件，不需要额外编译，使用时直接包含spdlog库中的include目录就行。
 ## 入门
 ### 使用默认logger记录器
 - 使用方式：
@@ -45,7 +45,7 @@ spdlog只含头文件，不需要额外编译，使用时直接包含apdlog库�
 int main()
 {
 	spdlog::info("Hello,{}", "world!");
-	spdlog::error("这时错误信息");
+	spdlog::error("这是错误信息");
 }
 ```
 ### 设置默认日志记录器属性

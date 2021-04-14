@@ -40,6 +40,15 @@ categories:
     - [删除表](#删除表)
   - [查询](#查询)
     - [查询条件关键字](#查询条件关键字)
+  - [插入表数据](#插入表数据)
+    - [插入所有数据](#插入所有数据)
+    - [插入指定字段数据](#插入指定字段数据)
+    - [插入多行数据](#插入多行数据)
+    - [将查询结果插入表中](#将查询结果插入表中)
+  - [更新表数据](#更新表数据)
+  - [删除表数据](#删除表数据)
+  - [索引](#索引)
+    - [](#)
 # mysql
 SQL(Structured Query Language)结构化查询语言,语言分3个部分，如下：
 - 数据定义语言(Data Definition Language,简称DDL)，如创建删除表、视图
@@ -638,3 +647,131 @@ select distinct 属性名集 from 表名;
 select 属性名集 from 表名 limit 数量;
 select 属性名集 from 表名 limit 起始位置,数量;
 ```
+## 插入表数据
+- 关键字
+  - `INSERT INTO ... VALUES`
+### 插入所有数据
+- 语法
+```sql
+insert into 表名 values(值1,...,值n);
+```
+- 示例
+```
+mysql> insert into table1 values(0,"jack",24);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select* from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   24 |
++----+------+------+
+1 row in set (0.00 sec)
+```
+### 插入指定字段数据
+- 语法
+```sql
+insert into 表名(属性1,...,属性n) values(值1,...,值n);
+```
+- 示例
+```sql
+mysql> insert into table1(id,name,age) values(1,"tom",26);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from table1 where id=1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  1 | tom  |   26 |
++----+------+------+
+1 row in set (0.02 sec)
+```
+### 插入多行数据
+- 语法
+```sql
+insert into 表名 values(值列表1),...(值列表n);
+```
+- 示例
+```sql
+mysql> insert into table2 values(0),(1),(2),(3);
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from table2;
++----+
+| id |
++----+
+|  0 |
+|  1 |
+|  2 |
+|  3 |
++----+
+4 rows in set (0.00 sec)
+```
+### 将查询结果插入表中
+- 语法
+```sql
+insert into 表名1 (属性列表) select (属性列表) from 表名2 [可选条件];
+```
+## 更新表数据
+- 关键字
+  - `UPDATE ... SET`
+- 语法
+```sql
+update 表名 set 
+属性名1=值1,
+...,
+属性名n=值n
+where 条件表达式;
+```
+- 示例
+```sql
+mysql> update table1 set
+    -> name="tim",
+    -> age=25
+    -> where id=1;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select* from table1 where id=1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  1 | tim  |   25 |
++----+------+------+
+1 row in set (0.03 sec)
+```
+## 删除表数据
+- 关键字
+  - `DELETE FROM`
+- 语法
+```sql
+delete from 表名 [where t条件表达式];
+```
+- 示例
+```sql
+mysql> select * from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   24 |
+|  1 | tim  |   25 |
++----+------+------+
+2 rows in set (0.00 sec)
+
+mysql> delete from table1 where id=1;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select * from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   24 |
++----+------+------+
+1 row in set (0.02 sec)
+```
+::: warning
+当不知道删除的where条件表达式时，会删除整个表数据
+:::
+## 索引
+### 
