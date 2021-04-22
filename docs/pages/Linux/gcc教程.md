@@ -92,7 +92,7 @@ $ g++ main.cpp print.cpp -o main.exe
 $ ls
 main.cpp  main.exe  print.cpp  print.h
 ```
-- 方式二：生产目标文件，再链接
+- 方式二：生成目标文件，再链接
 ```shell
 $ ls
 main.cpp  print.cpp  print.h
@@ -127,15 +127,15 @@ Linux上库命名格式,以lib起始，xxx表示库名，.a结尾是静态库，
 - 动态库: `libxxx.so`
 ### c++ 动态库静态库后缀
 - Linux
-  - 静态库:`xxx.a`(.a代表achieve)
+  - 静态库:`xxx.a`(.a代表archive)
   - 动态库:`xxx.so`(.so代表share object)
 - Windows
   - 静态库:`xxx.lib`
   - 动态库:`xxx.dll`
 ### 编译和链接静态库
-- `-L`选项指定库路径，不指定默认去系统/lib,/usr/lib等路径
+- `-L`选项指定库路径，不指定默认系统/lib,/usr/lib等路径
 #### 生成
-1. 将源文件生产目标文件
+1. 将源文件生成目标文件
 2. 使用ar打包从静态库
 ```shell
 $ g++ -c print.cpp 

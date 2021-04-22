@@ -8,11 +8,11 @@ categories:
  - Boost
 ---
 - [Process 可移植创建进程](#process-可移植创建进程)
-	- [`system`和`spawn`](#system和spawn)
+	- [system和spawn](#system和spawn)
 	- [参数风格](#参数风格)
 	- [进程的输入输出流](#进程的输入输出流)
 # Process 可移植创建进程
-## `system`和`spawn`
+## system和spawn
 - 使用`boost::process::system()`阻塞创建进程
 - 使用`boost::process::spawn()`不阻塞创建进程
 - 简单示例

@@ -7,7 +7,7 @@ tags:
 categories:
  - Boost
 ---
-- [`Serialization`序列化](#serialization序列化)
+- [Serialization序列化](#serialization序列化)
 	- [3种存档文件格式`xml`、`txt`、`binary`](#3种存档文件格式xmltxtbinary)
 	- [基本数据的存档和读档](#基本数据的存档和读档)
 	- [C++容器（list、string、array ...）的存档和读档](#c容器liststringarray-的存档和读档)
@@ -20,7 +20,7 @@ categories:
 		- [serialize函数与类分离，可作为类外函数（可声明类友元函数方便访问类使用成员）](#serialize函数与类分离可作为类外函数可声明类友元函数方便访问类使用成员)
 		- [添加版本信息](#添加版本信息)
 	- [参考资料](#参考资料)
-# `Serialization`序列化
+# Serialization序列化
 - 功能：将 C++ 应用程序中的对象转换为一个字节序列（binary data, text data, XML）
 - 特点：使用`fstream`文件流会生成存档文件，用于保存数据
 - **注意事项**：存档时数据顺序与读档是顺序保持一致，否则数据将错误

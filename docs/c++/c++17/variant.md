@@ -8,9 +8,9 @@ categories:
  - C++17
 ---
 - [variant](#variant)
-	- [`variant`赋值运算符`=`](#variant赋值运算符)
-	- [`variant`成员函数`emplace`](#variant成员函数emplace)
-	- [`variant`成员函数`index`](#variant成员函数index)
+	- [variant赋值运算符=](#variant赋值运算符)
+	- [variant成员函数emplace](#variant成员函数emplace)
+	- [variant成员函数index](#variant成员函数index)
 	- [非成员函数`get`](#非成员函数get)
 	- [非成员函数`visit`](#非成员函数visit)
 # variant
@@ -47,7 +47,7 @@ int main()
 	//v = w;//error,v和w需要相同
 }
 ```
-## `variant`赋值运算符`=`
+## variant赋值运算符=
 - `variant`赋值`variant`
   - `variant`参数必须匹配，否则报错
 - 任意类型`T`赋值`variant`
@@ -68,7 +68,7 @@ int main()
 	v3 = "abc"; // OK ：选择 string ； bool 不是候选
 }
 ```
-## `variant`成员函数`emplace`
+## variant成员函数emplace
 - 功能：给`variant`对象赋值
 - 注意事项：`emplace`模板参数可以是0值开始的索引值也可以是具体类型
   - 当`variant`保有多个相同类型参数时，不能使用具体类型模板参数，因为编译器不知道你需要赋值给具体哪一个
@@ -92,7 +92,7 @@ int main()
     // v2.emplace<std::string>("abc"); -> 错误,编译器无法判断是传给参数1还是参数2的string
 }
 ```
-## `variant`成员函数`index`
+## variant成员函数index
 - 功能：返回 `variant` 当前所保有的可选项的零基下标
 - 示例
 ```cpp
