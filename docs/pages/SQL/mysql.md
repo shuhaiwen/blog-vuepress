@@ -48,7 +48,19 @@ categories:
   - [更新表数据](#更新表数据)
   - [删除表数据](#删除表数据)
   - [索引](#索引)
-    - [](#)
+    - [索引优缺点](#索引优缺点)
+    - [索引类型](#索引类型)
+    - [索引设计原则](#索引设计原则)
+    - [索引的创建](#索引的创建)
+      - [创建表时创建索引](#创建表时创建索引)
+      - [在已存在表上建立索引](#在已存在表上建立索引)
+    - [删除索引](#删除索引)
+  - [视图](#视图)
+    - [创建视图](#创建视图)
+    - [查看视图结构](#查看视图结构)
+    - [修改视图结构](#修改视图结构)
+    - [更新视图](#更新视图)
+    - [删除视图](#删除视图)
 # mysql
 SQL(Structured Query Language)结构化查询语言,语言分3个部分，如下：
 - 数据定义语言(Data Definition Language,简称DDL)，如创建删除表、视图
@@ -774,4 +786,199 @@ mysql> select * from table1;
 当不知道删除的where条件表达式时，会删除整个表数据
 :::
 ## 索引
-### 
+- 组成：索引可以有表上一列或多列组成
+- 功能：提高查询表数据的速度
+- 索引存储类型：B树索引、哈希索引
+### 索引优缺点
+索引能增加查询速度，但会影响插入速度。
+- 优点：
+  - 提高查询数据速度
+  - 提高分组和排序速度
+- 缺点：
+  - 索引占据额外物理空间
+  - 增加和删除数据需要额外维护索引
+
+::: tip 如何处理向含索引的表中插入大量数据？
+1. 首先删除索引。
+2. 再插入数据。
+3. 最后重写添加索引。
+:::
+### 索引类型
+- 普通索引：不附加任何限制
+- 唯一性索引：限制索引项值必须唯一
+- 全文索引：使用`FULLTEXT`设置全文索引，且全文索引只用在`TEXT`、`CHAR`、`VARCHAR`数据类型上，全文索引适用于数据量加大的字符串型字段上。
+- 单列索引：在单个字段上创建索引
+- 多列索引：在多个字段是创建索引（只有查询时指定了第一个字段，多列索引才能起作用）
+- 空间索引：使用`SPATIAL`设置空间索引（空间索引只用在空间类型数据字段上`GEOMETRY`、`POINT`、`LINESTRING`、`POLYGON`，且索引字段不为空）
+### 索引设计原则
+1. 尽量选择唯一性索引
+2. 为经常需要排序、分组和联合查询的字段设置索引
+3. 为常做查询的字段设置索引
+4. 限制索引数量
+5. 尽量不在数据量大的字段上设置索引
+6. 在大数据字段采用前缀索引
+7. 删除很少使用或不再使用的索引
+### 索引的创建
+#### 创建表时创建索引
+- 语法
+```sql
+crate table 表名(
+属性名 数据类型 [完整性约束条件],
+...
+...
+属性名 数据类型 [完整性约束条件],
+[UNIQUE|FULLTEXT|SPATIAL] INDEX|KEY [别名](属性名 [(长度)] [ASC|DESC])
+);
+```
+- 解释：
+  - `UNIQUE`、`FULLTEXT`、`SPATIAL`分别对应唯一性索引、全文索引、空间索引
+  - `INDEX`、`KEY`是索引关键字，都可以使用
+  - 长度：限制索引字段值得长度，只能在`TEXT`、`CHAR`、`VARCHAR`字符串类型上使用
+  - `ASC`（升序）、`DESC`（降序）指示索引排序规则。
+- 示例
+```sql
+mysql> create table index1(
+    -> id int,
+    -> attr1 char(4),
+    -> index(id)
+    -> );
+Query OK, 0 rows affected (1.07 sec)
+```
+#### 在已存在表上建立索引
+- 语法1
+```sql
+create [UNIQUE|FULLTEXT|SPATIAL] INDEX 索引名 ON 表名(属性名 [(长度)] [ASC|DESC]);
+```
+- 示例
+```sql
+mysql> create fulltext index f_index on index1(attr1(2));
+Query OK, 0 rows affected, 1 warning (7.30 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+```
+- 语法2
+```sql
+alter table 表名 add [UNIQUE|FULLTEXT|SPATIAL] INDEX 索引名(属性名 [(长度)] [ASC|DESC]);
+```
+- 示例
+```sql
+mysql> alter table index1 add UNIQUE index u_index(id ASC);
+Query OK, 0 rows affected (0.43 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+```
+### 删除索引
+- 语法
+```sql
+drop index 索引名 on 表名;
+```
+- 示例
+```sql
+mysql> drop index u_index on index1;
+Query OK, 0 rows affected (0.20 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+```
+## 视图
+视图是虚拟化的表，它可以从表中定于或从另一个视图中定义；视图的数据来自原表，因此对视图的更改会改动原表的数据。原表增加列或删除没有被视图引用的列不影响视图。
+- 功能：
+  - 使操作简单化：为常使用的查询定义视图，避免查询时指定大量条件，使操作简单
+  - 增加了数据的安全性：只提供权限内数据
+### 创建视图
+- 语法
+```sql
+create [algorithm={undefined|merge|template}] view 视图名 [(属性列表)] as select表达式 [with [cascaded|local] check option]
+```
+- 解释
+  - `algorithm`：指定视图算法
+    - `undefined`：自动选择
+    - `merge`
+    - `template`
+  - `with check option`:表示更新视图时要保证在该视图的权限范围内
+- 示例
+```sql
+mysql> create view t_view(name,age) as select name,age from table1;
+Query OK, 0 rows affected (0.18 sec)
+mysql> select * from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   24 |
++----+------+------+
+1 row in set (0.02 sec)
+
+mysql> insert into table1 values(1,"tim",21);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   24 |
+|  1 | tim  |   21 |
++----+------+------+
+2 rows in set (0.00 sec)
+```
+### 查看视图结构
+- 语法：
+  1. `desc|describe 视图名;`
+  2. `show table status like '视图名';`
+  3. `show create view 视图名;`
+- 示例
+```sql
+mysql> desc t_view;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(20) | YES  |     | NULL    |       |
+| age   | tinyint     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+```
+### 修改视图结构
+1. 使用`create or replace`
+- 语法
+```sql
+create or replace [algorithm={undefined|merge|template}] view 视图名 [(属性列表)] as select表达式 [with [cascaded|local] check option]
+```
+- 解释：这操作和创建视图类似，当视图存在就更新，当视图不存在就创建。
+2. 使用`alter`
+- 语法
+```sql
+alter [algorithm={undefined|merge|template}] view 视图名 [(属性列表)] as select表达式 [with [cascaded|local] check option]
+```
+- 解释：与创建视图类型
+### 更新视图
+1. 更新视图会更改引用的表数据
+2. 更新操作，如`insert into`、`delete from`、`update set`与更新表操作一致。
+- 示例
+```sql
+mysql> update t_view set age=21 where name="tim";
+Query OK, 1 row affected (0.26 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from t_view;
++------+------+
+| name | age  |
++------+------+
+| jack |   23 |
+| tim  |   21 |
++------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from table1;
++----+------+------+
+| id | name | age  |
++----+------+------+
+|  0 | jack |   23 |
+|  1 | tim  |   21 |
++----+------+------+
+2 rows in set (0.00 sec)
+```
+### 删除视图
+- 语法
+```sql
+drop view [if exists] 视图名 [restrict|cascade];
+```
+- 示例
+```sql
+mysql> drop view if exists t_view;
+Query OK, 0 rows affected (0.07 sec)
+```
