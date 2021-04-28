@@ -53,6 +53,7 @@ categories:
 		- [缓冲区的刷新条件](#缓冲区的刷新条件)
 		- [Cache（缓存）和 Buffer（缓冲）区别](#cache缓存和-buffer缓冲区别)
 	- [strcpy和memcpy区别](#strcpy和memcpy区别)
+	- [运算符优先级](#运算符优先级)
 # C++常识
 ## 位运算
 - 按位或运算(|)：2数按位其中任意一个为1得1,2数都为0得0
@@ -516,3 +517,6 @@ char *Arr_p[]={"helle","world"};//指针数组
 1. 复制的内容不同。strcpy只能复制字符串，而memcpy可以复制任意内容，例如字符数组、整型、结构体、类等。
 2. 复制的方法不同。strcpy不需要指定长度，它遇到被复制字符的串结束符"\0"才结束，所以容易溢出。memcpy则是根据其第3个参数决定复制的长度。
 3. 用途不同。通常在复制字符串时用strcpy，而需要复制其他类型数据时则一般用memcpy
+## 运算符优先级
+![](https://cdn.jsdelivr.net/gh/shuhaiwen/image-host/Img/c++/%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7-%E8%A1%A81.png)
+![](https://cdn.jsdelivr.net/gh/shuhaiwen/image-host/Img/c++/%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7-%E8%A1%A82.png)
