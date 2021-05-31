@@ -87,7 +87,7 @@ g++ main.o math.o -o math
 ~/code/makefile$ ls
 main.o  makefile  math  math.o  src
 ```
-使用make clean命令删除中间文件
+指定make的执行目标，如使用make clean命令删除中间文件
 ```shell
 ~/code/makefile$ make clean
 rm -rf *.o
@@ -245,12 +245,12 @@ clean:
 上面这条rm指令不管失败还是成功，并不会影响make继续执行
 ### 条件语句
 make规则中有4个用条件判断的关键字
-|关键字|解释|语法规则|
-|:----:|----|----|
-|`ifeq`|判断是否相等|`ifeq (ARG1, ARG2)` or `ifeq 'ARG1' 'ARG2'` or `ifeq "ARG1" "ARG2"` or `ifeq "ARG1" 'ARG2'` or `ifeq 'ARG1' "ARG2"`|
-|`ifneq`|判断是否相等|同`ifeq`|
-|`ifdef`|判断是否有值|`ifdef VARIABLE-NAME`|
-|`ifndef`|判断是否有值|同`ifndef`|
+|  关键字  | 解释         | 语法规则                                                                                                            |
+| :------: | ------------ | ------------------------------------------------------------------------------------------------------------------- |
+|  `ifeq`  | 判断是否相等 | `ifeq (ARG1, ARG2)` or `ifeq 'ARG1' 'ARG2'` or `ifeq "ARG1" "ARG2"` or `ifeq "ARG1" 'ARG2'` or `ifeq 'ARG1' "ARG2"` |
+| `ifneq`  | 判断是否相等 | 同`ifeq`                                                                                                            |
+| `ifdef`  | 判断是否有值 | `ifdef VARIABLE-NAME`                                                                                               |
+| `ifndef` | 判断是否有值 | 同`ifndef`                                                                                                          |
 ### 变量
 #### 变量赋值
 变量的赋值有4种符号，如下

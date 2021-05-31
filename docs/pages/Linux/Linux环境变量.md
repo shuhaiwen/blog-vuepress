@@ -9,16 +9,17 @@ categories:
 ---
 
 # Linux环境变量
+## PATH
 PATH环境变量冒号`:`作用是作为分割符,如`PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin`。
 
 **注意：但这并不意味着其它环境变量也是以冒号:来作为分隔符，其它也可以有分号;等等来作为分隔符，只要使用它的能按规则正确解析即可**
-## 关于环境变量的指令
+### 关于环境变量的指令
 - `env`：显示当前系统环境变量
 - `export`：导入环境变量（临时，只对当前shell有效）
 - `set`：显示shell变量
 - `unset`：清除环境变量
 
-## 环境变量文件/etc/profile和~/.profile
+### 环境变量文件/etc/profile和~/.profile
 - 系统环境变量文件`/etc/profile`
 - 用户环境变量文件`~/.profile`
 
@@ -27,7 +28,7 @@ PATH环境变量冒号`:`作用是作为分割符,如`PATH=/usr/local/bin:/usr/b
 2. 然后根据不同使用者帐号，去其家目录读取~/.bash_profile，如果这读取不了就读取~/.bash_login，这个也读取不了才会读取~/.profile，这三个文档设定基本上是一样的, 读取有优先关系.
 3. 然后在根据用户帐号读取~/.bashrc
 
-### 系统变量文件/etc/profile
+#### 系统变量文件/etc/profile
 `/etc/profile`文件中导出了PATH变量
 ```shell
 $ cat /etc/profile
@@ -90,11 +91,11 @@ $ source /etc/profile
 $ echo $HELLO
 hello
 ```
-### 用户变量文件~/.profile与~/.bashrc
+#### 用户变量文件~/.profile与~/.bashrc
 ~/.profile可以设定本用户专有的路径，环境变量，等，它只能登入的时候执行一次. ~/.bashrc也是某用户专有设定文档，可以设定路径，命令别名，每次shell script的执行都会使用它一次。
 
 用户变量文件只对当前用户有效，使用和系统变量文件/etc/profile一样。设置后依然需要用`source`命令进行更新
-## export临时导入环境变量
+### export临时导入环境变量
 使用export向PATH中导入变量hello
 ```shell
 $ export PATH=hello:$PATH
@@ -106,5 +107,7 @@ hello:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin
 ~$ echo $PATH
 /usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin
 ```
-## 重要的环境变量统计
+### 重要的环境变量统计
 - 命令行提示符$PS1
+## LD_LIBRARY_PATH
+`LD_LIBRARY_PATH`是程序加载动态链接库(.so)文件查找的路径。如果你的程序需要加载非默认加载路径的.so文件时，你必须要将其路径通过`LD_LIBRARY_PATH`导出否则程序会报找不到库错误

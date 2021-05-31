@@ -19,6 +19,7 @@ categories:
     - [查看仓库状态](#查看仓库状态)
   - [git远程仓库命令](#git远程仓库命令)
     - [克隆远程仓库](#克隆远程仓库)
+    - [指定分支克隆](#指定分支克隆)
     - [拉取远程仓库内容](#拉取远程仓库内容)
     - [查看远程仓库](#查看远程仓库)
     - [移除/添加/重命名远程仓库关联](#移除添加重命名远程仓库关联)
@@ -77,6 +78,13 @@ git status
 ```git
 # 默认远程仓库名为origin，分支为你克隆的分支名，且在本地创建master分支
 git clone [url]
+```
+### 指定分支克隆
+- 语法
+  - `git clone -b 分支名 url`
+- 示例
+```git
+git clone -b main https://github.com/shuhaiwen/shuhaiwen.github.io.git
 ```
 ### 拉取远程仓库内容
 ```git

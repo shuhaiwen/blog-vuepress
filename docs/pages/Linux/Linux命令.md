@@ -40,9 +40,17 @@ categories:
     - [ls](#ls)
     - [locale](#locale)
     - [pwd](#pwd)
+    - [id](#id)
   - [库相关](#库相关)
     - [ldconfig](#ldconfig)
     - [ldd](#ldd)
+    - [nm](#nm)
+      - [查看.so文件导出函数](#查看so文件导出函数)
+  - [系统相关](#系统相关)
+    - [ps](#ps)
+    - [kill](#kill)
+  - [远程操作](#远程操作)
+    - [scp](#scp)
 # Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
 ## 基本操作
@@ -291,6 +299,13 @@ mv：是否覆盖'2.txt'？ n
 - `-f`当目标文件或目录存在时覆盖，不提示(默认)
 - `-i`当目标文件或目录存在时提示用户选择是否覆盖，y是，n否
 - `-u`当目标文件或目录存在时，源文件比目标文件新时才覆盖
+- 拷贝多个文件示例
+```shell
+# 拷贝多个文件到同一目录
+cp file1 file2 dir
+# 拷贝同一目录下文件到另一目录
+cp dir1/{file1,file2} dir2
+```
 ### touch
 `touch`实际上用用来修改文件时间属性的，但更多的用来新建文件。
 - 语法形式：`touch [option] [文件]`
@@ -459,6 +474,13 @@ zh_CN.utf8
 ~/code/sh$ pwd
 /home/shuhaiwen/code/sh
 ```
+### id
+- 语法形式：`id [option] username`
+- 功能：查看用户相关信息
+```shell
+~$ id shuhaiwen
+uid=1016(shuhaiwen) gid=1016(shuhaiwen) groups=1016(shuhaiwen)
+```
 ## 库相关
 ### ldconfig
 - 功能：设置运行时期动态链接，通常在向/lib和/usr/lib添加了新动态库后用来更新动态库
@@ -478,4 +500,52 @@ libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8ffe7a9000)
 ```
 ::: tip
 ldd不是一个可执行程序而是一个shell脚本。
+:::
+### nm
+- 功能：查看obj文件符号信息
+- 语法形式:`nm [option] filename`
+#### 查看.so文件导出函数
+```shell
+nm -D xxx.so | awk '{if($2=="T"){print $3}}'
+```
+## 系统相关
+### ps
+- 功能：查看系统进程信息
+- 语法形式:`ps [option]`
+  - `e`:显示所有进程
+  - `-A`:显示所有进程
+  - `-f`:显示完整格式列表
+  - `-L`:显示进程线程
+  - `-H`:以层级显示（显示父进程）
+- 示例
+```shell
+#显示系统所有进程信息
+ps -ef
+```
+### kill
+- 功能：停止指定进程
+- 语法形式:`kill PID`
+```shell
+#停止进程
+kill 1201
+#显示信号
+kill -l
+```
+## 远程操作
+### scp
+- 语法:`scp [option] 源文件 目标路径`
+- 功能：主机之间复制文件和目录(类似cp)
+  - `-r`:递归复制整个目录
+  - `-p`:保留原文件的修改时间，访问时间和访问权限
+- 示例:从本地复制到远程
+```shell
+#将本地用户目录下的test.txt文件复制到远程主机10.10.10.10上用户为user1的目录下
+scp ~/test.txt user1@10.10.10.10:/home/user1/
+```
+- 示例:从远程复制到本地
+```shell
+scp user1@10.10.10.10:/home/urer1/test.txt /home/user1
+```
+::: warning
+远程语法 `用户名@IP地址:路径`
 :::
