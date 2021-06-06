@@ -12,7 +12,10 @@ categories:
   - [gcc 常用指令](#gcc-常用指令)
     - [gcc预处理、编译、汇编和链接4大步骤](#gcc预处理编译汇编和链接4大步骤)
     - [选项-o指定生成文件名](#选项-o指定生成文件名)
+    - [选项-L指定静态库查找路径](#选项-l指定静态库查找路径)
     - [选项-l添加链接库](#选项-l添加链接库)
+    - [选项-I指定头文件包含目录](#选项-i指定头文件包含目录)
+    - [选项-g生成调试信息](#选项-g生成调试信息)
     - [编译多个文件](#编译多个文件)
     - [-std=支持标准范围](#-std支持标准范围)
     - [选项-save-temps保存中间文间(.i .s .o文件)](#选项-save-temps保存中间文间i-s-o文件)
@@ -81,7 +84,29 @@ $ ./1.exe
 hello world!
 ```
 ### 选项-o指定生成文件名
+```shell
+gcc test.c -o test
+```
+### 选项-L指定静态库查找路径
+```shell
+g++ -L~/test libprint.a test.c 
+```
 ### 选项-l添加链接库
+```shell
+# 优先链接动态库，找不到动态库再尝试链接静态库
+g++ -L~/test -lprint test.c 
+```### 选项-static指定连接静态库而不是动态库
+```shell
+g++ -L~/test -static -lprint test.c 
+```
+### 选项-I指定头文件包含目录
+```shell
+g++ -I~/test/src print.c test.c
+```
+### 选项-g生成调试信息
+```shell
+g++ -g test.c 
+```
 ### 编译多个文件
 假设有3个文件：main.cpp  print.cpp  print.h
 - 方式一：直接生产可执行程序
@@ -166,6 +191,7 @@ hello world!
 ```
 ### 编译和链接动态库
 #### 生成
+- `-fpic -shared`
 ```shell
 $ g++ -fpic -shared print.cpp -o libprint.so
 $ ls
@@ -176,7 +202,9 @@ libprint.a  libprint.so  main.cpp  print.cpp  print.h
   1. `dlopen`:打开动态库
   2. `dlsym`:获取库函数
   3. `dlclose`:关闭动态库
-- 方式二：像静态库链接一样，但需要将动态库放入系统库目录下（例如 /usr/lib、/usr/lib64、/lib、/lib64）(不推荐)
+- 方式二：像静态库链接一样使用
+  - 将动态库放入系统库目录下（例如 /usr/lib、/usr/lib64、/lib、/lib64）(不推荐)
+  - 在`.bash_profile`文件中导出`LD_LIBRARY_PATH`，如`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:动态库路径`
 ## windows和Linux上导出动态库的一些区别
 - 在Linux不需要使用`_declspec(dllexport)`和`__declspec(dllimport)`
 - 在Windows上，导出动态库需要`_declspec(dllexport)`
