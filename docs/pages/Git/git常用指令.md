@@ -101,7 +101,10 @@ git clone -b main https://github.com/shuhaiwen/shuhaiwen.github.io.git
 ```
 ### 拉取远程仓库内容
 ```git
+# 更新远程分支到本地（不删除本地保存的已失效的远程分支）
 git fetch [remote-name]
+# 更新远程分支到本地（同时删除本地保存的已失效的远程分支）
+git fetch --prune
 git pull <远程主机名> <远程分支名>:<本地分支名>
 ```
 ### 查看远程仓库
@@ -158,14 +161,16 @@ git branch -D branch1
 ```
 ### 删除远程分支
 ```git
-# 删除远程分支 branch1，其中冒号:前需要空一格，且删除的分支不能是远程仓库的默认分支
+# 方式1：删除远程分支 branch1，其中冒号:前需要空一格，且删除的分支不能是远程仓库的默认分支
 git push origin :branch1
+# 方式2：
+git push [remote] --delete [remote_branch]
 ```
 ### 显示分支
 ```git
 # 显示当前分支
 git branch
-# 显示所有分支（包括远程分支和本地分支）
+# 显示所有分支（包括远程分支和本地分支）(远程分支在本地仓库，使用前git fetch可以抓取更新远程分支到本地)
 git branch -a
 # 显示所有分支（包括远程跟踪分支和本地分支）
 git branch -r
