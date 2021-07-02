@@ -161,7 +161,7 @@ Linux上库命名格式,以lib起始，xxx表示库名，.a结尾是静态库，
 - `-L`选项指定库路径，不指定默认系统/lib,/usr/lib等路径
 #### 生成
 1. 将源文件生成目标文件
-2. 使用ar打包从静态库
+2. 使用ar打包成静态库
 ```shell
 $ g++ -c print.cpp 
 $ ls
@@ -203,8 +203,8 @@ libprint.a  libprint.so  main.cpp  print.cpp  print.h
   2. `dlsym`:获取库函数
   3. `dlclose`:关闭动态库
 - 方式二：像静态库链接一样使用
-  - 将动态库放入系统库目录下（例如 /usr/lib、/usr/lib64、/lib、/lib64）(不推荐)
-  - 在`.bash_profile`文件中导出`LD_LIBRARY_PATH`，如`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:动态库路径`
+  1. 将动态库放入系统库目录下（例如 /usr/lib、/usr/lib64、/lib、/lib64）(不推荐)
+  2. 在`.bash_profile`文件中导出`LD_LIBRARY_PATH`，如`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:动态库路径`
 ## windows和Linux上导出动态库的一些区别
 - 在Linux不需要使用`_declspec(dllexport)`和`__declspec(dllimport)`
 - 在Windows上，导出动态库需要`_declspec(dllexport)`

@@ -7,54 +7,64 @@ tags:
 categories:
  - Linux
 ---
-- [Linix 命令](#linix-命令)
-  - [基本操作](#基本操作)
-    - [命令连接符`&&`、`||`和`;`](#命令连接符和)
-    - [文件重定向符](#文件重定向符)
-  - [文件修改操作](#文件修改操作)
-    - [chmod](#chmod)
-    - [chgrp](#chgrp)
-    - [chown](#chown)
-    - [tar](#tar)
-      - [打包、解包](#打包解包)
-      - [解压包](#解压包)
-      - [查看压缩包内容](#查看压缩包内容)
-      - [附加文件](#附加文件)
-    - [mv](#mv)
-    - [cp](#cp)
-    - [touch](#touch)
-    - [rm](#rm)
-    - [rmdir](#rmdir)
-    - [mkdir](#mkdir)
-    - [ln](#ln)
-      - [软链接：](#软链接)
-      - [硬链接：](#硬链接)
-  - [文件查找操作](#文件查找操作)
-    - [find](#find)
-    - [file](#file)
-    - [whereis](#whereis)
-    - [which](#which)
-    - [whatis](#whatis)
-  - [显示信息操作](#显示信息操作)
-    - [cat](#cat)
-    - [ls](#ls)
-    - [locale](#locale)
-    - [pwd](#pwd)
-    - [id](#id)
-  - [库相关](#库相关)
-    - [ldconfig](#ldconfig)
-    - [ldd](#ldd)
-    - [nm](#nm)
-      - [查看.so文件导出函数](#查看so文件导出函数)
-  - [系统相关](#系统相关)
-    - [ps](#ps)
-    - [kill](#kill)
-  - [远程操作](#远程操作)
-    - [scp](#scp)
-# Linix 命令
+- [1. Linix 命令](#1-linix-命令)
+  - [1.1. 基本操作](#11-基本操作)
+    - [1.1.1. 命令连接符`&&`、`||`和`;`](#111-命令连接符和)
+    - [1.1.2. 文件重定向符](#112-文件重定向符)
+  - [1.2. 文件修改操作](#12-文件修改操作)
+    - [1.2.1. chmod](#121-chmod)
+    - [1.2.2. chgrp](#122-chgrp)
+    - [1.2.3. chown](#123-chown)
+    - [1.2.4. tar](#124-tar)
+      - [1.2.4.1. 打包、解包](#1241-打包解包)
+      - [1.2.4.2. 解压包](#1242-解压包)
+      - [1.2.4.3. 查看压缩包内容](#1243-查看压缩包内容)
+      - [1.2.4.4. 附加文件](#1244-附加文件)
+    - [1.2.5. mv](#125-mv)
+    - [1.2.6. cp](#126-cp)
+    - [1.2.7. touch](#127-touch)
+    - [1.2.8. rm](#128-rm)
+    - [1.2.9. rmdir](#129-rmdir)
+    - [1.2.10. mkdir](#1210-mkdir)
+    - [1.2.11. ln](#1211-ln)
+      - [1.2.11.1. 软链接：](#12111-软链接)
+      - [1.2.11.2. 硬链接：](#12112-硬链接)
+  - [1.3. 文件查找操作](#13-文件查找操作)
+    - [1.3.1. find](#131-find)
+    - [1.3.2. file](#132-file)
+    - [1.3.3. whereis](#133-whereis)
+    - [1.3.4. which](#134-which)
+    - [1.3.5. whatis](#135-whatis)
+  - [1.4. 文本分析](#14-文本分析)
+    - [1.4.1. awk](#141-awk)
+    - [1.4.2. sed](#142-sed)
+    - [1.4.3. cut](#143-cut)
+  - [1.5. 显示信息操作](#15-显示信息操作)
+    - [1.5.1. cat](#151-cat)
+    - [1.5.2. ls](#152-ls)
+    - [1.5.3. locale](#153-locale)
+    - [1.5.4. pwd](#154-pwd)
+    - [1.5.5. id](#155-id)
+  - [1.6. 库相关](#16-库相关)
+    - [1.6.1. ldconfig](#161-ldconfig)
+    - [1.6.2. ldd](#162-ldd)
+    - [1.6.3. nm](#163-nm)
+      - [1.6.3.1. 查看.so文件导出函数](#1631-查看so文件导出函数)
+  - [1.7. 系统相关](#17-系统相关)
+    - [1.7.1. ps](#171-ps)
+    - [1.7.2. kill](#172-kill)
+    - [1.7.3. uname](#173-uname)
+    - [hostname](#hostname)
+    - [hostid](#hostid)
+  - [1.8. 远程操作](#18-远程操作)
+    - [1.8.1. scp](#181-scp)
+
+# 1. Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
-## 基本操作
-### 命令连接符`&&`、`||`和`;`
+
+## 1.1. 基本操作
+
+### 1.1.1. 命令连接符`&&`、`||`和`;`
 - `&&`连接的多条命令会按顺序执行，直到命令出现错误就停止执行后面命令
 - `||`连接的命令直到正确执行了一条命令就会终止后续命令的执行
 - `;`连接的命令会按顺序一直执行，不管命令是否有误都不影响后续的命令执行
@@ -69,7 +79,8 @@ $ llk ; echo "hello"
 bash: llk：未找到命令
 hello
 ```
-### 文件重定向符
+
+### 1.1.2. 文件重定向符
 **重定向符`>`,`>>`和`<`,`<<`;其中`>>`是以追加方式写入目标，而`>`是直接覆盖目标;`<`将源作为输入传给命令，而`<<`将多段以分隔符标识的范围数据传给命令**
 - 文件修饰符：
   - `stdin`标准输入流为0
@@ -117,8 +128,10 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
 > del
 
 ```
-## 文件修改操作
-### chmod
+
+## 1.2. 文件修改操作
+
+### 1.2.1. chmod
 - `chmod [ugoa][+-=][rwx][file]`
   - `u`  用户user，表现文件或目录的所有者
   - `g`  用户组group，表现文件或目录所属的用户组
@@ -157,7 +170,8 @@ $ ls -l
 总用量 0
 -r-xr--r-- 1 xxx xxx 0 1月   3 13:30 1.md
 ```
-### chgrp
+
+### 1.2.2. chgrp
 - 功能:改变文件所属组
 - 语法形式:`chgrp [option] group file`
   - `-R`：如果是目录，则会递归到子文件
@@ -168,7 +182,8 @@ $ ls -l
 ~/code/cpp$ ls -l 1.file 
 -rw-r--r-- 1 shuhaiwen root 38 1月  23 10:49 1.file
 ```
-### chown
+
+### 1.2.3. chown
 - 功能:改变文件拥有者或拥有组
 - 语法形式:`chown [option] [OWNER][:[GROUP]] file`
   - `-R`：如果是目录，则会递归到子文件
@@ -190,9 +205,11 @@ $ ls -l
 -rw-r--r-- 1 root root 0 1月  28 11:06 1.txt
 
 ```
-### tar
+
+### 1.2.4. tar
 `tar`本质上只具有打包功能，而不具有解压缩功能，其内部调用`gzip`或其它打包工具才能执行解压缩功能
-#### 打包、解包
+
+#### 1.2.4.1. 打包、解包
 - `-c`或`--create` 建立新的备份文件
 - `-f`指定文件名
 - `-v`生成详细执行信息
@@ -210,7 +227,8 @@ $ tar -xvf 1.tar
 $ ls
 1.md  1.tar
 ```
-#### 解压包
+
+#### 1.2.4.2. 解压包
 - `-z`使用gzip压缩或解压
 - `-x`执行解压
 ```shell
@@ -227,7 +245,8 @@ $ tar -xzvf 1.tar.gz
 $ ls
 1.md  1.tar.gz
 ```
-#### 查看压缩包内容
+
+#### 1.2.4.3. 查看压缩包内容
 - `-t`查看压缩包内容
 ```shell
 $ tar -cvf 1.tar 1.md
@@ -235,7 +254,8 @@ $ tar -cvf 1.tar 1.md
 $ tar -tf 1.tar
 1.md
 ```
-#### 附加文件
+
+#### 1.2.4.4. 附加文件
 - `-r`或`--append` 新增文件到已存在的备份文件的结尾部分
 ```shell
 $ tar -cvf 1.tar 1.md
@@ -248,7 +268,8 @@ $ tar -tvf 1.tar
 -r-xr--r-- xxx/xxx 0 2021-01-03 13:30 1.md
 -rw-r--r-- xxx/xxx 0 2021-01-03 14:16 2.md
 ```
-### mv
+
+### 1.2.5. mv
 - 语法形式：`mv [option] [原文件] [目标文件]`
 - 功能：
   - 文件或文件夹改名:`mv oldname newname`
@@ -289,7 +310,8 @@ mv：是否覆盖'2.txt'？ n
 1.txt  2.txt
 ```
 上例由于目标文件已存在，指定了`-i`生成了提示信息，选择n不覆盖
-### cp
+
+### 1.2.6. cp
 `cp`命令参数和`mv`中很相似,可以参考
 - 语法形式：`cp [option] [原文件] [目标文件]`
 - 功能：复制文件或目录
@@ -306,24 +328,28 @@ cp file1 file2 dir
 # 拷贝同一目录下文件到另一目录
 cp dir1/{file1,file2} dir2
 ```
-### touch
+
+### 1.2.7. touch
 `touch`实际上用用来修改文件时间属性的，但更多的用来新建文件。
 - 语法形式：`touch [option] [文件]`
 - 功能：
   - 改变文件的时间属性
   - 新建文件
-### rm
+
+### 1.2.8. rm
 - 语法形式：`rm [option] [文件]`
 - 功能：删除文件或目录
   - `-f`强制执行
   - `-r -R --recursive`递归删除目录及目录下文件
   - `-i`删除文件前提示
   - `-v`显示详细信息
-### rmdir
+
+### 1.2.9. rmdir
 - 语法形式：`rm [option] [文件]`
 - 功能：删除***空目录***，不能用来删除非空目录
   - `-p --parents`删除目录及其祖先，如`rmdir -p a/b/c`等价于`rmdir a/b/c a/b a`
-### mkdir
+
+### 1.2.10. mkdir
 - 语法形式：`mkdir [option] [文件]`
 - 功能：创建目录
   - `-p`如果目录存在则不创建，也不会报错
@@ -335,7 +361,8 @@ cp dir1/{file1,file2} dir2
 drwxr-xr-x 2 xxx xxx 4096 1月  23 15:06 fd1/
 drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
 ```
-### ln
+
+### 1.2.11. ln
 - 语法形式：`ln [option] [原文件] [链接文件]`
 - 功能：为文件或目录创建链接
   - `-b`如果链接名存在，备份此文件再覆盖
@@ -343,21 +370,25 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
   - `-i`如果链接名存在则显示提示信息
   - `-P`硬链接（默认）
   - `-s`符号链接
-#### 软链接：
+
+#### 1.2.11.1. 软链接：
 1. 软链接，以路径的形式存在。类似于Windows操作系统中的快捷方式
 2. 软链接可以跨文件系统 ，硬链接不可以
 3. 软链接可以对一个不存在的文件名进行链接
 4. 原文件删除软链接也将失效，此时对软链接进行写操作，原文件会再次出现，但此原文件索引节点已经改变，也就是说此原文件之前的硬链接将不再指向它
 5. 软链接可以对目录进行链接
 6. 软链接与原文件索引节点不同
-#### 硬链接：
+
+#### 1.2.11.2. 硬链接：
 1. 硬链接，以文件副本的形式存在。但不占用实际空间。（理解c中指针，和原文件指向同一内存地址）
 2. 原文件丢失，不影响硬链接数据访问
 3. 不允许给目录创建硬链接（`-d`选项可强制给目录建立硬链接）
 4. 硬链接只有在同一个文件系统中才能创建
 5. 硬链接与原文件索引节点相同
-## 文件查找操作
-### find
+
+## 1.3. 文件查找操作
+
+### 1.3.1. find
 - 语法形式：`find [path] -name [文件名] [option]`
 - 功能：查找指定目录下文件
   - `-name fileName`：指定查找文件名如`find /opt -name 1.txt`,在/opt目录下查找1.txt文件
@@ -366,7 +397,8 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
   - `-size [+][-]fileSize`:指定文件大小，+大于，-小于
   - `-exec command {} \;`：查到文件后对文件执行命令，如`find /opt -name 1.txt -exec rm -f {} \;`,查找1.txt并删除
   - `-ok command {} \;`
-### file
+
+### 1.3.2. file
 - 语法形式：`file [option] [文件名]`
 - 功能：打印文件信息
 ```shell
@@ -375,7 +407,8 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
 ~/code/cpp$ file locale.cpp
 locale.cpp: C++ source, ASCII text
 ```
-### whereis
+
+### 1.3.3. whereis
 - 语法形式：`whereis [option] [文件名]`
 - 功能：查找二进制文件、源码文件、man手册文件位置，查找路径在$PATH and $MANPATH环境变量
 ```shell
@@ -384,22 +417,55 @@ rm: /usr/bin/rm /usr/share/man/man1/rm.1.gz
 ~/code/cpp$ whereis gcc
 gcc: /usr/bin/gcc /usr/lib/gcc
 ``` 
-### which
+
+### 1.3.4. which
 - 语法形式：`which [option] [文件名]`
 - 功能：查找可执行文件位置，查找路径在$PATH环境变量
 ```shell
 ~/code/cpp$ which rm
 /usr/bin/rm
 ```
-### whatis
+
+### 1.3.5. whatis
 - 语法形式：`whatis [option] [命令名]`
 - 功能：查询一个命令执行什么功能
 ```shell
 fzbk@fzbk:~$ whatis rm
 rm (1)               - remove files or directories
 ```
-## 显示信息操作
-### cat
+
+## 1.4. 文本分析
+
+### 1.4.1. awk
+- 参考[https://zhuanlan.zhihu.com/p/81123584](https://zhuanlan.zhihu.com/p/81123584)
+- 语法形式：
+  - awk [option] script files
+  - awk [option] -f scriptfile files
+- 功能：处理文本
+  - `-F`:指定分割符（默认每行按空格分割）
+  - `-f`:指定脚本文件取代script
+- 示例
+```shell
+# 对test.txt文本每行按空格或TAB分割，打印第1项和第3项的值
+awk '{print $1,$3}' test.txt
+# 对test.txt文本每行按;分割，打印第1项和第3项的值
+awk -F; '{print $1,$3}' test.txt
+# -F; 或者-F ';'
+awk -F ';' '{print $1,$3}' test.txt
+#用awk脚本分析test.txt,test.awk脚本作用与上面中的script一致
+awk -f test.awk test.txt
+```
+- 概念
+1. 文件的一行称为 awk 的一个记录
+2. 使用特定分隔符分开的单词称为字段
+
+### 1.4.2. sed
+
+### 1.4.3. cut
+
+## 1.5. 显示信息操作
+
+### 1.5.1. cat
 - 语法形式：`cat [option] [文件]`
 - 功能：打印文件内容到控制台
 - `-n`和`-b`输出行号，`-b`会忽略空行
@@ -422,7 +488,8 @@ en_US.utf8$
 POSIX$
 zh_CN.utf8$
 ```
-### ls
+
+### 1.5.2. ls
 - 语法形式：`ls [option]`
 - 功能：列出目录内容
   - `-a --all`列出所有文件或目录，包括`.`和`..`
@@ -438,7 +505,8 @@ zh_CN.utf8$
     - `-S`按文件大小排序，大->小
     - `-t`按修改时间排序，新->旧
     - `-X`按扩展名字母排序
-### locale
+
+### 1.5.3. locale
 - 语法形式：`locale [option]`
 - 功能：给出区域特定的信息
   - `-a`显示可用locale信息
@@ -467,27 +535,32 @@ en_US.utf8
 POSIX
 zh_CN.utf8
 ```
-### pwd
+
+### 1.5.4. pwd
 - 语法形式：`locale [option]`
 - 功能：显示当前路径信息
 ```shell
 ~/code/sh$ pwd
 /home/shuhaiwen/code/sh
 ```
-### id
+
+### 1.5.5. id
 - 语法形式：`id [option] username`
 - 功能：查看用户相关信息
 ```shell
 ~$ id shuhaiwen
 uid=1016(shuhaiwen) gid=1016(shuhaiwen) groups=1016(shuhaiwen)
 ```
-## 库相关
-### ldconfig
+
+## 1.6. 库相关
+
+### 1.6.1. ldconfig
 - 功能：设置运行时期动态链接，通常在向/lib和/usr/lib添加了新动态库后用来更新动态库
 ```shell
 ~/code/cpp$ sudo ldconfig
 ```
-### ldd
+
+### 1.6.2. ldd
 - 功能：打印动态库的依赖关系
 ```shell
 shuhaiwen@shuhaiwen:~/code/cpp$ ldd liblocale.so
@@ -501,15 +574,19 @@ libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8ffe7a9000)
 ::: tip
 ldd不是一个可执行程序而是一个shell脚本。
 :::
-### nm
+
+### 1.6.3. nm
 - 功能：查看obj文件符号信息
 - 语法形式:`nm [option] filename`
-#### 查看.so文件导出函数
+
+#### 1.6.3.1. 查看.so文件导出函数
 ```shell
 nm -D xxx.so | awk '{if($2=="T"){print $3}}'
 ```
-## 系统相关
-### ps
+
+## 1.7. 系统相关
+
+### 1.7.1. ps
 - 功能：查看系统进程信息
 - 语法形式:`ps [option]`
   - `e`:显示所有进程
@@ -521,8 +598,11 @@ nm -D xxx.so | awk '{if($2=="T"){print $3}}'
 ```shell
 #显示系统所有进程信息
 ps -ef
+# 
+ps -aux
 ```
-### kill
+
+### 1.7.2. kill
 - 功能：停止指定进程
 - 语法形式:`kill PID`
 ```shell
@@ -531,8 +611,53 @@ kill 1201
 #显示信号
 kill -l
 ```
-## 远程操作
-### scp
+
+### 1.7.3. uname
+- 功能：查询系统信息
+- 语法形式：`uname [option]`
+  - `-a`：打印系统所有信息
+  - `-s`：打印内核名（默认）
+  - `-m`：打印架构名
+  - `-o`：打印操作系统名
+  - `-n`：打印网络节点主机名
+- 示例
+```shell
+$ uname 
+Linux
+$ uname -s
+Linux
+$ uname -m
+x86_64
+$ uname -o
+GNU/Linux
+$ uname -a
+Linux web17 3.10.0-327.el7.x86_64 #1 SMP Thu Nov 19 22:10:57 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+$ uname -n
+web17
+```
+### hostname
+- 功能：is used to display the system's DNS name, and to display or set its hostname or NIS domain name.
+```shell
+# 显示主机名
+hostname
+# 修改主机名
+hostname newname
+# 显示ip
+hostname -i
+# 显示所有ip
+hostname -I
+# 显示dns域名
+hostname -d
+```
+### hostid
+- 功能：打印host id
+```shell
+hostid
+```
+
+## 1.8. 远程操作
+
+### 1.8.1. scp
 - 语法:`scp [option] 源文件 目标路径`
 - 功能：主机之间复制文件和目录(类似cp)
   - `-r`:递归复制整个目录
