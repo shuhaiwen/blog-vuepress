@@ -438,7 +438,7 @@ all:
 上例中表示将`feet on the street`字符串中`ee`字符串替换为`EE`，echo输出结果为`fEEt on the strEEt`。
 
 #### 1.3.3.2. 自定义函数
-使用`define`定义多行变量，具有函数特性，但与库函数调用还是有区别的，相比
+使用`define`定义多行变量，具有函数特性，但与库函数调用还是有区别的
 ```makefile
 define func1
     @echo "My name is $(0)"

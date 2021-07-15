@@ -19,6 +19,9 @@ categories:
     - [算术运算符](#算术运算符)
     - [关系运算符](#关系运算符)
   - [字符串操作](#字符串操作)
+    - [${#words}](#words)
+    - [${words:num_start:num_end}](#wordsnum_startnum_end)
+    - [${words1#*words2}](#words1words2)
   - [数组](#数组)
   - [条件语句](#条件语句)
     - [if条件语句](#if条件语句)
@@ -194,6 +197,15 @@ else
 fi
 ```
 ## 字符串操作
+https://blog.csdn.net/ITlinuxP/article/details/79060822
+### ${#words}
+### ${words:num_start:num_end}
+### ${words1#*words2} 
+- 功能：从words1中查找首次出现words2后的字符到结尾字符
+- 示例
+```shell
+
+```
 - `${#str}`和`${str:1:3}`分别求字符串长度和截取字符串子串
 - `test`也可以操作字符串，功能更多
 ```shell

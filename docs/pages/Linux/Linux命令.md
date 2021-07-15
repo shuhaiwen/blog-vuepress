@@ -54,10 +54,19 @@ categories:
     - [1.7.1. ps](#171-ps)
     - [1.7.2. kill](#172-kill)
     - [1.7.3. uname](#173-uname)
-    - [hostname](#hostname)
-    - [hostid](#hostid)
+    - [1.7.4. hostname](#174-hostname)
+    - [1.7.5. hostid](#175-hostid)
+    - [getconf PAGE_SIZE](#getconf-page_size)
+    - [lsattr](#lsattr)
   - [1.8. 远程操作](#18-远程操作)
     - [1.8.1. scp](#181-scp)
+    - [1.8.2. ssh-keygen](#182-ssh-keygen)
+    - [1.8.3. ssh](#183-ssh)
+  - [1.9. 常用功能指令](#19-常用功能指令)
+    - [1.9.1. seq](#191-seq)
+    - [1.9.2. truncate](#192-truncate)
+    - [1.9.3. dd](#193-dd)
+    - [shuf](#shuf)
 
 # 1. Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
@@ -460,7 +469,28 @@ awk -f test.awk test.txt
 2. 使用特定分隔符分开的单词称为字段
 
 ### 1.4.2. sed
-
+- 功能：流文本处理
+- 语法：`sed [选项]... {脚本(如果没有其他脚本)} [输入文件]`
+  - 选项参数：
+    - `-e script`:讲脚本指令添加到已有指令中
+    - `-f scriptFile`:指定脚本文件
+    - `-n`:不产生结果输出
+  - 脚本符号
+    - `s/pattern/replacement/flags`:替换字符，flags可选参数
+      - `g`：全局匹配，默认只匹配第一次出现
+      - `number`：匹配第number次匹配的
+- 示例
+```shell
+$ echo "hello world"|sed "s/hello/hi/"
+hi world
+$ echo "hello world"|sed -e "s/hello/hi/;s/world/boy/"
+hi boy
+$ cat sed.script 
+s/hello/hi/
+s/world/boy/
+$ echo "hello world"|sed -f sed.script 
+hi boy
+```
 ### 1.4.3. cut
 
 ## 1.5. 显示信息操作
@@ -635,7 +665,8 @@ Linux web17 3.10.0-327.el7.x86_64 #1 SMP Thu Nov 19 22:10:57 UTC 2015 x86_64 x86
 $ uname -n
 web17
 ```
-### hostname
+
+### 1.7.4. hostname
 - 功能：is used to display the system's DNS name, and to display or set its hostname or NIS domain name.
 ```shell
 # 显示主机名
@@ -649,12 +680,26 @@ hostname -I
 # 显示dns域名
 hostname -d
 ```
-### hostid
+
+### 1.7.5. hostid
 - 功能：打印host id
 ```shell
 hostid
 ```
-
+### getconf PAGE_SIZE
+- 功能：获取系统页大小
+- 示例
+```shell
+# 也大小4KB
+$ getconf PAGE_SIZE
+4096
+```
+### lsattr
+- 功能：查看文件扩展属性
+- 示例
+```shell
+lsattr
+```
 ## 1.8. 远程操作
 
 ### 1.8.1. scp
@@ -674,3 +719,88 @@ scp user1@10.10.10.10:/home/urer1/test.txt /home/user1
 ::: warning
 远程语法 `用户名@IP地址:路径`
 :::
+
+### 1.8.2. ssh-keygen
+- 语法:`ssh-keygen [option]`
+- 功能:用于为ssh生成、管理和转换认证密钥，它支持RSA和DSA两种认证密钥
+  - `-t [rsa|dsa]`:指定密钥类型rsa(默认)或dsa
+  - `-f file`:指定生成密钥的文件名
+  - `-b number`:指定密钥长度（最小1024bit）
+- 示例
+```shell
+ssh-keygen -t dsa -f key.file -b 1024
+```
+
+### 1.8.3. ssh
+- 语法:`ssh 用户名@ip`
+- 功能：用于远程登录
+- 示例
+```shell
+ssh shw@192.168.32.32
+```
+
+## 1.9. 常用功能指令
+
+### 1.9.1. seq
+- 功能：指定首位数字和步长，输出数值
+- 语法：`seq [option] [first] [step] last`
+  - `-f 分隔符`:指定输出结果间的分割符（默认\n）
+- 示例：
+```shell
+# 指定首数字1，尾数字10，步长2，输出结果被\n分割
+$ seq 1 2 10
+1
+3
+5
+7
+9
+```
+
+### 1.9.2. truncate
+- 功能：将文件的大小缩小或扩展到指定的大小
+- 语法：`truncate [option] file`
+  - `-s size`:指定缩小或扩大文件的大小
+- 示例
+```shell
+# 将file1文件大小变成1M
+truncate -s 1M file1
+```
+
+### 1.9.3. dd
+- 功能：用于复制文件并对原文件的内容进行转换和格式化处理
+- 语法
+  - `if=输入文件`：指定输入文件
+  - `of=输出文件`：指定输出文件
+  - `bs=n[c,w,b,k,M,G]`：指定块大小(c=1byte,w=2byte,b=512byte,k=1024byte,M=1024KB,G=1024MB)
+  - `count=n`：指定被复制块数量
+- 示例
+```shell
+# 输入文件/dev/zero 输出文件outfile 
+dd if=/dev/zero of=outfile bs=1k count=1
+```
+### shuf
+- 功能：生成随机数
+- 语法：
+  - `-i LO-HI`:指定随机数生成的区间，如1-10，生成大于等于1小于等于10的数
+  - `-n number`:生成几行数据
+  - `-r`:表示生成的数据可以重复（默认不可以重复），当生成数可用总数小于需要生成数的数量时，需要打开，否则生成不了被-n指定的数据量
+- 示例
+```shell
+# 输出数10，输出范围 1-3 ，数据可重复
+$ shuf -n 10 -i 1-3 -r
+2
+3
+2
+1
+1
+1
+3
+3
+3
+1
+# 输出数10，输出范围 1-3，数据不可重复（仅输出3个，因为数据不可重复）
+$ shuf -n 10 -i 1-3
+1
+3
+2
+```

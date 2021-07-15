@@ -7,19 +7,39 @@ tags:
 categories:
  - 面试汇总
 ---
-# Linux知识
-## Linux 启动流程
+<!-- TOC -->
+
+- [1. Linux知识](#1-linux知识)
+  - [1.1. Linux 启动流程](#11-linux-启动流程)
+  - [1.2. Linux指令](#12-linux指令)
+  - [1.3. select、poll、epoll之间的区别](#13-selectpollepoll之间的区别)
+  - [1.4. 什么是shell](#14-什么是shell)
+  - [1.5. 管道](#15-管道)
+  - [1.6. fock之后先执行子进程还是父进程](#16-fock之后先执行子进程还是父进程)
+  - [1.7. I/O 模型](#17-io-模型)
+  - [1.8. 文件](#18-文件)
+    - [1.8.1. 文件类型](#181-文件类型)
+    - [1.8.2. 软链接、硬链接](#182-软链接硬链接)
+
+<!-- /TOC -->
+# 1. Linux知识
+
+## 1.1. Linux 启动流程
 详见 [CS_Offer](https://github.com/selfboot/CS_Offer/blob/master/Linux_OS/Others.md)
-## Linux指令
+
+## 1.2. Linux指令
 详见[linuxtools-readthedocs](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/index.html)
-## select、poll、epoll之间的区别
+
+## 1.3. select、poll、epoll之间的区别
 [资料1](https://www.cnblogs.com/aspirant/p/9166944.html)
 [资料2](https://www.cnblogs.com/anker/p/3265058.html)
 [资料3](https://zhuanlan.zhihu.com/p/115220699)
-## 什么是shell
+
+## 1.4. 什么是shell
 Shell 是一个应用程序，它连接了用户和 Linux 内核，让用户能够更加高效、安全、低成本地使用 Linux 内核，这就是 Shell 的本质。
 详见[shell-c语言中文网](http://c.biancheng.net/view/706.html)
-## 管道
+
+## 1.5. 管道
 管道（英语：Pipeline）是一系列将标准输入输出链接起来的进程，其中每一个进程的输出被直接作为下一个进程的输入。
 详见[Linux的进程间通信：管道-知乎](https://zhuanlan.zhihu.com/p/58489873)
 ::: tip
@@ -28,30 +48,35 @@ Shell 是一个应用程序，它连接了用户和 Linux 内核，让用户能�
 ::: warning
 管道是半双工的
 :::
-## fock之后先执行子进程还是父进程
+
+## 1.6. fock之后先执行子进程还是父进程
 标准没有规定，详见[知乎](https://www.zhihu.com/question/59296096)
-## I/O 模型
+
+## 1.7. I/O 模型
 Unix 下有5种可用的 I/O 模型，如下：
 1. 阻塞式 I/O
 2. 非阻塞式 I/O
 3. I/O 复用（select 和 poll）
 4. 信号驱动 I/O
 5. 异步I/O
-## 文件
-### 文件类型
+
+## 1.8. 文件
+
+### 1.8.1. 文件类型
 
 Linux的文件类型有以下几种:
 
-| 文件类型	  | ls -l 显示 |
-| ------     |  -----     |
-|普通文件	  | -         |
-|目录	     |   d        |
-|符号链接	  |   l       |
-|字符设备	  |    c      |
-|块设备	     |   b        |
-|套接字	     |     s      |
-|命名管道	  |    p      |
-### 软链接、硬链接
+| 文件类型 | ls -l 显示 |
+| -------- | ---------- |
+| 普通文件 | -          |
+| 目录     | d          |
+| 符号链接 | l          |
+| 字符设备 | c          |
+| 块设备   | b          |
+| 套接字   | s          |
+| 命名管道 | p          |
+
+### 1.8.2. 软链接、硬链接
 软链接：
 1. 当源文件被删除后，软链接也将失效；
 2. 当软链接被删除，不影响原文件；
