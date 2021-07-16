@@ -103,6 +103,10 @@ googletest中有2类测试方式，基本测试TEXT和测试夹具TEXT_F，TEXT_
 **此命令参数只显示测试用例，不会执行测试用例**
 ### 过滤测试用例
 - 参数:`--gtest_filter`
+  - `:`:连接多个匹配项
+  - `-`:匹配项取反
+  - `*`:匹配多个字符
+  - `?`:匹配单个字符
 - 示例：
 ```shell
 ./程序名 --gtest_filter=测试用例名(TestSuiteName.TestName)

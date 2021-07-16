@@ -11,6 +11,7 @@ categories:
   - [1.1. 基本操作](#11-基本操作)
     - [1.1.1. 命令连接符`&&`、`||`和`;`](#111-命令连接符和)
     - [1.1.2. 文件重定向符](#112-文件重定向符)
+    - [1.1.3. echo](#113-echo)
   - [1.2. 文件修改操作](#12-文件修改操作)
     - [1.2.1. chmod](#121-chmod)
     - [1.2.2. chgrp](#122-chgrp)
@@ -56,8 +57,8 @@ categories:
     - [1.7.3. uname](#173-uname)
     - [1.7.4. hostname](#174-hostname)
     - [1.7.5. hostid](#175-hostid)
-    - [getconf PAGE_SIZE](#getconf-page_size)
-    - [lsattr](#lsattr)
+    - [1.7.6. getconf PAGE_SIZE](#176-getconf-page_size)
+    - [1.7.7. lsattr](#177-lsattr)
   - [1.8. 远程操作](#18-远程操作)
     - [1.8.1. scp](#181-scp)
     - [1.8.2. ssh-keygen](#182-ssh-keygen)
@@ -66,7 +67,8 @@ categories:
     - [1.9.1. seq](#191-seq)
     - [1.9.2. truncate](#192-truncate)
     - [1.9.3. dd](#193-dd)
-    - [shuf](#shuf)
+    - [1.9.4. shuf](#194-shuf)
+    - [1.9.5. xargs](#195-xargs)
 
 # 1. Linix 命令
 **以下所有命令都只描述了常用的选项，忽略了很少涉及到的选项**
@@ -136,6 +138,23 @@ shuhaiwen@shuhaiwen-PC:~/code/sh/test$ echo <<del
 > end
 > del
 
+```
+
+### 1.1.3. echo
+- 功能：输出一行文本
+- 语法：`echo [option] 文本字符`
+  - `-e`:
+  - `-n`:不输出末尾换行
+- 示例
+```shell
+$ echo -e "a\nb"
+a
+b
+$ echo  "a\nb"
+a\nb
+$ echo -n a
+$ echo a
+a
 ```
 
 ## 1.2. 文件修改操作
@@ -406,6 +425,11 @@ drwxrwxrwx 2 xxx xxx 4096 1月  23 15:06 fd2/
   - `-size [+][-]fileSize`:指定文件大小，+大于，-小于
   - `-exec command {} \;`：查到文件后对文件执行命令，如`find /opt -name 1.txt -exec rm -f {} \;`,查找1.txt并删除
   - `-ok command {} \;`
+- 示例
+```shell
+# 在.dir目录下查找 以file1或file2开头的文件
+find ./dir -name "file[1,2]*"
+```
 
 ### 1.3.2. file
 - 语法形式：`file [option] [文件名]`
@@ -491,6 +515,7 @@ s/world/boy/
 $ echo "hello world"|sed -f sed.script 
 hi boy
 ```
+
 ### 1.4.3. cut
 
 ## 1.5. 显示信息操作
@@ -686,7 +711,8 @@ hostname -d
 ```shell
 hostid
 ```
-### getconf PAGE_SIZE
+
+### 1.7.6. getconf PAGE_SIZE
 - 功能：获取系统页大小
 - 示例
 ```shell
@@ -694,12 +720,14 @@ hostid
 $ getconf PAGE_SIZE
 4096
 ```
-### lsattr
+
+### 1.7.7. lsattr
 - 功能：查看文件扩展属性
 - 示例
 ```shell
 lsattr
 ```
+
 ## 1.8. 远程操作
 
 ### 1.8.1. scp
@@ -778,7 +806,8 @@ truncate -s 1M file1
 # 输入文件/dev/zero 输出文件outfile 
 dd if=/dev/zero of=outfile bs=1k count=1
 ```
-### shuf
+
+### 1.9.4. shuf
 - 功能：生成随机数
 - 语法：
   - `-i LO-HI`:指定随机数生成的区间，如1-10，生成大于等于1小于等于10的数
@@ -804,3 +833,7 @@ $ shuf -n 10 -i 1-3
 3
 2
 ```
+
+### 1.9.5. xargs
+- 功能：从命令行标准输出中获取参数传递给命令执行
+- 语法：`cmd1 | xargs cmd2`
